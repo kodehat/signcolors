@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2015 CodeHat.
+ * This file is part of 'SignColors' and is licensed under GPLv3.
+ */
+
 package de.codehat.signcolors.commands;
 
 import org.bukkit.ChatColor;
@@ -7,11 +12,6 @@ import org.bukkit.command.CommandSender;
 import de.codehat.signcolors.SignColors;
 import de.codehat.signcolors.languages.LanguageLoading;
 import de.codehat.signcolors.util.Message;
-
-/**
- * SignColors
- * @author CodeHat
- */
 
 public class ColorCodesCommand extends BaseCommand {
 
@@ -43,7 +43,6 @@ public class ColorCodesCommand extends BaseCommand {
 		sender.sendMessage(ChatColor.UNDERLINE + "&n " + ChatColor.RESET + ChatColor.ITALIC + " &o "
 				+ ChatColor.RESET);
 		Message.sendMsg(sender, "&6+----------------+");
-		return;
 	}
 
 }

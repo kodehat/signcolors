@@ -1,11 +1,11 @@
+/*
+ * Copyright (c) 2015 CodeHat.
+ * This file is part of 'SignColors' and is licensed under GPLv3.
+ */
+
 package de.codehat.signcolors.updater;
 
 import de.codehat.signcolors.util.HttpRequest;
-
-/**
- * Updater
- * @author CodeHat
- */
 
 public class Updater {
 
@@ -26,7 +26,7 @@ public class Updater {
 	 * @return The result of the Updater.
 	 */
 	public UpdateResult checkForUpdate() {
-		String version = null;
+		String version;
 		try {
 			version = HttpRequest.sendGet(URL);
 		} catch (Exception e) {

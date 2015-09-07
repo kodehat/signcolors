@@ -1,9 +1,9 @@
-package de.codehat.signcolors.util;
-
-/**
- * SignColors
- * @author CodeHat
+/*
+ * Copyright (c) 2015 CodeHat.
+ * This file is part of 'SignColors' and is licensed under GPLv3.
  */
+
+package de.codehat.signcolors.util;
 
 public class Utils {
 

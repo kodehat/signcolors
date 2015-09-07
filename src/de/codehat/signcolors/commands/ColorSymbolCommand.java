@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2015 CodeHat.
+ * This file is part of 'SignColors' and is licensed under GPLv3.
+ */
+
 package de.codehat.signcolors.commands;
 
 import org.bukkit.command.Command;
@@ -6,11 +11,6 @@ import org.bukkit.command.CommandSender;
 import de.codehat.signcolors.SignColors;
 import de.codehat.signcolors.languages.LanguageLoading;
 import de.codehat.signcolors.util.Message;
-
-/**
- * SignColors
- * @author CodeHat
- */
 
 public class ColorSymbolCommand extends BaseCommand {
 
@@ -31,10 +31,8 @@ public class ColorSymbolCommand extends BaseCommand {
 				this.plugin.getConfig().set("colorsymbol", args[1]);
 				this.plugin.saveConfig();
 				Message.sendLogoMsg(sender, lang.getLang("csch") + " &c" + args[1]);
-				return;
 			} else {
 				Message.sendLogoMsg(sender, lang.getLang("cschtma"));
-				return;
 			}
 		}
 	}

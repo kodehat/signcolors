@@ -1,4 +1,11 @@
+/*
+ * Copyright (c) 2015 CodeHat.
+ * This file is part of 'SignColors' and is licensed under GPLv3.
+ */
+
 package de.codehat.signcolors.logger;
+
+import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,13 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
-
-import org.bukkit.plugin.Plugin;
-
-/**
- * PluginLogger
- * @author CodeHat
- */
 
 public class PluginLogger {
 
@@ -37,10 +37,7 @@ public class PluginLogger {
 			debugFileHandler.setFormatter(formatter);
 			debugLogger.setUseParentHandlers(false);
 
-		} catch (IOException e) {
-			e.printStackTrace();
-			warn(e.getMessage(), true);
-		} catch (SecurityException e) {
+		} catch (IOException | SecurityException e) {
 			e.printStackTrace();
 			warn(e.getMessage(), true);
 		}

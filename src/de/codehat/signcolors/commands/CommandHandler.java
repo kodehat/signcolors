@@ -1,19 +1,18 @@
+/*
+ * Copyright (c) 2015 CodeHat.
+ * This file is part of 'SignColors' and is licensed under GPLv3.
+ */
+
 package de.codehat.signcolors.commands;
-
-import java.util.HashMap;
-
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 
 import de.codehat.signcolors.SignColors;
 import de.codehat.signcolors.languages.LanguageLoading;
 import de.codehat.signcolors.util.Message;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 
-/**
- * SignColors
- * @author CodeHat
- */
+import java.util.HashMap;
 
 public class CommandHandler implements CommandExecutor {
 

@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2015 CodeHat.
+ * This file is part of 'SignColors' and is licensed under GPLv3.
+ */
+
 package de.codehat.signcolors.commands;
 
 import org.bukkit.command.Command;
@@ -6,11 +11,6 @@ import org.bukkit.command.CommandSender;
 import de.codehat.signcolors.SignColors;
 import de.codehat.signcolors.languages.LanguageLoading;
 import de.codehat.signcolors.util.Message;
-
-/**
- * SignColors
- * @author CodeHat
- */
 
 public class HelpCommand extends BaseCommand {
 
@@ -32,7 +32,6 @@ public class HelpCommand extends BaseCommand {
 		Message.sendMsg(sender, "&6/sc givesign [player] [amount] &a--- " + lang.getLang("gshelp"));
 		Message.sendMsg(sender, "&6/sc colorcodes &a--- " + lang.getLang("colorcodes"));
 		Message.sendMsg(sender, "&6+--------------------------------------------------+");
-		return;
 	}
 
 }

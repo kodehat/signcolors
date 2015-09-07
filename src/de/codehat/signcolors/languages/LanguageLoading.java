@@ -1,14 +1,14 @@
-package de.codehat.signcolors.languages;
+/*
+ * Copyright (c) 2015 CodeHat.
+ * This file is part of 'SignColors' and is licensed under GPLv3.
+ */
 
-import java.io.IOException;
-import java.util.HashMap;
+package de.codehat.signcolors.languages;
 
 import de.codehat.signcolors.SignColors;
 
-/**
- * SignColors
- * @author CodeHat
- */
+import java.io.IOException;
+import java.util.HashMap;
 
 public class LanguageLoading {
 

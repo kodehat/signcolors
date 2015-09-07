@@ -1,9 +1,9 @@
-package de.codehat.signcolors.updater;
-
-/**
- * UpdateResult
- * @author CodeHat
+/*
+ * Copyright (c) 2015 CodeHat.
+ * This file is part of 'SignColors' and is licensed under GPLv3.
  */
+
+package de.codehat.signcolors.updater;
 
 public enum UpdateResult {
 	NEEDED, UNNEEDED, COULD_NOT_CHECK

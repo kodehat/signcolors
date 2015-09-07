@@ -1,7 +1,13 @@
+/*
+ * Copyright (c) 2015 CodeHat.
+ * This file is part of 'SignColors' and is licensed under GPLv3.
+ */
+
 package de.codehat.signcolors.listener;
 
-import static de.codehat.signcolors.SignColors.eco;
-
+import de.codehat.signcolors.SignColors;
+import de.codehat.signcolors.languages.LanguageLoading;
+import de.codehat.signcolors.util.Message;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -19,14 +25,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 
-import de.codehat.signcolors.SignColors;
-import de.codehat.signcolors.languages.LanguageLoading;
-import de.codehat.signcolors.util.Message;
-
-/**
- * SignColors
- * @author CodeHat
- */
+import static de.codehat.signcolors.SignColors.eco;
 
 public class ColoredSignListener implements Listener {
 

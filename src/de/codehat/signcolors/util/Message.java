@@ -1,14 +1,14 @@
+/*
+ * Copyright (c) 2015 CodeHat.
+ * This file is part of 'SignColors' and is licensed under GPLv3.
+ */
+
 package de.codehat.signcolors.util;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import de.codehat.signcolors.languages.LanguageLoading;
-
-/**
- * SignColors
- * @author CodeHat
- */
 
 public class Message {
 

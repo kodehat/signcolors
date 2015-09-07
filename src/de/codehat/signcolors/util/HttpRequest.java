@@ -1,14 +1,14 @@
+/*
+ * Copyright (c) 2015 CodeHat.
+ * This file is part of 'SignColors' and is licensed under GPLv3.
+ */
+
 package de.codehat.signcolors.util;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-/**
- * HttpRequest
- * @author CodeHat
- */
 
 public class HttpRequest {
 
@@ -28,7 +28,7 @@ public class HttpRequest {
 		con.setReadTimeout(2000);
 		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 		String inputLine;
-		StringBuffer response = new StringBuffer();
+		StringBuilder response = new StringBuilder();
 		while ((inputLine = in.readLine()) != null) {
 			response.append(inputLine);
 		}
