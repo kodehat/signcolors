@@ -23,6 +23,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
 import static de.codehat.signcolors.SignColors.eco;
@@ -58,6 +59,18 @@ public class ColoredSignListener implements Listener {
 			}
 		}
 	}
+
+    /**
+     * Remove the left player from the list to save RAM and optimise speed.
+     * @param e PlayerQuitEvent
+     */
+	@EventHandler(priority = EventPriority.NORMAL)
+    public void onPlayerLeave(PlayerQuitEvent e) {
+        Player p = e.getPlayer();
+        if (this.plugin.sign_players.contains(p)) {
+            this.plugin.sign_players.remove(p);
+        }
+    }
 
 	/**
 	 * Drops a colored sign if signcrafting is enabled and block is available.
