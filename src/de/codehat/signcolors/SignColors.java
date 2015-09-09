@@ -63,7 +63,7 @@ public class SignColors extends JavaPlugin implements Listener {
 
     //Checks which language is loaded.
     public boolean languageEN;
-    //Checks if signcrsfting is enabled.
+    //Checks if signcrafting is enabled.
     public boolean signcrafting;
     //Checks if sending an updatemessage is allowed.
     public boolean updatePlayerMsg;
