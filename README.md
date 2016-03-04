@@ -1,4 +1,4 @@
-SignColors v0.5.* by CodeHat
+SignColors v0.6.* by CodeHat
 ==========
 
 Repository of the SignColors plugin.
@@ -30,13 +30,19 @@ For `/sc` you can alternatively use `/signcolors`
 - `signcolors.listcodes` - Allows you to see the color/format codes list.
 - `signcolors.givesign` - Allows you to use the `/sc givesign` command.
 
+## Add your own language
+
+To add your own language, you can copy the `EN.yml` in the `languages` folder and name it like
+your language. For example `GB.yml` and change its content as you like. Then change the `language` key
+in the `config.yml` to your language file code. In the example above it would be `GB`.
+
 ## SpigotMC
 
 Link: [http://www.spigotmc.org/resources/signcolors.6135/](http://www.spigotmc.org/resources/signcolors.6135/ "SignColors on SpigotMC")
 
-## Status for v0.5.* or v0.6
+## Status for v0.6.* or v0.7
 
- * Better language handling `(0%)`
+ * Make suggestions.
 
 ## License
 
