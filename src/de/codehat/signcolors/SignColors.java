@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 CodeHat.
+ * Copyright (c) 2016 CodeHat.
  * This file is part of 'SignColors' and is licensed under GPLv3.
  */
 
@@ -8,12 +8,13 @@ package de.codehat.signcolors;
 import de.codehat.metrics.Metrics;
 import de.codehat.signcolors.commands.*;
 import de.codehat.signcolors.database.SQLite;
-import de.codehat.signcolors.languages.LanguageLoading;
+import de.codehat.signcolors.languages.LanguageLoader;
 import de.codehat.signcolors.listener.ColoredSignListener;
 import de.codehat.signcolors.logger.PluginLogger;
 import de.codehat.signcolors.updater.UpdateResult;
 import de.codehat.signcolors.updater.Updater;
 import de.codehat.signcolors.util.Message;
+import de.codehat.signcolors.util.ZipUtils;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -29,8 +30,10 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -42,54 +45,38 @@ import java.util.logging.Logger;
 
 public class SignColors extends JavaPlugin implements Listener {
 
-    //Updater Strings.
-    public String updateLink = null, updateVersion = null;
-
     //All available colorcodes.
     public static final String ALL_COLOR_CODES = "0123456789abcdefklmnor";
-
+    //Config version.
+    public static final int CONFIG_VERSION = 1;
+    //Vault support.
+    public static Economy eco = null;
+    //The language file.
+    public File languageFile = null;
+    //The language FileConfiguration.
+    public FileConfiguration langCfg = null;
+    //Updater Strings.
+    public String updateLink = null, updateVersion = null;
     //ItemStacks/ItemMeta for colored signs.
     public ItemStack i = null;
     public ItemMeta im = null;
-
-    //Vault support.
-    public static Economy eco = null;
-
     //Item lores for colored signs.
     public List<String> lores = new ArrayList<>();
-
     //Player 'last sign' HashMap
     public List<Player> sign_players = new ArrayList<>();
-
-    //Checks which language is loaded.
-    public boolean languageEN;
     //Checks if signcrafting is enabled.
     public boolean signcrafting;
     //Checks if sending an updatemessage is allowed.
     public boolean updatePlayerMsg;
-
     //Minecraft logger.
     public Logger log = Logger.getLogger("Minecraft");
     public PluginLogger plog = null;
-
-    //The language module.
-    private LanguageLoading lang = new LanguageLoading(this);
-
-    //The language files.
-    public final File en = new File("plugins" + File.separator + "SignColors" + File.separator + "languages" + File.separator
-            + "en.yml");
-    public final File de = new File("plugins" + File.separator + "SignColors" + File.separator + "languages" + File.separator
-            + "de.yml");
-
-    //The language FileConfigurations.
-    public final FileConfiguration cfgen = YamlConfiguration.loadConfiguration(en);
-    public final FileConfiguration cfgde = YamlConfiguration.loadConfiguration(de);
-
     //SQLite Database.
     public SQLite sqlite = null;
-
     //Database Connection.
     public Connection c = null;
+    //The language module.
+    private LanguageLoader lang = new LanguageLoader(this);
 
     @Override
     public void onDisable() {
@@ -115,10 +102,10 @@ public class SignColors extends JavaPlugin implements Listener {
     public void onEnable() {
         this.log = this.getLogger();
         loadConfig();
+        checkConfigVersion();
         setupLogger();
-        lang.languageFileEN();
-        lang.languageFileDE();
-        lang.loadLanguages();
+        setupLanguage();
+        lang.loadLanguage();
         Message.lang = lang;
         setupSigns();
         new ColoredSignListener(this, lang);
@@ -164,7 +151,87 @@ public class SignColors extends JavaPlugin implements Listener {
     }
 
     /**
+     * Check the current config version and create new if needed.
+     */
+    public void checkConfigVersion() {
+        if (CONFIG_VERSION > this.getConfig().getInt("configversion")) {
+            backupConfig();
+            backupLanguages();
+            loadConfig();
+        }
+    }
+
+    /**
+     * Make a backup of the config.yml.
+     */
+    public void backupConfig() {
+        Path sourceConfig = Paths.get(this.getDataFolder().toPath().toString() + File.separator + "config.yml");
+        Path targetConfig = Paths.get(this.getDataFolder().toPath().toString() + File.separator + "config.yml.old");
+        try {
+            Files.copy(sourceConfig, targetConfig);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        log.info("Made a backup of the old config.yml!");
+        File config = new File(this.getDataFolder().toPath().toString() + File.separator + "config.yml");
+        config.delete();
+    }
+
+    /**
+     * Make a backup of the languages folder.
+     */
+    public void backupLanguages() {
+        ZipUtils.zipFolder(this.getDataFolder().toPath().toString() + File.separator + "languages",
+                this.getDataFolder().toPath().toString() + File.separator + "languages.old.zip");
+        log.info("Made a backup of the old languages folder!");
+    }
+
+    /**
+     * Loads the given language from the LANGCODE.yml.
+     */
+    public void setupLanguage() {
+        String languageCode = this.getConfig().get("language").toString();
+        File langDir = new File(this.getDataFolder().toPath().toString() + File.separator + "languages"
+                + File.separator);
+        if (!langDir.exists()) langDir.mkdir();
+        if (langDir.listFiles().length == 0) {
+            extractFile(getResource("EN.yml"), new File(this.getDataFolder().toPath().toString() + File.separator
+                    + "languages" + File.separator + "EN.yml"));
+            extractFile(getResource("DE.yml"), new File(this.getDataFolder().toPath().toString() + File.separator
+                    + "languages" + File.separator + "DE.yml"));
+            extractFile(getResource("ES.yml"), new File(this.getDataFolder().toPath().toString() + File.separator
+                    + "languages" + File.separator + "ES.yml"));
+        }
+        languageFile = new File(this.getDataFolder().toPath().toString() + File.separator + "languages"
+                + File.separator + languageCode + ".yml");
+        langCfg = YamlConfiguration.loadConfiguration(languageFile);
+        log.info("Successfully loaded language file: " + languageCode + ".yml :)");
+    }
+
+    /**
+     * Helper to extract files from the .jar.
+     *
+     * @param in   Resource via getResource("file-in-jar.ending").
+     * @param file Location where the file should be put to.
+     */
+    public void extractFile(InputStream in, File file) {
+        try {
+            OutputStream out = new FileOutputStream(file);
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = in.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+            out.close();
+            in.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Adds a sign location to the database.
+     *
      * @param location Location of the sign (world,x,y,z).
      */
     public void addSign(String location) {
@@ -178,6 +245,7 @@ public class SignColors extends JavaPlugin implements Listener {
 
     /**
      * Checks if a sign location is stored in the database.
+     *
      * @param location Location of the sign (world,x,y,z).
      * @return true if stored, false if not found.
      */
@@ -196,6 +264,7 @@ public class SignColors extends JavaPlugin implements Listener {
 
     /**
      * Deletes a sign location from the database.
+     *
      * @param location Location of the sign (world,x,y,z).
      */
     public void deleteSign(String location) {
@@ -220,7 +289,7 @@ public class SignColors extends JavaPlugin implements Listener {
         im.setDisplayName(Message.replaceColors(lang.getLang("signname")));
         im.setLore(lores);
         i.setItemMeta(im);
-        if(getConfig().getBoolean("signcrafting")) {
+        if (getConfig().getBoolean("signcrafting")) {
             removeRecipe();
             int ingredia = this.getConfig().getInt("ingredientA");
             Material ingredimata = Material.getMaterial(ingredia);
@@ -257,7 +326,7 @@ public class SignColors extends JavaPlugin implements Listener {
     private void removeRecipe() {
         Iterator<Recipe> it = getServer().recipeIterator();
         Recipe recipe;
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             recipe = it.next();
             if (recipe != null && recipe.getResult().getType() == Material.SIGN && recipe.getResult().getAmount()
                     == getConfig().getInt("signamount")) {
@@ -305,6 +374,7 @@ public class SignColors extends JavaPlugin implements Listener {
 
     /**
      * Gives you a colored sign ItemStack with a specific amount.
+     *
      * @param amount Sign amount.
      * @return A colored sign ItemStack.
      */
@@ -322,6 +392,7 @@ public class SignColors extends JavaPlugin implements Listener {
 
     /**
      * Setups vault.
+     *
      * @return true on economy setup, false if economy setup failed.
      */
     private boolean setupEconomy() {
@@ -340,7 +411,7 @@ public class SignColors extends JavaPlugin implements Listener {
      * Starts metrics service.
      */
     public void startMetrics() {
-        if(this.getConfig().getBoolean("metrics")) {
+        if (this.getConfig().getBoolean("metrics")) {
             Metrics metrics;
             try {
                 metrics = new Metrics(this);
@@ -357,7 +428,7 @@ public class SignColors extends JavaPlugin implements Listener {
      * Checks for plugin updates.
      */
     public void checkUpdates() {
-        if(getConfig().getBoolean("updatecheck")) {
+        if (getConfig().getBoolean("updatecheck")) {
             final PluginDescriptionFile plugin = getDescription();
             this.getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
                 @Override
@@ -373,7 +444,7 @@ public class SignColors extends JavaPlugin implements Listener {
                         updatePlayerMsg = true;
                         updateLink = updater.getDownloadUrl();
                         updateVersion = updater.getLatestVersion();
-                    } else if (result == UpdateResult.UNNEEDED){
+                    } else if (result == UpdateResult.UNNEEDED) {
                         log.info("No new version available");
                     } else {
                         log.info("Could not check for Updates");
@@ -385,7 +456,8 @@ public class SignColors extends JavaPlugin implements Listener {
 
     /**
      * Logs with INFO level.
-     * @param msg Message to log.
+     *
+     * @param msg    Message to log.
      * @param toFile Log it to file?
      */
     public void info(String msg, boolean toFile) {
@@ -394,7 +466,8 @@ public class SignColors extends JavaPlugin implements Listener {
 
     /**
      * Logs with INFO level.
-     * @param msg Message to log.
+     *
+     * @param msg    Message to log.
      * @param toFile Log it to file?
      */
     public void warn(String msg, boolean toFile) {

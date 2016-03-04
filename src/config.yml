@@ -29,8 +29,9 @@
 # Price for 10 signs from a [SignColors] sign.
 # price: 10.0
 # --------------------------------------------------------
-# Sets the plugin language (de = german; en = english).
-# language: en
+# Sets the plugin language (DE = german; EN = english; ES = spanish).
+# You can add your own language by adding a YOURLANG.yml file to the languages folder.
+# language: EN
 # --------------------------------------------------------
 # Should the plugin check for updates.
 # updatecheck: true
@@ -38,6 +39,8 @@
 # Metrics for mcstats.org.
 # metrics: true
 # --------------------------------------------------------
+# Config version. Don't change it!
+# configversion: 1
 # PLUGIN SETTINGS:
 colorsymbol: '&'
 signcrafting: true
@@ -45,7 +48,8 @@ ingredientA: 323
 ingredientB: 264
 signamount: 10
 price: 10.0
-language: en
+language: EN
 updatecheck: true
 metrics: true
 logging: true
+configversion: 1

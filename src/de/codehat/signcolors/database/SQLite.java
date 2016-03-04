@@ -1,4 +1,11 @@
+/*
+ * Copyright (c) 2016 CodeHat.
+ * This file is part of 'SignColors' and is licensed under GPLv3.
+ */
+
 package de.codehat.signcolors.database;
+
+import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,11 +14,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Level;
 
-import org.bukkit.plugin.Plugin;
-
 /**
  * Connects to and uses a SQLite database
- * 
+ *
  * @author tips48
  */
 public class SQLite extends Database {
@@ -21,11 +26,9 @@ public class SQLite extends Database {
 
     /**
      * Creates a new SQLite instance
-     * 
-     * @param plugin
-     *            Plugin instance
-     * @param dbLocation
-     *            Location of the Database (Must end in .db)
+     *
+     * @param plugin     Plugin instance
+     * @param dbLocation Location of the Database (Must end in .db)
      */
     public SQLite(Plugin plugin, String dbLocation) {
         super(plugin);
