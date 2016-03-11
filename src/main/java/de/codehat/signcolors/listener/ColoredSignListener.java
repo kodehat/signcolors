@@ -169,7 +169,7 @@ public class ColoredSignListener implements Listener {
                 Sign s = (Sign) e.getClickedBlock().getState();
                 if (s.getLine(0).equalsIgnoreCase(Message.replaceColors("&6[&3SC&6]"))) {
                     if (p.hasPermission("signcolors.sign.use")) {
-                        if (eco.getBalance(p.getName()) < price) {
+                        if (eco.getBalance(p) < price) {
                             Message.sendMsg(p, lang.getLang("notenmoney"));
                             return;
                         }
@@ -177,12 +177,12 @@ public class ColoredSignListener implements Listener {
                             Message.sendMsg(p, lang.getLang("notenspace"));
                             return;
                         }
-                        eco.withdrawPlayer(p.getName(), price);
+                        eco.withdrawPlayer(p, price);
                         p.getInventory().addItem(this.plugin.i);
                         p.updateInventory();
                         p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1F, 1F);
                         Message.sendMsg(p, "&6-" + eco.format(price) + " &a--->>>&6 "
-                                + eco.format(eco.getBalance(p.getName())));
+                                + eco.format(eco.getBalance(p)));
                         Message.sendMsg(p, lang.getLang("signmsg") + this.plugin.getConfig().getInt("signamount")
                                 + lang.getLang("signmsgb"));
                     } else {
