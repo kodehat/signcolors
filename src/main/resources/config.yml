@@ -1,0 +1,55 @@
+# ###########################################
+# ######## _________________________ ########
+# ########|                         |########
+# ########|       SignColors        |########
+# ########|           by            |########
+# ########|         CodeHat         |########
+# ########|  Licensed under GPLv3.  |########
+# ########|_________________________|########
+# ####################<|>####################
+# ####################<|>####################
+# ####################<|>####################
+# ####################<|>####################
+# CONFIG EXPLANATION:
+# The symbol in front of the colorcode e.g. &6 (= GOLD).
+# colorsymbol: '&'
+# --------------------------------------------------------
+# Should players be able to craft colored signs?
+# signcrafting: true
+# --------------------------------------------------------
+# Which Items/Blocks should they use to craft them?
+# Sign (323)
+# ingredientA: 323
+# Diamond (264)
+# ingredientB: 264
+# --------------------------------------------------------
+# How many signs should they get from a [SignColors] sign?
+# signamount: 10
+# --------------------------------------------------------
+# Price for 10 signs from a [SignColors] sign.
+# price: 10.0
+# --------------------------------------------------------
+# Sets the plugin language (DE = german; EN = english; ES = spanish).
+# You can add your own language by adding a YOURLANG.yml file to the languages folder.
+# language: EN
+# --------------------------------------------------------
+# Should the plugin check for updates.
+# updatecheck: true
+# --------------------------------------------------------
+# Metrics for mcstats.org.
+# metrics: true
+# --------------------------------------------------------
+# Config version. Don't change it!
+# configversion: 1
+# PLUGIN SETTINGS:
+colorsymbol: '&'
+signcrafting: true
+ingredientA: 323
+ingredientB: 264
+signamount: 10
+price: 10.0
+language: EN
+updatecheck: true
+metrics: true
+logging: true
+configversion: 1
