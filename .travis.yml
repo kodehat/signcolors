@@ -5,4 +5,4 @@ env:
     - secure: "VmkkJDX2/zy2SgEjNzeFA0ldaiZcaJPm+oG0fZzI99od19mu028/1Y7saTIbRCmuzN82lZtHt0HaUr0/oE9EpaGKIAkZyOF1zCCm1nkNLDnGEtxwv/zmGAxD6V2uFm8vs+Baag5T8HWy927LwnrolU+S/7OXxEUNUVfAnt7EvhrtYV0SMv1bK5AwsXWYBQocWbCMV60JyD3c+NZzAhkAGyTYrQsjUum6U4M6i6mpAKPIIAGSqKkW+D+Q7AgoVAUdGWx1gMkP5a6uJNExshZ8bCpFFpRJTNKLCfzWwBhyR+FZckmsm1tibRZTx9uA2Ty4Js64kxIAMVy8lFMDT+lyJjUl5I3EUNcKcUWHB4GXE4EK0KrF2mfDrw0AZqe3AhavsOSoJTu2QOw3NfX5y8xPrsxrMgafKhqMl8fySK2oya2OsewY9PeVhNTmvHU3xS2ajRH+GmBU5aqQpzx5S8+aGvbfaM4Mntsn3WziHj06THoRSE80WXojSXKMSx8VxUe6Sc2s81QzpQhXNsnvLYzpv2wsi7QilToY7VMNw+zyf7V/Y6rmOlGKDYzNLksuVW9tN0SkDT95Rmkk0cVKKL5APidwKhqQcrX1ZK1Qjh25ak01FMc3/NIhBVqaTgZlS8UOP30KhwoBE8SvamdpO6G5+NjzNIHV1jN+WlHonr9OHRQ="
 after_success:
     - "ls -lah target"
-    - "curl --ftp-create-dirs -T target/signcolors-* -u $FTP_USER:$FTP_PASSWORD ftp://pablo7777.de/signcolors/signcolors-0.6.1-SNAPSHOT-$TRAVIS_BUILD_NUMBER.jar"
+    - "curl --ftp-create-dirs -T target/SignColors.jar -u $FTP_USER:$FTP_PASSWORD ftp://pablo7777.de/signcolors/signcolors-0.6.1-SNAPSHOT-$TRAVIS_BUILD_NUMBER.jar"
