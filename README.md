@@ -1,7 +1,13 @@
-SignColors v0.6.* by CodeHat ![Build Status](https://travis-ci.org/Pixelhash/SignColors.svg)
-============================================================================================
+SignColors v0.6.* by CodeHat [![Build Status](https://travis-ci.org/Pixelhash/SignColors.svg?branch=master)](https://travis-ci.org/Pixelhash/SignColors)
+==============================================================================================
 
 Repository of the SignColors plugin.
+
+## Development Builds
+
+**NOTE!:**
+Development builds for SignColors can be found at the below server. These builds may be unstable and can cause errors. Use them at your own risk!
+Link: [https://pablo7777.de/signcolors/](https://pablo7777.de/signcolors/ "SignColors Development Builds")
 
 ## Commands
 

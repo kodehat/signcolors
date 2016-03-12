@@ -13,6 +13,7 @@ import de.codehat.signcolors.logger.PluginLogger;
 import de.codehat.signcolors.updater.UpdateResult;
 import de.codehat.signcolors.updater.Updater;
 import de.codehat.signcolors.util.Message;
+import de.codehat.signcolors.util.Utils;
 import de.codehat.signcolors.util.ZipUtils;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -165,6 +166,9 @@ public class SignColors extends JavaPlugin implements Listener {
      * Make a backup of the config.yml.
      */
     public void backupConfig() {
+        File oldConfigBackup = new File(this.getDataFolder().toPath().toString() + File.separator + "config.yml.old");
+        if (oldConfigBackup.exists()) oldConfigBackup.delete();
+
         Path sourceConfig = Paths.get(this.getDataFolder().toPath().toString() + File.separator + "config.yml");
         Path targetConfig = Paths.get(this.getDataFolder().toPath().toString() + File.separator + "config.yml.old");
         try {
@@ -181,9 +185,17 @@ public class SignColors extends JavaPlugin implements Listener {
      * Make a backup of the languages folder.
      */
     public void backupLanguages() {
+        File oldLangBackup = new File(this.getDataFolder().toPath().toString() + File.separator + "languages.old");
+        if (oldLangBackup.exists()) Utils.deleteDirectory(oldLangBackup);
+
         ZipUtils.zipFolder(this.getDataFolder().toPath().toString() + File.separator + "languages",
                 this.getDataFolder().toPath().toString() + File.separator + "languages.old.zip");
         log.info("Made a backup of the old languages folder!");
+        if (Utils.deleteDirectory(new File(this.getDataFolder().toPath().toString() + File.separator + "languages"))) {
+            log.info("Successfully deleted old languages folder!");
+        } else {
+            log.warning("Could not delete the old languages folder");
+        }
     }
 
     /**
@@ -237,7 +249,7 @@ public class SignColors extends JavaPlugin implements Listener {
     public void addSign(String location) {
         try {
             final Statement signlocation = c.createStatement();
-            signlocation.executeUpdate("INSERT INTO signs (`location`) VALUES ('" + location + "');");
+            signlocation.executeUpdate("INSERT INTO signs (location) VALUES ('" + location + "');");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -252,7 +264,7 @@ public class SignColors extends JavaPlugin implements Listener {
     public boolean checkSign(String location) {
         try {
             final Statement signlocation = c.createStatement();
-            ResultSet res = signlocation.executeQuery("SELECT * FROM signs WHERE `location` = '" + location + "';");
+            ResultSet res = signlocation.executeQuery("SELECT * FROM signs WHERE location = '" + location + "';");
             while (res.next()) {
                 return true;
             }
@@ -271,7 +283,7 @@ public class SignColors extends JavaPlugin implements Listener {
         Statement signlocation;
         try {
             signlocation = c.createStatement();
-            signlocation.executeUpdate("DELETE FROM signs WHERE `location` = '" + location + "';");
+            signlocation.executeUpdate("DELETE FROM signs WHERE location = '" + location + "';");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -353,7 +365,7 @@ public class SignColors extends JavaPlugin implements Listener {
             }
             try {
                 if (signlocation != null) {
-                    signlocation.executeUpdate("CREATE TABLE IF NOT EXISTS signs (`location`);");
+                    signlocation.executeUpdate("CREATE TABLE IF NOT EXISTS signs (location);");
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -433,7 +445,6 @@ public class SignColors extends JavaPlugin implements Listener {
             this.getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
                 @Override
                 public void run() {
-                    //TODO: Updater is sometimes not working!
                     Updater updater = new Updater(plugin.getVersion());
                     UpdateResult result = updater.checkForUpdate();
                     log.info("Checking for Updates...");

@@ -34,6 +34,7 @@ public class ZipUtils {
                     out.write(data, 0, count);
                 }
                 out.closeEntry();
+                in.close();
             }
             out.flush();
             out.close();

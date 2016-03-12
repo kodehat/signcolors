@@ -5,6 +5,8 @@
 
 package de.codehat.signcolors.util;
 
+import java.io.File;
+
 public class Utils {
 
     /**
@@ -20,5 +22,20 @@ public class Utils {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Deletes a directory and all its contents.
+     *
+     * @param directory Directory to delete.
+     * @return true if directory was deleted.
+     */
+    public static boolean deleteDirectory(File directory) {
+        if (directory.isDirectory() && directory.listFiles().length > 0) {
+            for (File f : directory.listFiles()) {
+                f.delete();
+            }
+        }
+        return directory.delete();
     }
 }
