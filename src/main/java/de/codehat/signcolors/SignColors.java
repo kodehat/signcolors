@@ -301,6 +301,11 @@ public class SignColors extends JavaPlugin implements Listener {
         if (getConfig().getBoolean("signcrafting")) {
             removeRecipe();
             List<String> ingredients = (List<String>) getConfig().getList("ingredients");
+            if (ingredients.size() > 9) {
+                log.warning("You added more than nine crafting items to the config!");
+                log.warning("Please change it or you will not be able to craft colored signs!");
+                return;
+            }
             ShapelessRecipe sr = new ShapelessRecipe(i);
             for (String ingredient : ingredients) {
                 Material m = Material.getMaterial(ingredient);
@@ -445,7 +450,7 @@ public class SignColors extends JavaPlugin implements Listener {
                     if (result == UpdateResult.NEEDED) {
                         log.info("A new version is available: v" + updater.getLatestVersion());
                         log.info("Get it from: " + updater.getDownloadUrl());
-                        plog.info("New version available: v" + updater.getLatestVersion(), true);
+                        info("New version available: v" + updater.getLatestVersion(), true);
                         updatePlayerMsg = true;
                         updateLink = updater.getDownloadUrl();
                         updateVersion = updater.getLatestVersion();

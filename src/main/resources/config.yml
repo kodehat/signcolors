@@ -17,11 +17,14 @@
 # Should players be able to craft colored signs?
 # signcrafting: true
 # --------------------------------------------------------
-# Which Items/Blocks should they use to craft them?
-# Sign (323)
-# ingredientA: 323
-# Diamond (264)
-# ingredientB: 264
+# Which items/blocks should they use to craft them?
+# Use material names instead of item IDs! It is not
+# possible to add more than nine different items/blocks!
+# You can easily add an item/block by making a new line
+# like it is shown below:
+# ingredients:
+# - SIGN
+# - DIAMOND
 # --------------------------------------------------------
 # How many signs should they get from a [SignColors] sign?
 # signamount: 10
@@ -40,12 +43,10 @@
 # metrics: true
 # --------------------------------------------------------
 # Config version. Don't change it!
-# configversion: 1
+# configversion: 2
 # PLUGIN SETTINGS:
 colorsymbol: '&'
 signcrafting: true
-ingredientA: 323
-ingredientB: 264
 ingredients:
 - SIGN
 - DIAMOND
@@ -54,5 +55,5 @@ price: 10.0
 language: EN
 updatecheck: true
 metrics: true
-logging: true
+logging: false
 configversion: 2
