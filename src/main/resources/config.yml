@@ -17,14 +17,53 @@
 # Should players be able to craft colored signs?
 # signcrafting: true
 # --------------------------------------------------------
+# There are two different types of recipes:
+# "shaped": They have a pattern defining where you have
+# to place your items/blocks on the workbench.
+# "shapeless": They do not have a pattern and you can
+# place the ingredients on your workbench where you want.
+# recipetype: "shaped"
+# --------------------------------------------------------
+# ONLY enabled if "recipetype" is set to "shaped"!
+# At first you define your items/blocks you want to use in
+# your recipe and give them a letter as the variable name.
+# E.g. S: "SIGN"
+# You can use data values as well.
+# E.g. T: "WOOL:9"
+# This would represent Cyan Wool.
+# Generally the ingredients pattern is:
+# VARIABLELETTER: "MATERIALNAME:DATAVALUE"
+# The "craftingshape" represents the workbench. Each line
+# in the list equals a line at the workbench. Here you
+# can use your defined variables and place them where
+# you want. A whitespace represents air.
+# Remember that it is not possible to have more
+# than three characters (whitespace included) in one line!
+#  shaped:
+#    ingredients:
+#      A: "INK_SACK:1"
+#      B: "INK_SACK:2"
+#      C: "INK_SACK:4"
+#      D: "INK_SACK:11"
+#      S: "SIGN"
+#    craftingshape:
+#    - "A B"
+#    - " S "
+#    - "C D"
+# --------------------------------------------------------
+# ONLY enabled if "recipetype" is set to "shapeless"!
 # Which items/blocks should they use to craft them?
 # Use material names instead of item IDs! It is not
 # possible to add more than nine different items/blocks!
 # You can easily add an item/block by making a new line
-# like it is shown below:
-# ingredients:
-# - SIGN
-# - DIAMOND
+# like it is shown below with the following pattern:
+# MATERIALNAME:DATAVALUE
+#  shapeless:
+#    ingredients:
+#    - "INK_SACK:1"
+#    - "INK:SACK:2"
+#    - "INK_SACK:4"
+#    - "INK_SACK:11"
 # --------------------------------------------------------
 # How many signs should they get from a [SignColors] sign?
 # signamount: 10
@@ -47,9 +86,25 @@
 # PLUGIN SETTINGS:
 colorsymbol: '&'
 signcrafting: true
-ingredients:
-- SIGN
-- DIAMOND
+recipetype: "shaped"
+recipes:
+  shaped:
+    ingredients:
+      A: "INK_SACK:1"
+      B: "INK_SACK:2"
+      C: "INK_SACK:4"
+      D: "INK_SACK:11"
+      S: "SIGN"
+    craftingshape:
+    - "A B"
+    - " S "
+    - "C D"
+  shapeless:
+    ingredients:
+    - "INK_SACK:1"
+    - "INK:SACK:2"
+    - "INK_SACK:4"
+    - "INK_SACK:11"
 signamount: 10
 price: 10.0
 language: EN

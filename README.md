@@ -1,5 +1,5 @@
-SignColors v0.6.* by CodeHat [![Build Status](https://travis-ci.org/Pixelhash/SignColors.svg?branch=master)](https://travis-ci.org/Pixelhash/SignColors)
-==============================================================================================
+SignColors v0.7.* by CodeHat [![Build Status](https://travis-ci.org/Pixelhash/SignColors.svg?branch=master)](https://travis-ci.org/Pixelhash/SignColors)
+========================================================================================================================================================
 
 Repository of the SignColors plugin.
 
@@ -46,7 +46,7 @@ in the `config.yml` to your language file code. In the example above it would be
 
 Link: [http://www.spigotmc.org/resources/signcolors.6135/](http://www.spigotmc.org/resources/signcolors.6135/ "SignColors on SpigotMC")
 
-## Status for v0.6.* or v0.7
+## Status for v0.7.* or v0.8
 
  * Make suggestions.
 

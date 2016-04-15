@@ -17,12 +17,14 @@ import de.codehat.signcolors.util.Utils;
 import de.codehat.signcolors.util.ZipUtils;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -300,19 +302,67 @@ public class SignColors extends JavaPlugin implements Listener {
         i.setItemMeta(im);
         if (getConfig().getBoolean("signcrafting")) {
             removeRecipe();
-            List<String> ingredients = (List<String>) getConfig().getList("ingredients");
-            if (ingredients.size() > 9) {
-                log.warning("You added more than nine crafting items to the config!");
+            if (getConfig().get("recipetype").equals("shapeless")) {
+                List<String> ingredients = (List<String>) getConfig().getList("recipes.shapeless.ingredients");
+                if (ingredients.size() > 9) {
+                    log.warning("You added more than nine crafting items to the config!");
+                    log.warning("Please change it or you will not be able to craft colored signs!");
+                    return;
+                }
+                ShapelessRecipe sr = new ShapelessRecipe(i);
+                for (String ingredient : ingredients) {
+                    if (ingredient.contains(":")) {
+                        String[] ingredientData = ingredient.split(":");
+                        Material m = Material.getMaterial(ingredientData[0]);
+                        sr.addIngredient(m, Integer.valueOf(ingredientData[1]));
+                    } else {
+                        Material m = Material.getMaterial(ingredient);
+                        sr.addIngredient(m);
+                    }
+                }
+                getServer().addRecipe(sr);
+                signcrafting = true;
+            } else if (getConfig().get("recipetype").equals("shaped")) {
+                List<String> shape = (List<String>) getConfig().getList("recipes.shaped.craftingshape");
+                if (shape.size() > 3) {
+                    log.warning("You added more than three recipe shapes to the config!");
+                    log.warning("Please change it or you will not be able to craft colored signs!");
+                    return;
+                }
+                ShapedRecipe sr = new ShapedRecipe(i);
+                switch (shape.size()) {
+                    case 1:
+                        sr.shape(shape.get(0));
+                        break;
+                    case 2:
+                        sr.shape(shape.get(0), shape.get(1));
+                        break;
+                    case 3:
+                        sr.shape(shape.get(0), shape.get(1), shape.get(2));
+                        break;
+                    default:
+                        log.warning("You defined too many recipe shapes!");
+                        log.warning("Please change it or you will not be able to craft colored signs!");
+                        return;
+                }
+                ConfigurationSection ingredients = getConfig().getConfigurationSection("ingredients");
+                for (String key : ingredients.getKeys(false)) {
+                    log.info(key);
+                    if (ingredients.get(key).toString().contains(":")) {
+                        String[] ingredient = ingredients.get(key).toString().split(":");
+                        Material m = Material.getMaterial(ingredient[0]);
+                        sr.setIngredient(key.charAt(0), m, Integer.valueOf(ingredient[1]));
+                    } else {
+                        Material m = Material.getMaterial(ingredients.get(key).toString());
+                        sr.setIngredient(key.charAt(0), m);
+                    }
+                }
+                getServer().addRecipe(sr);
+                signcrafting = true;
+            } else {
+                log.warning("Unknown config value of 'recipetype'! Possible values are: 'shaped' and 'shapeless'.");
                 log.warning("Please change it or you will not be able to craft colored signs!");
-                return;
             }
-            ShapelessRecipe sr = new ShapelessRecipe(i);
-            for (String ingredient : ingredients) {
-                Material m = Material.getMaterial(ingredient);
-                sr.addIngredient(m);
-            }
-            getServer().addRecipe(sr);
-            signcrafting = true;
         } else {
             removeRecipe();
             signcrafting = false;
