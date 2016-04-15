@@ -26,7 +26,7 @@
 # --------------------------------------------------------
 # ONLY enabled if "recipetype" is set to "shaped"!
 # At first you define your items/blocks you want to use in
-# your recipe and give them a letter as the variable name.
+# your recipe and give them a letter as a variable name.
 # E.g. S: "SIGN"
 # You can use data values as well.
 # E.g. T: "WOOL:9"
@@ -61,9 +61,10 @@
 #  shapeless:
 #    ingredients:
 #    - "INK_SACK:1"
-#    - "INK:SACK:2"
+#    - "INK_SACK:2"
 #    - "INK_SACK:4"
 #    - "INK_SACK:11"
+#    - "SIGN"
 # --------------------------------------------------------
 # How many signs should they get from a [SignColors] sign?
 # signamount: 10
@@ -71,8 +72,9 @@
 # Price for 10 signs from a [SignColors] sign.
 # price: 10.0
 # --------------------------------------------------------
-# Sets the plugin language (DE = german; EN = english; ES = spanish).
-# You can add your own language by adding a YOURLANG.yml file to the languages folder.
+# Sets the plugin language (DE = german; EN = english;
+# ES = spanish). You can add your own language by adding
+# a YOURLANG.yml file to the languages folder.
 # language: EN
 # --------------------------------------------------------
 # Should the plugin check for updates.
@@ -102,9 +104,10 @@ recipes:
   shapeless:
     ingredients:
     - "INK_SACK:1"
-    - "INK:SACK:2"
+    - "INK_SACK:2"
     - "INK_SACK:4"
     - "INK_SACK:11"
+    - "SIGN"
 signamount: 10
 price: 10.0
 language: EN

@@ -341,13 +341,12 @@ public class SignColors extends JavaPlugin implements Listener {
                         sr.shape(shape.get(0), shape.get(1), shape.get(2));
                         break;
                     default:
-                        log.warning("You defined too many recipe shapes!");
+                        log.warning("You defined too many or no recipe shapes!");
                         log.warning("Please change it or you will not be able to craft colored signs!");
                         return;
                 }
-                ConfigurationSection ingredients = getConfig().getConfigurationSection("ingredients");
+                ConfigurationSection ingredients = getConfig().getConfigurationSection("recipes.shaped.ingredients");
                 for (String key : ingredients.getKeys(false)) {
-                    log.info(key);
                     if (ingredients.get(key).toString().contains(":")) {
                         String[] ingredient = ingredients.get(key).toString().split(":");
                         Material m = Material.getMaterial(ingredient[0]);
