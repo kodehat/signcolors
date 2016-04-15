@@ -6,6 +6,7 @@
 package de.codehat.signcolors.languages;
 
 import de.codehat.signcolors.SignColors;
+import de.codehat.signcolors.util.Message;
 
 import java.util.HashMap;
 
@@ -63,6 +64,7 @@ public class LanguageLoader {
         lg.put("givesign", this.plugin.langCfg.getString("GIVESIGN"));
         lg.put("invamount", this.plugin.langCfg.getString("INVAMOUNT"));
         lg.put("gshelp", this.plugin.langCfg.getString("GSHELP"));
+        Message.lang = this;
     }
 
     /**

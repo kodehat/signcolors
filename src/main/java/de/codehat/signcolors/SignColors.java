@@ -16,7 +16,6 @@ import de.codehat.signcolors.util.Message;
 import de.codehat.signcolors.util.Utils;
 import de.codehat.signcolors.util.ZipUtils;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -49,7 +48,7 @@ public class SignColors extends JavaPlugin implements Listener {
     //All available colorcodes.
     public static final String ALL_COLOR_CODES = "0123456789abcdefklmnor";
     //Config version.
-    public static final int CONFIG_VERSION = 1;
+    public static final int CONFIG_VERSION = 2;
     //Vault support.
     public static Economy eco = null;
     //The language file.
@@ -107,7 +106,6 @@ public class SignColors extends JavaPlugin implements Listener {
         setupLogger();
         setupLanguage();
         lang.loadLanguage();
-        Message.lang = lang;
         setupSigns();
         new ColoredSignListener(this, lang);
         registerCommands();
@@ -292,7 +290,6 @@ public class SignColors extends JavaPlugin implements Listener {
     /**
      * Creates the recipe for the colored signs or removes it.
      */
-    @SuppressWarnings("deprecation")
     public void setupSigns() {
         i = new ItemStack(Material.SIGN, this.getConfig().getInt("signamount"));
         im = i.getItemMeta();
@@ -303,16 +300,13 @@ public class SignColors extends JavaPlugin implements Listener {
         i.setItemMeta(im);
         if (getConfig().getBoolean("signcrafting")) {
             removeRecipe();
-            int ingredia = this.getConfig().getInt("ingredientA");
-            Material ingredimata = Material.getMaterial(ingredia);
-            int ingredib = this.getConfig().getInt("ingredientB");
-            Material ingredimatb = Material.getMaterial(ingredib);
+            List<String> ingredients = (List<String>) getConfig().getList("ingredients");
             ShapelessRecipe sr = new ShapelessRecipe(i);
-            sr.removeIngredient(ingredimata);
-            sr.removeIngredient(ingredimatb);
-            sr.addIngredient(ingredimata);
-            sr.addIngredient(ingredimatb);
-            Bukkit.addRecipe(sr);
+            for (String ingredient : ingredients) {
+                Material m = Material.getMaterial(ingredient);
+                sr.addIngredient(m);
+            }
+            getServer().addRecipe(sr);
             signcrafting = true;
         } else {
             removeRecipe();

@@ -4,7 +4,7 @@ author: CodeHat
 website: http://dev.bukkit.org/server-mods/signcolors/
 softdepend: [Vault]
 description: Make colored signs.
-version: 0.6
+version: 0.7
 
 commands:
   sc:

@@ -46,10 +46,13 @@ colorsymbol: '&'
 signcrafting: true
 ingredientA: 323
 ingredientB: 264
+ingredients:
+- SIGN
+- DIAMOND
 signamount: 10
 price: 10.0
 language: EN
 updatecheck: true
 metrics: true
 logging: true
-configversion: 1
+configversion: 2
