@@ -47,7 +47,7 @@ public class ColoredSignListener implements Listener {
     }
 
     /**
-     * Fixes the NPE on creating a colored sign with an amount of 1x sign.
+     * Fixes the NPE on creating a colored sign with an amount of 1x sign in the player's inventory.
      *
      * @param e BlockPlaceEvent.
      */
@@ -63,9 +63,9 @@ public class ColoredSignListener implements Listener {
     }
 
     /**
-     * Remove the left player from the list to save RAM and optimise speed.
+     * Remove the left player from the list.
      *
-     * @param e PlayerQuitEvent
+     * @param e PlayerQuitEvent.
      */
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerLeave(PlayerQuitEvent e) {
@@ -148,7 +148,7 @@ public class ColoredSignListener implements Listener {
                 e.setLine(2, Message.replaceColors(lang.getLang("sltwo")) + this.plugin.getConfig().getInt("signamount")
                         + Message.replaceColors(lang.getLang("sltwob")));
                 e.setLine(3, Message.replaceColors(lang.getLang("slthree")) + this.plugin.getConfig().getDouble("price") + " $");
-                p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_USE, 1F, 1F);
+                p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_USE, 0.75F, 1F);
             } else {
                 Message.sendMsg(p, lang.getLang("noaction"));
             }
@@ -180,7 +180,7 @@ public class ColoredSignListener implements Listener {
                         eco.withdrawPlayer(p, price);
                         p.getInventory().addItem(this.plugin.i);
                         p.updateInventory();
-                        p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1F, 1F);
+                        p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.75F, 1F);
                         Message.sendMsg(p, "&6-" + eco.format(price) + " &a--->>>&6 "
                                 + eco.format(eco.getBalance(p)));
                         Message.sendMsg(p, lang.getLang("signmsg") + this.plugin.getConfig().getInt("signamount")

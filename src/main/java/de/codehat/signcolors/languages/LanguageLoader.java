@@ -68,7 +68,7 @@ public class LanguageLoader {
     }
 
     /**
-     * Returns language message.
+     * Returns a specific message.
      *
      * @param key Language key.
      * @return Message.

@@ -49,34 +49,48 @@ public class SignColors extends JavaPlugin implements Listener {
 
     //All available colorcodes.
     public static final String ALL_COLOR_CODES = "0123456789abcdefklmnor";
+
     //Config version.
     public static final int CONFIG_VERSION = 2;
+
     //Vault support.
     public static Economy eco = null;
+
     //The language file.
     public File languageFile = null;
+
     //The language FileConfiguration.
     public FileConfiguration langCfg = null;
+
     //Updater Strings.
     public String updateLink = null, updateVersion = null;
+
     //ItemStacks/ItemMeta for colored signs.
     public ItemStack i = null;
     public ItemMeta im = null;
+
     //Item lores for colored signs.
     public List<String> lores = new ArrayList<>();
+
     //Player 'last sign' HashMap
     public List<Player> sign_players = new ArrayList<>();
+
     //Checks if signcrafting is enabled.
     public boolean signcrafting;
+
     //Checks if sending an updatemessage is allowed.
     public boolean updatePlayerMsg;
+
     //Minecraft logger.
     public Logger log = Logger.getLogger("Minecraft");
     public PluginLogger plog = null;
+
     //SQLite Database.
     public SQLite sqlite = null;
+
     //Database Connection.
     public Connection c = null;
+
     //The language module.
     private LanguageLoader lang = new LanguageLoader(this);
 
@@ -125,7 +139,7 @@ public class SignColors extends JavaPlugin implements Listener {
     }
 
     /**
-     * Registers all commands.
+     * Registers all SignColors commands.
      */
     private void registerCommands() {
         CommandHandler cmdh = new CommandHandler(this, lang);
@@ -138,7 +152,7 @@ public class SignColors extends JavaPlugin implements Listener {
     }
 
     /**
-     * Loads the config file.
+     * Loads the config.yml file.
      */
     public void loadConfig() {
         if (new File("plugins" + File.separator + "SignColors" + File.separator + "config.yml").exists()) {
@@ -163,7 +177,7 @@ public class SignColors extends JavaPlugin implements Listener {
     }
 
     /**
-     * Make a backup of the config.yml.
+     * Makes a backup of the current config.yml.
      */
     public void backupConfig() {
         File oldConfigBackup = new File(this.getDataFolder().toPath().toString() + File.separator + "config.yml.old");
@@ -182,7 +196,7 @@ public class SignColors extends JavaPlugin implements Listener {
     }
 
     /**
-     * Make a backup of the languages folder.
+     * Makes a backup of the current 'languages' folder.
      */
     public void backupLanguages() {
         File oldLangBackup = new File(this.getDataFolder().toPath().toString() + File.separator + "languages.old");
@@ -221,7 +235,7 @@ public class SignColors extends JavaPlugin implements Listener {
     }
 
     /**
-     * Helper to extract files from the .jar.
+     * Helper to extract files from the SignColors.jar.
      *
      * @param in   Resource via getResource("file-in-jar.ending").
      * @param file Location where the file should be put to.
@@ -242,7 +256,7 @@ public class SignColors extends JavaPlugin implements Listener {
     }
 
     /**
-     * Adds a sign location to the database.
+     * Adds a location of a sign to the database.
      *
      * @param location Location of the sign (world,x,y,z).
      */
@@ -256,10 +270,10 @@ public class SignColors extends JavaPlugin implements Listener {
     }
 
     /**
-     * Checks if a sign location is stored in the database.
+     * Checks if a location of a sign is stored in the database.
      *
      * @param location Location of the sign (world,x,y,z).
-     * @return true if stored, false if not found.
+     * @return True if stored, false if not found.
      */
     public boolean checkSign(String location) {
         try {
@@ -275,7 +289,7 @@ public class SignColors extends JavaPlugin implements Listener {
     }
 
     /**
-     * Deletes a sign location from the database.
+     * Deletes a location of a sign from the database.
      *
      * @param location Location of the sign (world,x,y,z).
      */
@@ -290,7 +304,7 @@ public class SignColors extends JavaPlugin implements Listener {
     }
 
     /**
-     * Creates the recipe for the colored signs or removes it.
+     * Creates the recipe for the colored signs or recreates it.
      */
     public void setupSigns() {
         i = new ItemStack(Material.SIGN, this.getConfig().getInt("signamount"));
@@ -323,6 +337,7 @@ public class SignColors extends JavaPlugin implements Listener {
                 getServer().addRecipe(sr);
                 signcrafting = true;
             } else if (getConfig().get("recipetype").equals("shaped")) {
+                removeRecipe();
                 List<String> shape = (List<String>) getConfig().getList("recipes.shaped.craftingshape");
                 if (shape.size() > 3) {
                     log.warning("You added more than three recipe shapes to the config!");
@@ -396,7 +411,7 @@ public class SignColors extends JavaPlugin implements Listener {
     }
 
     /**
-     * Loads the sign location database.
+     * Loads the database for the location of the signs.
      */
     public void loadDatabase() {
         if (signcrafting && c == null) {
@@ -435,7 +450,7 @@ public class SignColors extends JavaPlugin implements Listener {
     /**
      * Gives you a colored sign ItemStack with a specific amount.
      *
-     * @param amount Sign amount.
+     * @param amount Amount of signs.
      * @return A colored sign ItemStack.
      */
     public ItemStack getSign(int amount) {
@@ -453,7 +468,7 @@ public class SignColors extends JavaPlugin implements Listener {
     /**
      * Setups vault.
      *
-     * @return true on economy setup, false if economy setup failed.
+     * @return True on a successfull economy setup, false if economy setup fails.
      */
     private boolean setupEconomy() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {

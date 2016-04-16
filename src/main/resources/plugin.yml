@@ -1,7 +1,7 @@
 name: SignColors
 main: de.codehat.signcolors.SignColors
 author: CodeHat
-website: http://dev.bukkit.org/server-mods/signcolors/
+website: https://www.spigotmc.org/resources/signcolors.6135/
 softdepend: [Vault]
 description: Make colored signs.
 version: 0.7
