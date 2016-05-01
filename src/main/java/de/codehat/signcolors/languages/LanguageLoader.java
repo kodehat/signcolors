@@ -13,7 +13,7 @@ import java.util.HashMap;
 public class LanguageLoader {
 
     //Language HashMap.
-    public HashMap<String, String> lg;
+    private HashMap<String, String> lg;
     //SignColors instance.
     private SignColors plugin;
 

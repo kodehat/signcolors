@@ -35,8 +35,8 @@ public class GiveSignCommand extends BaseCommand {
                 if (p.getInventory().firstEmpty() == -1) {
                     Message.sendMsg(sender, lang.getLang("notenspace"));
                 } else {
-                    if (!Utils.isInteger(args[2]) || Integer.valueOf(args[2]) < 0 || Integer.valueOf(args[2]) > 64) {
-                        Message.sendLogoMsg(sender, lang.getLang("invamaount"));
+                    if (!Utils.isInteger(args[2]) || Integer.valueOf(args[2]) < 1 || Integer.valueOf(args[2]) > 64) {
+                        Message.sendLogoMsg(sender, lang.getLang("invamount"));
                     } else {
                         p.getInventory().addItem(this.plugin.getSign(Integer.valueOf(args[2])));
                         Message.sendLogoMsg(sender, String.format(lang.getLang("givesign"), p.getName(), String.valueOf(Integer.valueOf(args[2]))));

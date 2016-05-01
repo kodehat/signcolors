@@ -51,13 +51,13 @@ public class SignColors extends JavaPlugin implements Listener {
     public static final String ALL_COLOR_CODES = "0123456789abcdefklmnor";
 
     //Config version.
-    public static final int CONFIG_VERSION = 2;
+    private static final int CONFIG_VERSION = 2;
 
     //Vault support.
     public static Economy eco = null;
 
     //The language file.
-    public File languageFile = null;
+    private File languageFile = null;
 
     //The language FileConfiguration.
     public FileConfiguration langCfg = null;
@@ -67,10 +67,10 @@ public class SignColors extends JavaPlugin implements Listener {
 
     //ItemStacks/ItemMeta for colored signs.
     public ItemStack i = null;
-    public ItemMeta im = null;
+    //private ItemMeta im = null;
 
     //Item lores for colored signs.
-    public List<String> lores = new ArrayList<>();
+    private List<String> lores = new ArrayList<>();
 
     //Player 'last sign' HashMap
     public List<Player> sign_players = new ArrayList<>();
@@ -82,11 +82,11 @@ public class SignColors extends JavaPlugin implements Listener {
     public boolean updatePlayerMsg;
 
     //Minecraft logger.
-    public Logger log = Logger.getLogger("Minecraft");
-    public PluginLogger plog = null;
+    private Logger log = Logger.getLogger("Minecraft");
+    private PluginLogger plog = null;
 
     //SQLite Database.
-    public SQLite sqlite = null;
+    //private SQLite sqlite = null;
 
     //Database Connection.
     public Connection c = null;
@@ -154,7 +154,7 @@ public class SignColors extends JavaPlugin implements Listener {
     /**
      * Loads the config.yml file.
      */
-    public void loadConfig() {
+    private void loadConfig() {
         if (new File("plugins" + File.separator + "SignColors" + File.separator + "config.yml").exists()) {
             FileConfiguration cfg = this.getConfig();
             cfg.options().copyDefaults(true);
@@ -168,7 +168,7 @@ public class SignColors extends JavaPlugin implements Listener {
     /**
      * Check the current config version and create new if needed.
      */
-    public void checkConfigVersion() {
+    private void checkConfigVersion() {
         if (CONFIG_VERSION > this.getConfig().getInt("configversion")) {
             backupConfig();
             backupLanguages();
@@ -179,10 +179,9 @@ public class SignColors extends JavaPlugin implements Listener {
     /**
      * Makes a backup of the current config.yml.
      */
-    public void backupConfig() {
+    private void backupConfig() {
         File oldConfigBackup = new File(this.getDataFolder().toPath().toString() + File.separator + "config.yml.old");
         if (oldConfigBackup.exists()) oldConfigBackup.delete();
-
         Path sourceConfig = Paths.get(this.getDataFolder().toPath().toString() + File.separator + "config.yml");
         Path targetConfig = Paths.get(this.getDataFolder().toPath().toString() + File.separator + "config.yml.old");
         try {
@@ -198,10 +197,9 @@ public class SignColors extends JavaPlugin implements Listener {
     /**
      * Makes a backup of the current 'languages' folder.
      */
-    public void backupLanguages() {
+    private void backupLanguages() {
         File oldLangBackup = new File(this.getDataFolder().toPath().toString() + File.separator + "languages.old");
         if (oldLangBackup.exists()) Utils.deleteDirectory(oldLangBackup);
-
         ZipUtils.zipFolder(this.getDataFolder().toPath().toString() + File.separator + "languages",
                 this.getDataFolder().toPath().toString() + File.separator + "languages.old.zip");
         log.info("Made a backup of the old languages folder!");
@@ -240,7 +238,7 @@ public class SignColors extends JavaPlugin implements Listener {
      * @param in   Resource via getResource("file-in-jar.ending").
      * @param file Location where the file should be put to.
      */
-    public void extractFile(InputStream in, File file) {
+    private void extractFile(InputStream in, File file) {
         try {
             OutputStream out = new FileOutputStream(file);
             byte[] buf = new byte[1024];
@@ -258,7 +256,7 @@ public class SignColors extends JavaPlugin implements Listener {
     /**
      * Adds a location of a sign to the database.
      *
-     * @param location Location of the sign (world,x,y,z).
+     * @param location Location of the sign (world, x, y, z).
      */
     public void addSign(String location) {
         try {
@@ -308,7 +306,7 @@ public class SignColors extends JavaPlugin implements Listener {
      */
     public void setupSigns() {
         i = new ItemStack(Material.SIGN, this.getConfig().getInt("signamount"));
-        im = i.getItemMeta();
+        ItemMeta im = i.getItemMeta();
         lores.clear();
         lores.add(Message.replaceColors(lang.getLang("signlore")));
         im.setDisplayName(Message.replaceColors(lang.getLang("signname")));
@@ -418,7 +416,7 @@ public class SignColors extends JavaPlugin implements Listener {
             log.info("Loading database...");
             File db_dir = new File(this.getDataFolder().toPath().toString() + File.separator + "data" + File.separator);
             if (!db_dir.exists()) db_dir.mkdir();
-            sqlite = new SQLite(this, "data" + File.separator + "signs.db");
+            SQLite sqlite = new SQLite(this, "data" + File.separator + "signs.db");
             c = sqlite.openConnection();
             Statement signlocation = null;
             try {
@@ -502,7 +500,7 @@ public class SignColors extends JavaPlugin implements Listener {
     /**
      * Checks for plugin updates.
      */
-    public void checkUpdates() {
+    private void checkUpdates() {
         if (getConfig().getBoolean("updatecheck")) {
             final PluginDescriptionFile plugin = getDescription();
             this.getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {

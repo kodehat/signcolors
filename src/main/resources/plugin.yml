@@ -21,7 +21,7 @@ permissions:
       signcolors.help: true
       signcolors.reload: true
       signcolors.sign.create: true
-      signcolor.sign.use: true
+      signcolors.sign.use: true
       signcolors.colorsymbol: true
       signcolors.updatemsg: true
       signcolors.craftsign.bypass: true
