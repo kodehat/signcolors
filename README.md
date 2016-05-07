@@ -48,6 +48,7 @@ Link: [http://www.spigotmc.org/resources/signcolors.6135/](http://www.spigotmc.o
 
 ## Status for v0.7.* or v0.8
 
+ * Make the Logger more useful.
  * Make suggestions.
 
 ## License

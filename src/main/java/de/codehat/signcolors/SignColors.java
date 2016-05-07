@@ -56,9 +56,6 @@ public class SignColors extends JavaPlugin implements Listener {
     //Vault support.
     public static Economy eco = null;
 
-    //The language file.
-    private File languageFile = null;
-
     //The language FileConfiguration.
     public FileConfiguration langCfg = null;
 
@@ -158,10 +155,12 @@ public class SignColors extends JavaPlugin implements Listener {
         if (new File("plugins" + File.separator + "SignColors" + File.separator + "config.yml").exists()) {
             FileConfiguration cfg = this.getConfig();
             cfg.options().copyDefaults(true);
+            this.reloadConfig();
         } else {
             saveDefaultConfig();
             FileConfiguration cfg = this.getConfig();
             cfg.options().copyDefaults(true);
+            this.reloadConfig();
         }
     }
 
@@ -181,7 +180,12 @@ public class SignColors extends JavaPlugin implements Listener {
      */
     private void backupConfig() {
         File oldConfigBackup = new File(this.getDataFolder().toPath().toString() + File.separator + "config.yml.old");
-        if (oldConfigBackup.exists()) oldConfigBackup.delete();
+        if (oldConfigBackup.exists()) {
+            if (!oldConfigBackup.delete()) {
+                log.warning("Could not delete old config backup file! Please delete it manually and restart the server!");
+                return;
+            }
+        }
         Path sourceConfig = Paths.get(this.getDataFolder().toPath().toString() + File.separator + "config.yml");
         Path targetConfig = Paths.get(this.getDataFolder().toPath().toString() + File.separator + "config.yml.old");
         try {
@@ -191,7 +195,9 @@ public class SignColors extends JavaPlugin implements Listener {
         }
         log.info("Made a backup of the old config.yml!");
         File config = new File(this.getDataFolder().toPath().toString() + File.separator + "config.yml");
-        config.delete();
+        if (!config.delete()) {
+            log.warning("Could not delete old config file! Please delete it manually and restart the server!");
+        }
     }
 
     /**
@@ -217,7 +223,12 @@ public class SignColors extends JavaPlugin implements Listener {
         String languageCode = this.getConfig().get("language").toString();
         File langDir = new File(this.getDataFolder().toPath().toString() + File.separator + "languages"
                 + File.separator);
-        if (!langDir.exists()) langDir.mkdir();
+        if (!langDir.exists()) {
+            if (!langDir.mkdir()) {
+                log.warning("Could not create 'languages' folder! Please create it manually and restart the server!");
+                return;
+            }
+        }
         if (langDir.listFiles().length == 0) {
             extractFile(getResource("EN.yml"), new File(this.getDataFolder().toPath().toString() + File.separator
                     + "languages" + File.separator + "EN.yml"));
@@ -226,7 +237,7 @@ public class SignColors extends JavaPlugin implements Listener {
             extractFile(getResource("ES.yml"), new File(this.getDataFolder().toPath().toString() + File.separator
                     + "languages" + File.separator + "ES.yml"));
         }
-        languageFile = new File(this.getDataFolder().toPath().toString() + File.separator + "languages"
+        File languageFile = new File(this.getDataFolder().toPath().toString() + File.separator + "languages"
                 + File.separator + languageCode + ".yml");
         langCfg = YamlConfiguration.loadConfiguration(languageFile);
         log.info("Successfully loaded language file: " + languageCode + ".yml :)");
@@ -305,13 +316,13 @@ public class SignColors extends JavaPlugin implements Listener {
      * Creates the recipe for the colored signs or recreates it.
      */
     public void setupSigns() {
-        i = new ItemStack(Material.SIGN, this.getConfig().getInt("signamount"));
-        ItemMeta im = i.getItemMeta();
+        i = coloredSignStack();
+        /*ItemMeta im = i.getItemMeta();
         lores.clear();
         lores.add(Message.replaceColors(lang.getLang("signlore")));
         im.setDisplayName(Message.replaceColors(lang.getLang("signname")));
         im.setLore(lores);
-        i.setItemMeta(im);
+        i.setItemMeta(im);*/
         if (getConfig().getBoolean("signcrafting")) {
             removeRecipe();
             if (getConfig().get("recipetype").equals("shapeless")) {
@@ -321,7 +332,7 @@ public class SignColors extends JavaPlugin implements Listener {
                     log.warning("Please change it or you will not be able to craft colored signs!");
                     return;
                 }
-                ShapelessRecipe sr = new ShapelessRecipe(i);
+                ShapelessRecipe sr = new ShapelessRecipe(coloredSignStack(1));
                 for (String ingredient : ingredients) {
                     if (ingredient.contains(":")) {
                         String[] ingredientData = ingredient.split(":");
@@ -342,7 +353,7 @@ public class SignColors extends JavaPlugin implements Listener {
                     log.warning("Please change it or you will not be able to craft colored signs!");
                     return;
                 }
-                ShapedRecipe sr = new ShapedRecipe(i);
+                ShapedRecipe sr = new ShapedRecipe(coloredSignStack(1));
                 switch (shape.size()) {
                     case 1:
                         sr.shape(shape.get(0));
@@ -382,6 +393,39 @@ public class SignColors extends JavaPlugin implements Listener {
     }
 
     /**
+     * The ItemStack for colored signs.
+     *
+     * @return The ItemStack for colored signs.
+     */
+    public ItemStack coloredSignStack() {
+        ItemStack i = new ItemStack(Material.SIGN, this.getConfig().getInt("signamount"));
+        ItemMeta im = i.getItemMeta();
+        lores.clear();
+        lores.add(Message.replaceColors(lang.getLang("signlore")));
+        im.setDisplayName(Message.replaceColors(lang.getLang("signname")));
+        im.setLore(lores);
+        i.setItemMeta(im);
+        return i;
+    }
+
+    /**
+     * The ItemStack for colored signs.
+     *
+     * @param amount Amount if you do not want to use the config 'amount'. Else it can be null.
+     * @return The ItemStack for colored signs.
+     */
+    public ItemStack coloredSignStack(int amount) {
+        ItemStack i = new ItemStack(Material.SIGN, amount);
+        ItemMeta im = i.getItemMeta();
+        lores.clear();
+        lores.add(Message.replaceColors(lang.getLang("signlore")));
+        im.setDisplayName(Message.replaceColors(lang.getLang("signname")));
+        im.setLore(lores);
+        i.setItemMeta(im);
+        return i;
+    }
+
+    /**
      * Configures the PluginLogger.
      */
     public void setupLogger() {
@@ -415,7 +459,12 @@ public class SignColors extends JavaPlugin implements Listener {
         if (signcrafting && c == null) {
             log.info("Loading database...");
             File db_dir = new File(this.getDataFolder().toPath().toString() + File.separator + "data" + File.separator);
-            if (!db_dir.exists()) db_dir.mkdir();
+            if (!db_dir.exists()) {
+                if (!db_dir.mkdir()) {
+                    log.warning("Could not create 'data' folder! Please create it manually and restart the server!");
+                    return;
+                }
+            }
             SQLite sqlite = new SQLite(this, "data" + File.separator + "signs.db");
             c = sqlite.openConnection();
             Statement signlocation = null;

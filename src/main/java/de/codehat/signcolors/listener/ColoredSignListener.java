@@ -113,16 +113,16 @@ public class ColoredSignListener implements Listener {
                         if (this.plugin.sign_players.contains(p)) this.plugin.sign_players.remove(p);
                         makeColors(e, p);
                         Block b = e.getBlock();
-                        this.plugin.addSign(b.getLocation().getWorld().getName() + "," + b.getLocation().getBlockX() + ","
-                                + b.getLocation().getBlockY() + "," + b.getLocation().getBlockZ());
+                        this.plugin.addSign(b.getLocation().getWorld().getName() + "," + b.getLocation().getBlockX()
+                                + "," + b.getLocation().getBlockY() + "," + b.getLocation().getBlockZ());
                     }
                 } else {
                     if (i.getItemMeta().hasLore()) {
                         if (this.plugin.sign_players.contains(p)) this.plugin.sign_players.remove(p);
                         makeColors(e, p);
                         Block b = e.getBlock();
-                        this.plugin.addSign(b.getLocation().getWorld().getName() + "," + b.getLocation().getBlockX() + ","
-                                + b.getLocation().getBlockY() + "," + b.getLocation().getBlockZ());
+                        this.plugin.addSign(b.getLocation().getWorld().getName() + "," + b.getLocation().getBlockX()
+                                + "," + b.getLocation().getBlockY() + "," + b.getLocation().getBlockZ());
                     }
                 }
             } else {
@@ -147,7 +147,8 @@ public class ColoredSignListener implements Listener {
                 e.setLine(1, Message.replaceColors(lang.getLang("slone")));
                 e.setLine(2, Message.replaceColors(lang.getLang("sltwo")) + this.plugin.getConfig().getInt("signamount")
                         + Message.replaceColors(lang.getLang("sltwob")));
-                e.setLine(3, Message.replaceColors(lang.getLang("slthree")) + this.plugin.getConfig().getDouble("price") + " $");
+                e.setLine(3, Message.replaceColors(lang.getLang("slthree")) + this.plugin.getConfig().getDouble("price")
+                        + " $");
                 p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_USE, 0.75F, 1F);
             } else {
                 Message.sendMsg(p, lang.getLang("noaction"));
@@ -223,7 +224,8 @@ public class ColoredSignListener implements Listener {
             for (String partline : colorline) {
                 int color;
                 if (partline.equals(colorline[0])) continue;
-                if (partline.length() == 0 || SignColors.ALL_COLOR_CODES.indexOf(partline.toLowerCase().charAt(0)) == -1) {
+                if (partline.length() == 0
+                        || SignColors.ALL_COLOR_CODES.indexOf(partline.toLowerCase().charAt(0)) == -1) {
                     newline += colorChar + partline;
                     continue;
                 }
@@ -248,6 +250,7 @@ public class ColoredSignListener implements Listener {
      */
     private boolean checkColorPermissions(Player p, int color) {
         char col = SignColors.ALL_COLOR_CODES.charAt(color);
-        return (color == 0) || p.hasPermission("signcolors.color." + col) || p.hasPermission("signcolors.*") || p.hasPermission("signcolors.colors");
+        return (color == 0) || p.hasPermission("signcolors.color." + col) || p.hasPermission("signcolors.*")
+                || p.hasPermission("signcolors.colors");
     }
 }
