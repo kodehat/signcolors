@@ -145,23 +145,29 @@ public class SignColors extends JavaPlugin implements Listener {
         cmdh.registerNewCommand("colorcodes", new ColorCodesCommand(this, lang));
         cmdh.registerNewCommand("givesign", new GiveSignCommand(this, lang));
         cmdh.registerNewCommand("colorsymbol", new ColorSymbolCommand(this, lang));
-        getCommand("sc").setExecutor(new CommandHandler(this, lang));
+        getCommand(getConfig().get("plugincommand").toString().toLowerCase())
+                .setExecutor(new CommandHandler(this, lang));
     }
 
     /**
      * Loads the config.yml file.
      */
     private void loadConfig() {
-        if (new File("plugins" + File.separator + "SignColors" + File.separator + "config.yml").exists()) {
-            FileConfiguration cfg = this.getConfig();
-            cfg.options().copyDefaults(true);
-            this.reloadConfig();
-        } else {
-            saveDefaultConfig();
-            FileConfiguration cfg = this.getConfig();
-            cfg.options().copyDefaults(true);
-            this.reloadConfig();
+        try {
+            if (!getDataFolder().exists()) {
+                getDataFolder().mkdirs();
+            }
+            File file = new File(getDataFolder(), "config.yml");
+            if (!file.exists()) {
+                getLogger().info("config.yml not found, creating!");
+                saveDefaultConfig();
+            } else {
+                getLogger().info("config.yml found, loading!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        reloadConfig();
     }
 
     /**

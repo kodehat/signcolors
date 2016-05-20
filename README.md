@@ -35,6 +35,7 @@ For `/sc` you can alternatively use `/signcolors`
 - `signcolors.craftsign.bypass` - Allows you to write colors on a normal sign, even if signcrafting is true.
 - `signcolors.listcodes` - Allows you to see the color/format codes list.
 - `signcolors.givesign` - Allows you to use the `/sc givesign` command.
+- `signcolors.blockedfirstlines.bypass` - Allows you to bypass the blocked first lines.
 
 ## Add your own language
 
@@ -48,6 +49,7 @@ Link: [http://www.spigotmc.org/resources/signcolors.6135/](http://www.spigotmc.o
 
 ## Status for v0.7.* or v0.8
 
+ * Add possibility to change the costs of a colored sign directly on [SC] sign.
  * Make the Logger more useful.
  * Make suggestions.
 

@@ -27,6 +27,7 @@ permissions:
       signcolors.craftsign.bypass: true
       signcolors.listcodes: true
       signcolors.givesign: true
+      signcolors.blockedfirstlines.bypass: true
   signcolors.colors:
     description: Allows you to write colored signs.
   signcolors.info:
@@ -49,3 +50,5 @@ permissions:
     description: Allows you to use the /sc colorcodes command.
   signcolors.givesign:
     description: Allows you to use the /sc givesign command.
+  signcolors.blockedfirstlines.bypass:
+    description: Allows you to bypass the blocked first lines.

@@ -64,6 +64,7 @@ public class LanguageLoader {
         lg.put("givesign", this.plugin.langCfg.getString("GIVESIGN"));
         lg.put("invamount", this.plugin.langCfg.getString("INVAMOUNT"));
         lg.put("gshelp", this.plugin.langCfg.getString("GSHELP"));
+        lg.put("notallfl", this.plugin.langCfg.getString("NOTALLFL"));
         Message.lang = this;
     }
 

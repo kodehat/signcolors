@@ -11,6 +11,9 @@
 # ####################<|>####################
 # ####################<|>####################
 # CONFIG EXPLANATION:
+# Command prefix for this plugin. Default: /sc.
+# plugincommand: "sc"
+# --------------------------------------------------------
 # The symbol in front of the colorcode e.g. &6 (= GOLD).
 # colorsymbol: '&'
 # --------------------------------------------------------
@@ -66,6 +69,14 @@
 #    - "INK_SACK:11"
 #    - "SIGN"
 # --------------------------------------------------------
+# Prevents players to create clickable signs like the
+# plugin's [SC] sign or Essential's [Buy] sign. You
+# are free to add as many you want. And don't worry, the
+# '&' character gets replaced by the current colorsymbol.
+# blocked_firstlines:
+# - "&6[&3SC&6]"
+# - "&1[Buy]"
+# --------------------------------------------------------
 # How many signs should they get from a [SignColors] sign?
 # signamount: 10
 # --------------------------------------------------------
@@ -86,6 +97,7 @@
 # Config version. Don't change it!
 # configversion: 2
 # PLUGIN SETTINGS:
+plugincommand: "sc"
 colorsymbol: '&'
 signcrafting: true
 recipetype: "shaped"
@@ -108,6 +120,9 @@ recipes:
     - "INK_SACK:4"
     - "INK_SACK:11"
     - "SIGN"
+blocked_firstlines:
+- "&6[&3SC&6]"
+- "&1[Buy]"
 signamount: 10
 price: 10.0
 language: EN

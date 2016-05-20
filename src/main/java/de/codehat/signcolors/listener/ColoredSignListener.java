@@ -26,6 +26,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
+
 import static de.codehat.signcolors.SignColors.eco;
 
 public class ColoredSignListener implements Listener {
@@ -192,6 +194,25 @@ public class ColoredSignListener implements Listener {
                 }
             }
         }
+    }
+
+    /**
+     * Checks the first line of the sign and prevents creation if needed.
+     *
+     * @param e
+     */
+    @EventHandler(priority = EventPriority.HIGH)
+    public void checkFirstLine(SignChangeEvent e) {
+        //if (e.getLine(0).contains(this.plugin.getConfig().get("colorsymbol").toString())) {
+        List<String> blocked_lines = (List<String>) this.plugin.getConfig().getList("blocked_firstlines");
+        for (String blocked_line : blocked_lines) {
+            if (e.getLine(0).trim().equals(Message.replaceColors(blocked_line))
+                    && !e.getPlayer().hasPermission("signcolors.blockedfirstlines.bypass")) {
+                Message.sendLogoMsg(e.getPlayer(), lang.getLang("notallfl"));
+                e.setCancelled(true);
+            }
+        }
+        //}
     }
 
     /**
