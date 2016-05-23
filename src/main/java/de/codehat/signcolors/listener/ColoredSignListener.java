@@ -199,11 +199,10 @@ public class ColoredSignListener implements Listener {
     /**
      * Checks the first line of the sign and prevents creation if needed.
      *
-     * @param e
+     * @param e SignChangeEvent.
      */
     @EventHandler(priority = EventPriority.HIGH)
     public void checkFirstLine(SignChangeEvent e) {
-        //if (e.getLine(0).contains(this.plugin.getConfig().get("colorsymbol").toString())) {
         List<String> blocked_lines = (List<String>) this.plugin.getConfig().getList("blocked_firstlines");
         for (String blocked_line : blocked_lines) {
             if (e.getLine(0).trim().contains(Message.replaceColors(blocked_line))
@@ -212,7 +211,6 @@ public class ColoredSignListener implements Listener {
                 e.setCancelled(true);
             }
         }
-        //}
     }
 
     /**
