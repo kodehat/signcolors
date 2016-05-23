@@ -93,6 +93,7 @@ public class SignColors extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
+        reloadConfig();
         saveConfig();
         PluginDescriptionFile plugin = getDescription();
         if (c != null) {
@@ -145,8 +146,7 @@ public class SignColors extends JavaPlugin implements Listener {
         cmdh.registerNewCommand("colorcodes", new ColorCodesCommand(this, lang));
         cmdh.registerNewCommand("givesign", new GiveSignCommand(this, lang));
         cmdh.registerNewCommand("colorsymbol", new ColorSymbolCommand(this, lang));
-        getCommand(getConfig().get("plugincommand").toString().toLowerCase())
-                .setExecutor(new CommandHandler(this, lang));
+        getCommand("sc").setExecutor(new CommandHandler(this, lang));
     }
 
     /**
@@ -323,12 +323,6 @@ public class SignColors extends JavaPlugin implements Listener {
      */
     public void setupSigns() {
         i = coloredSignStack();
-        /*ItemMeta im = i.getItemMeta();
-        lores.clear();
-        lores.add(Message.replaceColors(lang.getLang("signlore")));
-        im.setDisplayName(Message.replaceColors(lang.getLang("signname")));
-        im.setLore(lores);
-        i.setItemMeta(im);*/
         if (getConfig().getBoolean("signcrafting")) {
             removeRecipe();
             if (getConfig().get("recipetype").equals("shapeless")) {
@@ -452,7 +446,7 @@ public class SignColors extends JavaPlugin implements Listener {
         while (it.hasNext()) {
             recipe = it.next();
             if (recipe != null && recipe.getResult().getType() == Material.SIGN && recipe.getResult().getAmount()
-                    == getConfig().getInt("signamount")) {
+                    == 1) {
                 it.remove();
             }
         }
