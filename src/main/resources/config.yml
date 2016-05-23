@@ -11,8 +11,6 @@
 # ####################<|>####################
 # ####################<|>####################
 # CONFIG EXPLANATION:
-# Command prefix for this plugin. Default: /sc.
-# plugincommand: "sc"
 # --------------------------------------------------------
 # The symbol in front of the colorcode e.g. &6 (= GOLD).
 # colorsymbol: '&'
@@ -25,14 +23,14 @@
 # to place your items/blocks on the workbench.
 # "shapeless": They do not have a pattern and you can
 # place the ingredients on your workbench where you want.
-# recipetype: "shaped"
+# recipetype: 'shaped'
 # --------------------------------------------------------
 # ONLY enabled if "recipetype" is set to "shaped"!
 # At first you define your items/blocks you want to use in
 # your recipe and give them a letter as a variable name.
-# E.g. S: "SIGN"
+# E.g. S: 'SIGN'
 # You can use data values as well.
-# E.g. T: "WOOL:9"
+# E.g. T: 'WOOL:9'
 # This would represent Cyan Wool.
 # Generally the ingredients pattern is:
 # VARIABLELETTER: "MATERIALNAME:DATAVALUE"
@@ -44,15 +42,15 @@
 # than three characters (whitespace included) in one line!
 #  shaped:
 #    ingredients:
-#      A: "INK_SACK:1"
-#      B: "INK_SACK:2"
-#      C: "INK_SACK:4"
-#      D: "INK_SACK:11"
-#      S: "SIGN"
+#      A: 'INK_SACK:1'
+#      B: 'INK_SACK:2'
+#      C: 'INK_SACK:4'
+#      D: 'INK_SACK:11'
+#      S: 'SIGN'
 #    craftingshape:
-#    - "A B"
-#    - " S "
-#    - "C D"
+#    - 'A B'
+#    - ' S '
+#    - 'C D'
 # --------------------------------------------------------
 # ONLY enabled if "recipetype" is set to "shapeless"!
 # Which items/blocks should they use to craft them?
@@ -63,19 +61,19 @@
 # MATERIALNAME:DATAVALUE
 #  shapeless:
 #    ingredients:
-#    - "INK_SACK:1"
-#    - "INK_SACK:2"
-#    - "INK_SACK:4"
-#    - "INK_SACK:11"
-#    - "SIGN"
+#    - 'INK_SACK:1'
+#    - 'INK_SACK:2'
+#    - 'INK_SACK:4'
+#    - 'INK_SACK:11'
+#    - 'SIGN'
 # --------------------------------------------------------
 # Prevents players to create clickable signs like the
 # plugin's [SC] sign or Essential's [Buy] sign. You
 # are free to add as many you want. And don't worry, the
 # '&' character gets replaced by the current colorsymbol.
 # blocked_firstlines:
-# - "&6[&3SC&6]"
-# - "&1[Buy]"
+# - '&6[&3SC&6]'
+# - '&1[Buy]'
 # --------------------------------------------------------
 # How many signs should they get from a [SignColors] sign?
 # signamount: 10
@@ -86,7 +84,7 @@
 # Sets the plugin language (DE = german; EN = english;
 # ES = spanish). You can add your own language by adding
 # a YOURLANG.yml file to the languages folder.
-# language: EN
+# language: 'EN'
 # --------------------------------------------------------
 # Should the plugin check for updates.
 # updatecheck: true
@@ -97,35 +95,34 @@
 # Config version. Don't change it!
 # configversion: 2
 # PLUGIN SETTINGS:
-plugincommand: "sc"
 colorsymbol: '&'
 signcrafting: true
-recipetype: "shaped"
+recipetype: 'shaped'
 recipes:
   shaped:
     ingredients:
-      A: "INK_SACK:1"
-      B: "INK_SACK:2"
-      C: "INK_SACK:4"
-      D: "INK_SACK:11"
-      S: "SIGN"
+      A: 'INK_SACK:1'
+      B: 'INK_SACK:2'
+      C: 'INK_SACK:4'
+      D: 'INK_SACK:11'
+      S: 'SIGN'
     craftingshape:
-    - "A B"
-    - " S "
-    - "C D"
+    - 'A B'
+    - ' S '
+    - 'C D'
   shapeless:
     ingredients:
-    - "INK_SACK:1"
-    - "INK_SACK:2"
-    - "INK_SACK:4"
-    - "INK_SACK:11"
-    - "SIGN"
+    - 'INK_SACK:1'
+    - 'INK_SACK:2'
+    - 'INK_SACK:4'
+    - 'INK_SACK:11'
+    - 'SIGN'
 blocked_firstlines:
-- "&6[&3SC&6]"
-- "&1[Buy]"
+- '&6[&3SC&6]'
+- '&1[Buy]'
 signamount: 10
 price: 10.0
-language: EN
+language: 'EN'
 updatecheck: true
 metrics: true
 logging: false

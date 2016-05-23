@@ -206,7 +206,7 @@ public class ColoredSignListener implements Listener {
         //if (e.getLine(0).contains(this.plugin.getConfig().get("colorsymbol").toString())) {
         List<String> blocked_lines = (List<String>) this.plugin.getConfig().getList("blocked_firstlines");
         for (String blocked_line : blocked_lines) {
-            if (e.getLine(0).trim().equals(Message.replaceColors(blocked_line))
+            if (e.getLine(0).trim().contains(Message.replaceColors(blocked_line))
                     && !e.getPlayer().hasPermission("signcolors.blockedfirstlines.bypass")) {
                 Message.sendLogoMsg(e.getPlayer(), lang.getLang("notallfl"));
                 e.setCancelled(true);
