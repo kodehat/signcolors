@@ -75,8 +75,13 @@
 # - '&6[&3SC&6]'
 # - '&1[Buy]'
 # --------------------------------------------------------
+# => sc_sign
 # How many signs should they get from a [SignColors] sign?
-# signamount: 10
+# => crafting
+# How many signs should they get from the crafting recipe?
+# signamount:
+#   crafting: 1
+#   sc_sign: 10
 # --------------------------------------------------------
 # Price for 10 signs from a [SignColors] sign.
 # price: 10.0
@@ -93,7 +98,7 @@
 # metrics: true
 # --------------------------------------------------------
 # Config version. Don't change it!
-# configversion: 2
+# configversion: 3
 # PLUGIN SETTINGS:
 colorsymbol: '&'
 signcrafting: true
@@ -120,10 +125,12 @@ recipes:
 blocked_firstlines:
 - '&6[&3SC&6]'
 - '&1[Buy]'
-signamount: 10
+signamount:
+  crafting: 1
+  sc_sign: 10
 price: 10.0
 language: 'EN'
 updatecheck: true
 metrics: true
 logging: false
-configversion: 2
+configversion: 3

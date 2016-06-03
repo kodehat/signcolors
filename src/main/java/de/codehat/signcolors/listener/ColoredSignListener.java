@@ -186,7 +186,7 @@ public class ColoredSignListener implements Listener {
                         p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.75F, 1F);
                         Message.sendMsg(p, "&6-" + eco.format(price) + " &a--->>>&6 "
                                 + eco.format(eco.getBalance(p)));
-                        Message.sendMsg(p, lang.getLang("signmsg") + this.plugin.getConfig().getInt("signamount")
+                        Message.sendMsg(p, lang.getLang("signmsg") + this.plugin.getConfig().getInt("signamount.sc_sign")
                                 + lang.getLang("signmsgb"));
                     } else {
                         Message.sendMsg(p, lang.getLang("noaction"));

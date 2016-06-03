@@ -23,11 +23,13 @@ public class ReloadCommand extends BaseCommand {
             Message.sendLogoMsg(sender, lang.getLang("nocmd"));
             return;
         }
+        this.plugin.oldSignAmount = this.plugin.getConfig().getInt("signamount.crafting");
         this.plugin.reloadConfig();
         this.plugin.setupLogger();
         this.plugin.startMetrics();
         this.plugin.setupLanguage();
         this.lang.loadLanguage();
+        this.plugin.removeRecipe();
         this.plugin.setupSigns();
         this.plugin.loadDatabase();
         Message.sendLogoMsg(sender, lang.getLang("configre"));

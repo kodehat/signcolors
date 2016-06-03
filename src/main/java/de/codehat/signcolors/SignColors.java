@@ -82,14 +82,14 @@ public class SignColors extends JavaPlugin implements Listener {
     private Logger log = Logger.getLogger("Minecraft");
     private PluginLogger plog = null;
 
-    //SQLite Database.
-    //private SQLite sqlite = null;
-
     //Database Connection.
     public Connection c = null;
 
     //The language module.
     private LanguageLoader lang = new LanguageLoader(this);
+
+    //Old crafting sign recipe amount
+    public int oldSignAmount = 0;
 
     @Override
     public void onDisable() {
@@ -324,15 +324,14 @@ public class SignColors extends JavaPlugin implements Listener {
     public void setupSigns() {
         i = coloredSignStack();
         if (getConfig().getBoolean("signcrafting")) {
-            removeRecipe();
-            if (getConfig().get("recipetype").equals("shapeless")) {
+            if (getConfig().getString("recipetype").equals("shapeless")) {
                 List<String> ingredients = (List<String>) getConfig().getList("recipes.shapeless.ingredients");
                 if (ingredients.size() > 9) {
                     log.warning("You added more than nine crafting items to the config!");
                     log.warning("Please change it or you will not be able to craft colored signs!");
                     return;
                 }
-                ShapelessRecipe sr = new ShapelessRecipe(coloredSignStack(1));
+                ShapelessRecipe sr = new ShapelessRecipe(coloredSignStack(getConfig().getInt("signamount.crafting")));
                 for (String ingredient : ingredients) {
                     if (ingredient.contains(":")) {
                         String[] ingredientData = ingredient.split(":");
@@ -345,15 +344,14 @@ public class SignColors extends JavaPlugin implements Listener {
                 }
                 getServer().addRecipe(sr);
                 signcrafting = true;
-            } else if (getConfig().get("recipetype").equals("shaped")) {
-                removeRecipe();
+            } else if (getConfig().getString("recipetype").equals("shaped")) {
                 List<String> shape = (List<String>) getConfig().getList("recipes.shaped.craftingshape");
                 if (shape.size() > 3) {
                     log.warning("You added more than three recipe shapes to the config!");
                     log.warning("Please change it or you will not be able to craft colored signs!");
                     return;
                 }
-                ShapedRecipe sr = new ShapedRecipe(coloredSignStack(1));
+                ShapedRecipe sr = new ShapedRecipe(coloredSignStack(getConfig().getInt("signamount.crafting")));
                 switch (shape.size()) {
                     case 1:
                         sr.shape(shape.get(0));
@@ -387,7 +385,6 @@ public class SignColors extends JavaPlugin implements Listener {
                 log.warning("Please change it or you will not be able to craft colored signs!");
             }
         } else {
-            removeRecipe();
             signcrafting = false;
         }
     }
@@ -398,7 +395,7 @@ public class SignColors extends JavaPlugin implements Listener {
      * @return The ItemStack for colored signs.
      */
     public ItemStack coloredSignStack() {
-        ItemStack i = new ItemStack(Material.SIGN, this.getConfig().getInt("signamount"));
+        ItemStack i = new ItemStack(Material.SIGN, this.getConfig().getInt("signamount.sc_sign"));
         ItemMeta im = i.getItemMeta();
         lores.clear();
         lores.add(Message.replaceColors(lang.getLang("signlore")));
@@ -440,13 +437,13 @@ public class SignColors extends JavaPlugin implements Listener {
     /**
      * Removes the created colored sign recipe.
      */
-    private void removeRecipe() {
+    public void removeRecipe() {
         Iterator<Recipe> it = getServer().recipeIterator();
         Recipe recipe;
         while (it.hasNext()) {
             recipe = it.next();
             if (recipe != null && recipe.getResult().getType() == Material.SIGN && recipe.getResult().getAmount()
-                    == 1) {
+                    == oldSignAmount) {
                 it.remove();
             }
         }
