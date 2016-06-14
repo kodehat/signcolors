@@ -47,55 +47,55 @@ import java.util.logging.Logger;
 
 public class SignColors extends JavaPlugin implements Listener {
 
-    //All available colorcodes.
+    // All available colorcodes.
     public static final String ALL_COLOR_CODES = "0123456789abcdefklmnor";
 
-    //Config version.
+    // Config version.
     private static final int CONFIG_VERSION = 2;
 
-    //Vault support.
+    // Vault support.
     public static Economy eco = null;
 
-    //The language FileConfiguration.
+    // The language FileConfiguration.
     public FileConfiguration langCfg = null;
 
-    //Updater Strings.
+    // Updater Strings.
     public String updateLink = null, updateVersion = null;
 
-    //ItemStacks/ItemMeta for colored signs.
+    // ItemStacks/ItemMeta for colored signs.
     public ItemStack i = null;
-    //private ItemMeta im = null;
 
-    //Item lores for colored signs.
+    // Item lores for colored signs.
     private List<String> lores = new ArrayList<>();
 
-    //Player 'last sign' HashMap
+    // Player 'last sign' HashMap.
     public List<Player> sign_players = new ArrayList<>();
 
-    //Checks if signcrafting is enabled.
+    // Checks if signcrafting is enabled.
     public boolean signcrafting;
 
-    //Checks if sending an updatemessage is allowed.
+    // Checks if sending an updatemessage is allowed.
     public boolean updatePlayerMsg;
 
-    //Minecraft logger.
+    // Minecraft logger.
     private Logger log = Logger.getLogger("Minecraft");
     private PluginLogger plog = null;
 
-    //Database Connection.
+    // Database Connection.
     public Connection c = null;
 
-    //The language module.
+    // The language module.
     private LanguageLoader lang = new LanguageLoader(this);
 
-    //Old crafting sign recipe amount
+    // Old crafting sign recipe amount.
     public int oldSignAmount = 0;
 
     @Override
     public void onDisable() {
-        reloadConfig();
-        saveConfig();
-        PluginDescriptionFile plugin = getDescription();
+        this.reloadConfig();
+        this.saveConfig();
+        PluginDescriptionFile plugin = this.getDescription();
+        // Close database if needed.
         if (c != null) {
             try {
                 log.info("Closing database...");
@@ -107,6 +107,7 @@ public class SignColors extends JavaPlugin implements Listener {
                 plog.warn(e.getMessage(), true);
             }
         }
+        // Close logger if needed.
         if (plog != null) plog.close();
         log.info("Version " + plugin.getVersion() + " by CodeHat disabled.");
         super.onDisable();
@@ -115,23 +116,24 @@ public class SignColors extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         this.log = this.getLogger();
-        loadConfig();
-        checkConfigVersion();
-        setupLogger();
-        setupLanguage();
+        this.loadConfig();
+        this.checkConfigVersion();
+        this.setupLogger();
+        this.setupLanguage();
         lang.loadLanguage();
-        setupSigns();
+        this.setupSigns();
         new ColoredSignListener(this, lang);
-        registerCommands();
-        if (!setupEconomy()) {
+        this.registerCommands();
+        // Check if Vault is installed.
+        if (!this.setupEconomy()) {
             log.info("Some features won't work, because no Vault/Economy dependency found!");
             log.info("Please install this dependency!");
             plog.warn("Vault is NOT installed!", true);
         }
-        loadDatabase();
-        checkUpdates();
-        startMetrics();
-        PluginDescriptionFile plugin = getDescription();
+        this.loadDatabase();
+        this.checkUpdates();
+        this.startMetrics();
+        PluginDescriptionFile plugin = this.getDescription();
         log.info("Version " + plugin.getVersion() + " by CodeHat enabled.");
         super.onEnable();
     }
@@ -141,12 +143,14 @@ public class SignColors extends JavaPlugin implements Listener {
      */
     private void registerCommands() {
         CommandHandler cmdh = new CommandHandler(this, lang);
+        // Register all subcommands.
         cmdh.registerNewCommand("help", new HelpCommand(this, lang));
         cmdh.registerNewCommand("reload", new ReloadCommand(this, lang));
         cmdh.registerNewCommand("colorcodes", new ColorCodesCommand(this, lang));
         cmdh.registerNewCommand("givesign", new GiveSignCommand(this, lang));
         cmdh.registerNewCommand("colorsymbol", new ColorSymbolCommand(this, lang));
-        getCommand("sc").setExecutor(new CommandHandler(this, lang));
+        // Set executor for /sc.
+        this.getCommand("sc").setExecutor(new CommandHandler(this, lang));
     }
 
     /**
@@ -154,20 +158,27 @@ public class SignColors extends JavaPlugin implements Listener {
      */
     private void loadConfig() {
         try {
-            if (!getDataFolder().exists()) {
-                getDataFolder().mkdirs();
+            // Create folders if needed.
+            if (!this.getDataFolder().exists()) {
+                if (!this.getDataFolder().mkdirs()) {
+                    log.warning("Could not create the data folder for the plugin! Please check if you have enough " +
+                            "permissions to create folders!");
+                    return;
+                }
             }
             File file = new File(getDataFolder(), "config.yml");
             if (!file.exists()) {
-                getLogger().info("config.yml not found, creating!");
-                saveDefaultConfig();
+                // Config not found.
+                this.getLogger().info("config.yml not found, creating!");
+                this.saveDefaultConfig();
             } else {
-                getLogger().info("config.yml found, loading!");
+                // Config found.
+                this.getLogger().info("config.yml found, loading!");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        reloadConfig();
+        this.reloadConfig();
     }
 
     /**
@@ -175,9 +186,10 @@ public class SignColors extends JavaPlugin implements Listener {
      */
     private void checkConfigVersion() {
         if (CONFIG_VERSION > this.getConfig().getInt("configversion")) {
-            backupConfig();
-            backupLanguages();
-            loadConfig();
+            // Backup old config file and languages folder to be able to update them.
+            this.backupConfig();
+            this.backupLanguages();
+            this.loadConfig();
         }
     }
 
@@ -185,22 +197,26 @@ public class SignColors extends JavaPlugin implements Listener {
      * Makes a backup of the current config.yml.
      */
     private void backupConfig() {
-        File oldConfigBackup = new File(this.getDataFolder().toPath().toString() + File.separator + "config.yml.old");
+        File oldConfigBackup = new File(this.getDataFolder(), "config.yml.old");
+        // Delete old config.yml if it exists.
         if (oldConfigBackup.exists()) {
             if (!oldConfigBackup.delete()) {
-                log.warning("Could not delete old config backup file! Please delete it manually and restart the server!");
+                log.warning("Could not delete old config backup file! Please delete it manually and restart " +
+                        "the server!");
                 return;
             }
         }
         Path sourceConfig = Paths.get(this.getDataFolder().toPath().toString() + File.separator + "config.yml");
         Path targetConfig = Paths.get(this.getDataFolder().toPath().toString() + File.separator + "config.yml.old");
         try {
+            // Make a backup of the current config.yml -> config.yml.old.
             Files.copy(sourceConfig, targetConfig);
         } catch (IOException e1) {
             e1.printStackTrace();
         }
         log.info("Made a backup of the old config.yml!");
         File config = new File(this.getDataFolder().toPath().toString() + File.separator + "config.yml");
+        // Delete the old config.yml to be able to create the updated one.
         if (!config.delete()) {
             log.warning("Could not delete old config file! Please delete it manually and restart the server!");
         }
@@ -210,14 +226,21 @@ public class SignColors extends JavaPlugin implements Listener {
      * Makes a backup of the current 'languages' folder.
      */
     private void backupLanguages() {
-        File oldLangBackup = new File(this.getDataFolder().toPath().toString() + File.separator + "languages.old");
-        if (oldLangBackup.exists()) Utils.deleteDirectory(oldLangBackup);
+        File oldLangBackup = new File(this.getDataFolder().toPath().toString() + File.separator + "languages.old.zip");
+        // Delete old languages backup .zip file if it exists.
+        if (oldLangBackup.exists()) {
+            if (!oldLangBackup.delete()) {
+                log.warning("Could not delete old languages backup file! Please delete it manually and restart " +
+                        "the server!");
+                return;
+            }
+        }
+        // Create a .zip file of the current 'languages' folder.
         ZipUtils.zipFolder(this.getDataFolder().toPath().toString() + File.separator + "languages",
                 this.getDataFolder().toPath().toString() + File.separator + "languages.old.zip");
         log.info("Made a backup of the old languages folder!");
-        if (Utils.deleteDirectory(new File(this.getDataFolder().toPath().toString() + File.separator + "languages"))) {
-            log.info("Successfully deleted old languages folder!");
-        } else {
+        // Delete the old 'languages' folder to be able to create the updated one.
+        if (!Utils.deleteDirectory(new File(this.getDataFolder().toPath().toString() + File.separator + "languages"))) {
             log.warning("Could not delete the old languages folder");
         }
     }
@@ -226,16 +249,21 @@ public class SignColors extends JavaPlugin implements Listener {
      * Loads the given language from the LANGCODE.yml.
      */
     public void setupLanguage() {
+        // Get current language code from config.
         String languageCode = this.getConfig().get("language").toString();
+        // Get 'languages' folder.
         File langDir = new File(this.getDataFolder().toPath().toString() + File.separator + "languages"
                 + File.separator);
+        // Create 'languages' if it does not exist.
         if (!langDir.exists()) {
             if (!langDir.mkdir()) {
                 log.warning("Could not create 'languages' folder! Please create it manually and restart the server!");
                 return;
             }
         }
+        // Check if the 'languages' folder contains all languages. Extract them if not.
         if (langDir.listFiles().length == 0) {
+            // Extract all available languages.
             extractFile(getResource("EN.yml"), new File(this.getDataFolder().toPath().toString() + File.separator
                     + "languages" + File.separator + "EN.yml"));
             extractFile(getResource("DE.yml"), new File(this.getDataFolder().toPath().toString() + File.separator
@@ -243,8 +271,10 @@ public class SignColors extends JavaPlugin implements Listener {
             extractFile(getResource("ES.yml"), new File(this.getDataFolder().toPath().toString() + File.separator
                     + "languages" + File.separator + "ES.yml"));
         }
+        // Get current languages file.
         File languageFile = new File(this.getDataFolder().toPath().toString() + File.separator + "languages"
                 + File.separator + languageCode + ".yml");
+        // Load current language file.
         langCfg = YamlConfiguration.loadConfiguration(languageFile);
         log.info("Successfully loaded language file: " + languageCode + ".yml :)");
     }
@@ -294,7 +324,7 @@ public class SignColors extends JavaPlugin implements Listener {
         try {
             final Statement signlocation = c.createStatement();
             ResultSet res = signlocation.executeQuery("SELECT * FROM signs WHERE location = '" + location + "';");
-            while (res.next()) {
+            if (res.next()) {
                 return true;
             }
         } catch (SQLException e) {
