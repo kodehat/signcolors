@@ -10,6 +10,7 @@ import de.codehat.signcolors.database.SQLite;
 import de.codehat.signcolors.languages.LanguageLoader;
 import de.codehat.signcolors.listener.ColoredSignListener;
 import de.codehat.signcolors.logger.PluginLogger;
+import de.codehat.signcolors.updater.UpdateCallback;
 import de.codehat.signcolors.updater.UpdateResult;
 import de.codehat.signcolors.updater.Updater;
 import de.codehat.signcolors.util.Message;
@@ -424,7 +425,7 @@ public class SignColors extends JavaPlugin implements Listener {
      *
      * @return The ItemStack for colored signs.
      */
-    public ItemStack coloredSignStack() {
+    private ItemStack coloredSignStack() {
         ItemStack i = new ItemStack(Material.SIGN, this.getConfig().getInt("signamount.sc_sign"));
         ItemMeta im = i.getItemMeta();
         lores.clear();
@@ -441,7 +442,7 @@ public class SignColors extends JavaPlugin implements Listener {
      * @param amount Amount if you do not want to use the config 'amount'. Else it can be null.
      * @return The ItemStack for colored signs.
      */
-    public ItemStack coloredSignStack(int amount) {
+    private ItemStack coloredSignStack(int amount) {
         ItemStack i = new ItemStack(Material.SIGN, amount);
         ItemMeta im = i.getItemMeta();
         lores.clear();
@@ -579,26 +580,24 @@ public class SignColors extends JavaPlugin implements Listener {
     private void checkUpdates() {
         if (getConfig().getBoolean("updatecheck")) {
             final PluginDescriptionFile plugin = getDescription();
-            this.getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
+            log.info("Checking for Updates...");
+            this.getServer().getScheduler().runTaskAsynchronously(this, new Updater(plugin.getVersion(), new UpdateCallback<UpdateResult, String>() {
                 @Override
-                public void run() {
-                    Updater updater = new Updater(plugin.getVersion());
-                    UpdateResult result = updater.checkForUpdate();
-                    log.info("Checking for Updates...");
+                public void call(UpdateResult result, String version) {
                     if (result == UpdateResult.NEEDED) {
-                        log.info("A new version is available: v" + updater.getLatestVersion());
-                        log.info("Get it from: " + updater.getDownloadUrl());
-                        info("New version available: v" + updater.getLatestVersion(), true);
+                        log.info("A new version is available: v" + version);
+                        log.info("Get it from: " + Updater.getDownloadUrl());
+                        info("New version available: v" + version, true);
                         updatePlayerMsg = true;
-                        updateLink = updater.getDownloadUrl();
-                        updateVersion = updater.getLatestVersion();
+                        updateLink = Updater.getDownloadUrl();
+                        updateVersion = version;
                     } else if (result == UpdateResult.UNNEEDED) {
                         log.info("No new version available");
                     } else {
                         log.info("Could not check for Updates");
                     }
                 }
-            });
+            }));
         }
     }
 
@@ -608,7 +607,7 @@ public class SignColors extends JavaPlugin implements Listener {
      * @param msg    Message to log.
      * @param toFile Log it to file?
      */
-    public void info(String msg, boolean toFile) {
+    private void info(String msg, boolean toFile) {
         if (plog != null) plog.info(msg, toFile);
     }
 

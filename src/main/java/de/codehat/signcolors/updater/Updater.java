@@ -7,48 +7,41 @@ package de.codehat.signcolors.updater;
 
 import de.codehat.signcolors.util.HttpRequest;
 
-public class Updater {
+public class Updater implements Runnable {
 
     private static final String URL = "https://codehat.de/api/spigot/signcolors/version";
     private String plugin_version = null;
     private String latest_version = null;
+    private UpdateCallback<UpdateResult, String> c;
 
     /**
      * Constrcutor.
      *
      * @param current_version Current plugin version.
      */
-    public Updater(String current_version) {
+    public Updater(String current_version, UpdateCallback<UpdateResult, String> c) {
         this.plugin_version = current_version;
+        this.c = c;
     }
 
     /**
-     * Checks for Updates.
+     * Checks for updates.
      *
-     * @return The result of the Updater.
      */
-    public UpdateResult checkForUpdate() {
-        String version;
+    @Override
+    public void run() {
+        String version = "";
         try {
             version = HttpRequest.sendGet(URL);
         } catch (Exception e) {
-            return UpdateResult.COULD_NOT_CHECK;
+            c.call(UpdateResult.COULD_NOT_CHECK, version);
         }
         if (!plugin_version.equals(version)) {
             latest_version = version;
-            return UpdateResult.NEEDED;
+            c.call(UpdateResult.NEEDED, version);
         } else {
-            return UpdateResult.UNNEEDED;
+            c.call(UpdateResult.UNNEEDED, version);
         }
-    }
-
-    /**
-     * Get the latest version number on UpdateResult.NEEDED.
-     *
-     * @return The latest version.
-     */
-    public String getLatestVersion() {
-        return latest_version;
     }
 
     /**
@@ -56,7 +49,8 @@ public class Updater {
      *
      * @return The plugin download link.
      */
-    public String getDownloadUrl() {
+    public static String getDownloadUrl() {
         return "http://www.spigotmc.org/resources/signcolors.6135/";
     }
+
 }
