@@ -11,7 +11,6 @@ public class Updater implements Runnable {
 
     private static final String URL = "https://codehat.de/api/spigot/signcolors/version";
     private String plugin_version = null;
-    private String latest_version = null;
     private UpdateCallback<UpdateResult, String> c;
 
     /**
@@ -32,12 +31,11 @@ public class Updater implements Runnable {
     public void run() {
         String version = "";
         try {
-            version = HttpRequest.sendGet(URL);
+            version = HttpRequest.sendGet(Updater.URL);
         } catch (Exception e) {
             c.call(UpdateResult.COULD_NOT_CHECK, version);
         }
         if (!plugin_version.equals(version)) {
-            latest_version = version;
             c.call(UpdateResult.NEEDED, version);
         } else {
             c.call(UpdateResult.UNNEEDED, version);

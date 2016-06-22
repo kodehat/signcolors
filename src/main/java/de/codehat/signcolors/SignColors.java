@@ -584,17 +584,20 @@ public class SignColors extends JavaPlugin implements Listener {
             this.getServer().getScheduler().runTaskAsynchronously(this, new Updater(plugin.getVersion(), new UpdateCallback<UpdateResult, String>() {
                 @Override
                 public void call(UpdateResult result, String version) {
-                    if (result == UpdateResult.NEEDED) {
-                        log.info("A new version is available: v" + version);
-                        log.info("Get it from: " + Updater.getDownloadUrl());
-                        info("New version available: v" + version, true);
-                        updatePlayerMsg = true;
-                        updateLink = Updater.getDownloadUrl();
-                        updateVersion = version;
-                    } else if (result == UpdateResult.UNNEEDED) {
-                        log.info("No new version available");
-                    } else {
-                        log.info("Could not check for Updates");
+                    switch (result) {
+                        case NEEDED:
+                            log.info("A new version is available: v" + version);
+                            log.info("Get it from: " + Updater.getDownloadUrl());
+                            info("New version available: v" + version, true);
+                            updatePlayerMsg = true;
+                            updateLink = Updater.getDownloadUrl();
+                            updateVersion = version;
+                            break;
+                        case UNNEEDED:
+                            log.info("No new version available");
+                            break;
+                        default:
+                            log.info("Could not check for Updates");
                     }
                 }
             }));
