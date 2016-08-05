@@ -11,7 +11,7 @@
 
     <groupId>de.codehat</groupId>
     <artifactId>signcolors</artifactId>
-    <version>0.7.1-SNAPSHOT</version>
+    <version>0.7.1-RELEASE</version>
     <name>SignColors</name>
 
     <repositories>

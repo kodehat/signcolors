@@ -52,7 +52,7 @@ public class SignColors extends JavaPlugin implements Listener {
     public static final String ALL_COLOR_CODES = "0123456789abcdefklmnor";
 
     // Config version.
-    private static final int CONFIG_VERSION = 2;
+    private static final int CONFIG_VERSION = 3;
 
     // Vault support.
     public static Economy eco = null;
