@@ -129,7 +129,7 @@ public class SignColors extends JavaPlugin implements Listener {
         if (!this.setupEconomy()) {
             log.info("Some features won't work, because no Vault/Economy dependency found!");
             log.info("Please install this dependency!");
-            plog.warn("Vault is NOT installed!", true);
+            if (plog != null) plog.warn("Vault is NOT installed!", true);
         }
         this.loadDatabase();
         this.checkUpdates();
