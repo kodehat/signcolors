@@ -91,6 +91,11 @@
 # a YOURLANG.yml file to the languages folder.
 # language: 'EN'
 # --------------------------------------------------------
+# Can be either 'sqlite' or 'mysql'. If you choose 'mysql'
+# you have to enter your mysql data/credentials under the
+# 'mysql:' tree.
+# database_type: 'sqlite'
+# --------------------------------------------------------
 # Should the plugin check for updates.
 # updatecheck: true
 # --------------------------------------------------------
@@ -130,7 +135,14 @@ signamount:
   sc_sign: 10
 price: 10.0
 language: 'EN'
+database_type: 'sqlite'
+mysql:
+  host: '127.0.0.1'
+  port: '3306'
+  database: 'signcolors'
+  username: 'steve'
+  password: 'ilovemc'
 updatecheck: true
 metrics: true
 logging: false
-configversion: 3
+configversion: 4

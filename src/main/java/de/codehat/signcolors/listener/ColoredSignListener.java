@@ -86,11 +86,9 @@ public class ColoredSignListener implements Listener {
     public void onSignBreak(BlockBreakEvent e) {
         Player p = e.getPlayer();
         Block b = e.getBlock();
-        String location = b.getLocation().getWorld().getName() + "," + b.getLocation().getBlockX() + ","
-                + b.getLocation().getBlockY() + "," + b.getLocation().getBlockZ();
         if (this.plugin.signcrafting && (b.getType() == Material.SIGN_POST || b.getType() == Material.WALL_SIGN
-                || b.getType() == Material.SIGN) && this.plugin.checkSign(location)) {
-            this.plugin.deleteSign(location);
+                || b.getType() == Material.SIGN) && this.plugin.checkSign(b.getLocation())) {
+            this.plugin.deleteSign(b.getLocation());
             b.setType(Material.AIR);
             if (p.getGameMode().equals(GameMode.SURVIVAL)) {
                 b.getWorld().dropItemNaturally(b.getLocation(), new ItemStack(this.plugin.getSign(1)));
@@ -115,16 +113,14 @@ public class ColoredSignListener implements Listener {
                         if (this.plugin.sign_players.contains(p)) this.plugin.sign_players.remove(p);
                         makeColors(e, p);
                         Block b = e.getBlock();
-                        this.plugin.addSign(b.getLocation().getWorld().getName() + "," + b.getLocation().getBlockX()
-                                + "," + b.getLocation().getBlockY() + "," + b.getLocation().getBlockZ());
+                        this.plugin.addSign(b.getLocation());
                     }
                 } else {
                     if (i.getItemMeta().hasLore()) {
                         if (this.plugin.sign_players.contains(p)) this.plugin.sign_players.remove(p);
                         makeColors(e, p);
                         Block b = e.getBlock();
-                        this.plugin.addSign(b.getLocation().getWorld().getName() + "," + b.getLocation().getBlockX()
-                                + "," + b.getLocation().getBlockY() + "," + b.getLocation().getBlockZ());
+                        this.plugin.addSign(b.getLocation());
                     }
                 }
             } else {
@@ -147,7 +143,7 @@ public class ColoredSignListener implements Listener {
             if (p.hasPermission("signcolors.sign.create")) {
                 e.setLine(0, Message.replaceColors("&6[&3SC&6]"));
                 e.setLine(1, Message.replaceColors(lang.getLang("slone")));
-                e.setLine(2, Message.replaceColors(lang.getLang("sltwo")) + this.plugin.getConfig().getInt("signamount")
+                e.setLine(2, Message.replaceColors(lang.getLang("sltwo")) + this.plugin.getConfig().getInt("signamount.sc_sign")
                         + Message.replaceColors(lang.getLang("sltwob")));
                 e.setLine(3, Message.replaceColors(lang.getLang("slthree")) + this.plugin.getConfig().getDouble("price")
                         + " $");

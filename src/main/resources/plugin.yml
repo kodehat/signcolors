@@ -4,7 +4,7 @@ author: CodeHat
 website: https://www.spigotmc.org/resources/signcolors.6135/
 softdepend: [Vault]
 description: Make colored signs.
-version: 0.7.2
+version: 0.8
 
 commands:
   sc:
@@ -28,6 +28,7 @@ permissions:
       signcolors.listcodes: true
       signcolors.givesign: true
       signcolors.blockedfirstlines.bypass: true
+      signcolors.upgrade: true
   signcolors.colors:
     description: Allows you to write colored signs.
   signcolors.info:
@@ -52,3 +53,5 @@ permissions:
     description: Allows you to use the /sc givesign command.
   signcolors.blockedfirstlines.bypass:
     description: Allows you to bypass the blocked first lines.
+  signcolors.upgrade:
+    description: Allows you to upgrade the database to the new format.

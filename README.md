@@ -1,4 +1,4 @@
-SignColors v0.7.* by CodeHat [![Build Status](https://ci.codehat.de/buildStatus/icon?job=SignColors)](https://ci.codehat.de/job/SignColors/)
+SignColors v0.8.* by CodeHat [![Build Status](https://ci.codehat.de/buildStatus/icon?job=SignColors)](https://ci.codehat.de/job/SignColors/)
 ========================================================================================================================================================
 
 Repository of the SignColors plugin.
@@ -7,7 +7,7 @@ Repository of the SignColors plugin.
 
 **NOTE!:**
 Development builds for SignColors can be found at the below server. These builds may be unstable and can cause errors. Use them at your own risk!
-Link: [https://pablo7777.de/signcolors/](https://pablo7777.de/signcolors/ "SignColors Development Builds")
+Link: [https://ci.codehat.de/job/SignColors/](https://ci.codehat.de/job/SignColors/ "SignColors Development Builds")
 
 ## Commands
 
@@ -19,6 +19,7 @@ For `/sc` you can alternatively use `/signcolors`
 - `/sc colorsymbol [symbol]` - Changes the color symbol.
 - `/sc givesign [player] [amount]` - Give a player colored signs.
 - `/sc colorcodes` - Shows you a color/format codes list.
+- `/sc upgrade` - Upgrades the old database format from version 0.7.1 and earlier to the new database format of version 0.8.0 and later.
 
 ## Permissions
 

@@ -6,6 +6,7 @@
 package de.codehat.signcolors;
 
 import de.codehat.signcolors.commands.*;
+import de.codehat.signcolors.database.MySQL;
 import de.codehat.signcolors.database.SQLite;
 import de.codehat.signcolors.languages.LanguageLoader;
 import de.codehat.signcolors.listener.ColoredSignListener;
@@ -17,6 +18,7 @@ import de.codehat.signcolors.util.Message;
 import de.codehat.signcolors.util.Utils;
 import de.codehat.signcolors.util.ZipUtils;
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -37,10 +39,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -52,7 +51,7 @@ public class SignColors extends JavaPlugin implements Listener {
     public static final String ALL_COLOR_CODES = "0123456789abcdefklmnor";
 
     // Config version.
-    private static final int CONFIG_VERSION = 3;
+    private static final int CONFIG_VERSION = 4;
 
     // Vault support.
     public static Economy eco = null;
@@ -150,6 +149,7 @@ public class SignColors extends JavaPlugin implements Listener {
         cmdh.registerNewCommand("colorcodes", new ColorCodesCommand(this, lang));
         cmdh.registerNewCommand("givesign", new GiveSignCommand(this, lang));
         cmdh.registerNewCommand("colorsymbol", new ColorSymbolCommand(this, lang));
+        cmdh.registerNewCommand("upgrade", new UpgradeCommand(this, lang));
         // Set executor for /sc.
         this.getCommand("sc").setExecutor(new CommandHandler(this, lang));
     }
@@ -306,13 +306,24 @@ public class SignColors extends JavaPlugin implements Listener {
      *
      * @param location Location of the sign (world, x, y, z).
      */
-    public void addSign(String location) {
+    public void addSign(Location location) {
         try {
+            PreparedStatement ps = c.prepareStatement("INSERT INTO sign_locations (world, x, y, z) VALUES (?, ?, ?, ?)");
+            ps.setString(1, location.getWorld().getName());
+            ps.setInt(2, location.getBlockX());
+            ps.setInt(3, location.getBlockY());
+            ps.setInt(4, location.getBlockZ());
+            ps.executeUpdate();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+
+        /*try {
             final Statement signlocation = c.createStatement();
             signlocation.executeUpdate("INSERT INTO signs (location) VALUES ('" + location + "');");
         } catch (SQLException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     /**
@@ -321,8 +332,23 @@ public class SignColors extends JavaPlugin implements Listener {
      * @param location Location of the sign (world,x,y,z).
      * @return True if stored, false if not found.
      */
-    public boolean checkSign(String location) {
+    public boolean checkSign(Location location) {
         try {
+            PreparedStatement ps = c.prepareStatement("SELECT * FROM sign_locations WHERE world = ? AND x = ? AND y = ? AND z = ?");
+            ps.setString(1, location.getWorld().getName());
+            ps.setInt(2, location.getBlockX());
+            ps.setInt(3, location.getBlockY());
+            ps.setInt(4, location.getBlockZ());
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return false;
+
+        /*try {
             final Statement signlocation = c.createStatement();
             ResultSet res = signlocation.executeQuery("SELECT * FROM signs WHERE location = '" + location + "';");
             if (res.next()) {
@@ -331,7 +357,7 @@ public class SignColors extends JavaPlugin implements Listener {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return false;*/
     }
 
     /**
@@ -339,14 +365,25 @@ public class SignColors extends JavaPlugin implements Listener {
      *
      * @param location Location of the sign (world,x,y,z).
      */
-    public void deleteSign(String location) {
-        Statement signlocation;
+    public void deleteSign(Location location) {
+        try {
+            PreparedStatement ps = c.prepareStatement("DELETE FROM sign_locations WHERE world = ? AND x = ? AND y = ? AND z = ?");
+            ps.setString(1, location.getWorld().getName());
+            ps.setInt(2, location.getBlockX());
+            ps.setInt(3, location.getBlockY());
+            ps.setInt(4, location.getBlockZ());
+            ps.executeUpdate();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+
+        /*Statement signlocation;
         try {
             signlocation = c.createStatement();
             signlocation.executeUpdate("DELETE FROM signs WHERE location = '" + location + "';");
         } catch (SQLException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     /**
@@ -485,28 +522,36 @@ public class SignColors extends JavaPlugin implements Listener {
      */
     public void loadDatabase() {
         if (signcrafting && c == null) {
-            log.info("Loading database...");
-            File db_dir = new File(this.getDataFolder().toPath().toString() + File.separator + "data" + File.separator);
-            if (!db_dir.exists()) {
-                if (!db_dir.mkdir()) {
-                    log.warning("Could not create 'data' folder! Please create it manually and restart the server!");
-                    return;
+            this.getLogger().info("Using database type: " + this.getConfig().getString("database_type").toUpperCase());
+            if (this.getConfig().getString("database_type").equals("mysql")) {
+                MySQL mysql = new MySQL(this, this.getConfig().getString("mysql.host"), this.getConfig().getString("mysql.port"),
+                        this.getConfig().getString("mysql.database"), this.getConfig().getString("mysql.username"),
+                        this.getConfig().getString("mysql.password"));
+                this.c = mysql.openConnection();
+                PreparedStatement ps;
+                try {
+                    ps = this.c.prepareStatement("CREATE TABLE IF NOT EXISTS sign_locations (world VARCHAR(50), x INT, y INT, z INT)");
+                    ps.executeUpdate();
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
-            }
-            SQLite sqlite = new SQLite(this, "data" + File.separator + "signs.db");
-            c = sqlite.openConnection();
-            Statement signlocation = null;
-            try {
-                signlocation = c.createStatement();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            try {
-                if (signlocation != null) {
-                    signlocation.executeUpdate("CREATE TABLE IF NOT EXISTS signs (location);");
+            } else {
+                File db_dir = new File(this.getDataFolder().toPath().toString() + File.separator + "data" + File.separator);
+                if (!db_dir.exists()) {
+                    if (!db_dir.mkdir()) {
+                        log.warning("Could not create 'data' folder! Please create it manually and restart the server!");
+                        return;
+                    }
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
+                SQLite sqlite = new SQLite(this, "data" + File.separator + "sign_locations.db");
+                c = sqlite.openConnection();
+                PreparedStatement ps;
+                try {
+                    ps = this.c.prepareStatement("CREATE TABLE IF NOT EXISTS sign_locations (world VARCHAR(50), x INT, y INT, z INT)");
+                    ps.executeUpdate();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         } else if (!signcrafting && c != null) {
             try {
