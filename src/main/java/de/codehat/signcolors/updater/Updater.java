@@ -10,7 +10,7 @@ import de.codehat.signcolors.util.HttpRequest;
 public class Updater implements Runnable {
 
     private static final String URL = "https://codehat.de/api/spigot/signcolors/version";
-    private String plugin_version = null;
+    private String plugin_version;
     private UpdateCallback<UpdateResult, String> c;
 
     /**
