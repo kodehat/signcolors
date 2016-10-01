@@ -39,7 +39,10 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -308,7 +311,8 @@ public class SignColors extends JavaPlugin implements Listener {
      */
     public void addSign(Location location) {
         try {
-            PreparedStatement ps = c.prepareStatement("INSERT INTO sign_locations (world, x, y, z) VALUES (?, ?, ?, ?)");
+            PreparedStatement ps = c.prepareStatement("INSERT INTO " + this.getConfig().getString("mysql.table_prefix")
+                    + "sign_locations (world, x, y, z) VALUES (?, ?, ?, ?)");
             ps.setString(1, location.getWorld().getName());
             ps.setInt(2, location.getBlockX());
             ps.setInt(3, location.getBlockY());
@@ -334,7 +338,8 @@ public class SignColors extends JavaPlugin implements Listener {
      */
     public boolean checkSign(Location location) {
         try {
-            PreparedStatement ps = c.prepareStatement("SELECT * FROM sign_locations WHERE world = ? AND x = ? AND y = ? AND z = ?");
+            PreparedStatement ps = c.prepareStatement("SELECT * FROM " + this.getConfig().getString("mysql.table_prefix")
+                    + "sign_locations WHERE world = ? AND x = ? AND y = ? AND z = ?");
             ps.setString(1, location.getWorld().getName());
             ps.setInt(2, location.getBlockX());
             ps.setInt(3, location.getBlockY());
@@ -367,7 +372,8 @@ public class SignColors extends JavaPlugin implements Listener {
      */
     public void deleteSign(Location location) {
         try {
-            PreparedStatement ps = c.prepareStatement("DELETE FROM sign_locations WHERE world = ? AND x = ? AND y = ? AND z = ?");
+            PreparedStatement ps = c.prepareStatement("DELETE FROM " + this.getConfig().getString("mysql.table_prefix")
+                    + "sign_locations WHERE world = ? AND x = ? AND y = ? AND z = ?");
             ps.setString(1, location.getWorld().getName());
             ps.setInt(2, location.getBlockX());
             ps.setInt(3, location.getBlockY());
@@ -530,7 +536,9 @@ public class SignColors extends JavaPlugin implements Listener {
                 this.c = mysql.openConnection();
                 PreparedStatement ps;
                 try {
-                    ps = this.c.prepareStatement("CREATE TABLE IF NOT EXISTS sign_locations (world VARCHAR(50), x INT, y INT, z INT)");
+                    ps = this.c.prepareStatement("CREATE TABLE IF NOT EXISTS "
+                            + this.getConfig().getString("mysql.table_prefix")
+                            + "sign_locations (world VARCHAR(50), x INT, y INT, z INT)");
                     ps.executeUpdate();
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -547,7 +555,9 @@ public class SignColors extends JavaPlugin implements Listener {
                 c = sqlite.openConnection();
                 PreparedStatement ps;
                 try {
-                    ps = this.c.prepareStatement("CREATE TABLE IF NOT EXISTS sign_locations (world VARCHAR(50), x INT, y INT, z INT)");
+                    ps = this.c.prepareStatement("CREATE TABLE IF NOT EXISTS "
+                            + this.getConfig().getString("mysql.table_prefix")
+                            + "sign_locations (world VARCHAR(50), x INT, y INT, z INT)");
                     ps.executeUpdate();
                 } catch (SQLException e) {
                     e.printStackTrace();

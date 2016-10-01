@@ -1,12 +1,15 @@
+/*
+ * Copyright (c) 2016 CodeHat.
+ * This file is part of 'SignColors' and is licensed under GPLv3.
+ */
+
 package de.codehat.signcolors.database;
 
 import org.bukkit.plugin.Plugin;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.logging.Level;
 
 public class MySQL extends Database {
 
@@ -39,6 +42,7 @@ public class MySQL extends Database {
                         + this.database_, this.username_, this.password_);
                 this.plugin.getLogger().info("Successfully opened MySQL connection.");
             } catch (SQLException e) {
+                this.plugin.getLogger().warning("Could not connect to MySQL server! Are your credentials correct?");
                 e.printStackTrace();
             }
         }

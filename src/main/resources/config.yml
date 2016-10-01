@@ -133,7 +133,7 @@ blocked_firstlines:
 signamount:
   crafting: 1
   sc_sign: 10
-price: 10.0
+price: 100.0
 language: 'EN'
 database_type: 'sqlite'
 mysql:
@@ -142,6 +142,7 @@ mysql:
   database: 'signcolors'
   username: 'steve'
   password: 'ilovemc'
+  table_prefix: 'sc_'
 updatecheck: true
 metrics: true
 logging: false

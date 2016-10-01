@@ -18,7 +18,22 @@ public class Utils {
     public static boolean isInteger(String s) {
         try {
             Integer.parseInt(s);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException exception) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Checks wheather a String is a Double or not.
+     *
+     * @param s String to check.
+     * @return true if Double, false if not.
+     */
+    public static boolean isDouble(String s) {
+        try {
+            Double.parseDouble(s);
+        } catch (NumberFormatException exception) {
             return false;
         }
         return true;
