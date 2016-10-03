@@ -69,6 +69,7 @@ public class MySQL extends Database {
         if (connection_ != null) {
             try {
                 connection_.close();
+                connection_ = null;
             } catch (SQLException e) {
                 plugin.getLogger().warning("Error closing the MySQL connection!");
                 e.printStackTrace();

@@ -39,6 +39,8 @@ permissions:
     description: Allows you to reload the config.yml.
   signcolors.sign.create:
     description: Allows you to create a [SignColors] sign.
+    children:
+      signcolors.blockedfirstlines.bypass: true
   signcolors.sign.use:
     description: Allows you to use a [SC] sign.
   signcolors.colorsymbol:

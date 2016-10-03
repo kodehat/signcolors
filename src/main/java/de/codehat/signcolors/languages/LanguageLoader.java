@@ -7,15 +7,24 @@ package de.codehat.signcolors.languages;
 
 import de.codehat.signcolors.SignColors;
 import de.codehat.signcolors.util.Message;
+import de.codehat.signcolors.util.Utils;
+import org.bukkit.configuration.file.YamlConfiguration;
 
+import java.io.File;
 import java.util.HashMap;
 
 public class LanguageLoader {
 
+    /*
+     * ---------------------------------------------------------
+     *  Private Variables
+     * ---------------------------------------------------------
+     */
+
     //Language HashMap.
-    private HashMap<String, String> lg;
+    private HashMap<String, String> languageMap_;
     //SignColors instance.
-    private SignColors plugin;
+    private SignColors plugin_;
 
     /**
      * Constructor.
@@ -23,48 +32,81 @@ public class LanguageLoader {
      * @param instance SignColors instance.
      */
     public LanguageLoader(SignColors instance) {
-        this.plugin = instance;
+        this.plugin_ = instance;
+    }
+
+    /**
+     * Loads the given language from the LANGCODE.yml.
+     */
+    public void setupLanguage() {
+        // Get current language code from config.
+        String languageCode = this.plugin_.getConfig().get("language").toString();
+        // Get 'languages' folder.
+        File langDir = new File(this.plugin_.getDataFolder().toPath().toString() + File.separator + "languages"
+                + File.separator);
+        // Create 'languages' if it does not exist.
+        if (!langDir.exists()) {
+            if (!langDir.mkdir()) {
+                this.plugin_.getLogger().warning("Could not create 'languages' folder! Please create it manually and restart the server!");
+                return;
+            }
+        }
+        // Check if the 'languages' folder contains all languages. Extract them if not.
+        if (langDir.isDirectory() && langDir.listFiles().length == 0) {
+            // All language codes.
+            String[] languageCodes = {"EN", "DE", "ES"};
+
+            // Extract all available languages.
+            for (String language : languageCodes) {
+                Utils.extractFile(this.plugin_.getResource(language + ".yml"), new File(this.plugin_.getDataFolder().toPath().toString() + File.separator
+                        + "languages" + File.separator + language + ".yml"));
+            }
+        }
+        // Get current languages file.
+        File languageFile = new File(this.plugin_.getDataFolder().toPath().toString() + File.separator + "languages"
+                + File.separator + languageCode + ".yml");
+        // Load current language file.
+        this.plugin_.langCfg = YamlConfiguration.loadConfiguration(languageFile);
+        this.plugin_.getLogger().info("Successfully loaded language file: " + languageCode + ".yml :)");
     }
 
     /**
      * Loads the language HashMap (en/de).
      */
     public void loadLanguage() {
-        lg = new HashMap<>();
-        lg.put("nocmd", this.plugin.langCfg.getString("NOCMDACCESS"));
-        lg.put("noaction", this.plugin.langCfg.getString("NOACTION"));
-        lg.put("sciauthor", this.plugin.langCfg.getString("SCINFOAUTHOR"));
-        lg.put("scicmd", this.plugin.langCfg.getString("SCINFOCMD"));
-        lg.put("scicmdh", this.plugin.langCfg.getString("SCINFOCMDH"));
-        lg.put("csch", this.plugin.langCfg.getString("COLORSYMBOLCH"));
-        lg.put("cschtma", this.plugin.langCfg.getString("COLORSYMBOLTMA"));
-        lg.put("uncmd", this.plugin.langCfg.getString("UNKNOWNCMD"));
-        lg.put("uncmdh", this.plugin.langCfg.getString("UNKNOWNCMDH"));
-        lg.put("configre", this.plugin.langCfg.getString("CONFREL"));
-        lg.put("sc", this.plugin.langCfg.getString("SC"));
-        lg.put("schelp", this.plugin.langCfg.getString("SCHELP"));
-        lg.put("scre", this.plugin.langCfg.getString("SCRE"));
-        lg.put("sccs", this.plugin.langCfg.getString("SCCS"));
-        lg.put("slone", this.plugin.langCfg.getString("SLONE"));
-        lg.put("sltwo", this.plugin.langCfg.getString("SLTWO"));
-        lg.put("sltwob", this.plugin.langCfg.getString("SLTWOB"));
-        lg.put("slthree", this.plugin.langCfg.getString("SLTHREE"));
-        lg.put("signmsg", this.plugin.langCfg.getString("SIGNMSG"));
-        lg.put("signmsgb", this.plugin.langCfg.getString("SIGNMSGB"));
-        lg.put("notenmoney", this.plugin.langCfg.getString("NOTENMONEY"));
-        lg.put("notenspace", this.plugin.langCfg.getString("NOTENSPACE"));
-        lg.put("updatemsg", this.plugin.langCfg.getString("UPDATEMSG"));
-        lg.put("sclogo", this.plugin.langCfg.getString("TAG"));
-        lg.put("colorlist", this.plugin.langCfg.getString("COLORLIST"));
-        lg.put("formatlist", this.plugin.langCfg.getString("FORMATLIST"));
-        lg.put("colorcodes", this.plugin.langCfg.getString("COLORCODES"));
-        lg.put("signname", this.plugin.langCfg.getString("SIGNNAME"));
-        lg.put("signlore", this.plugin.langCfg.getString("SIGNLORE"));
-        lg.put("pnoton", this.plugin.langCfg.getString("PNOTON"));
-        lg.put("givesign", this.plugin.langCfg.getString("GIVESIGN"));
-        lg.put("invamount", this.plugin.langCfg.getString("INVAMOUNT"));
-        lg.put("gshelp", this.plugin.langCfg.getString("GSHELP"));
-        lg.put("notallfl", this.plugin.langCfg.getString("NOTALLFL"));
+        languageMap_ = new HashMap<>();
+        languageMap_.put("nocmd", this.plugin_.langCfg.getString("NOCMDACCESS"));
+        languageMap_.put("noaction", this.plugin_.langCfg.getString("NOACTION"));
+        languageMap_.put("sciauthor", this.plugin_.langCfg.getString("SCINFOAUTHOR"));
+        languageMap_.put("scicmd", this.plugin_.langCfg.getString("SCINFOCMD"));
+        languageMap_.put("scicmdh", this.plugin_.langCfg.getString("SCINFOCMDH"));
+        languageMap_.put("csch", this.plugin_.langCfg.getString("COLORSYMBOLCH"));
+        languageMap_.put("cschtma", this.plugin_.langCfg.getString("COLORSYMBOLTMA"));
+        languageMap_.put("uncmd", this.plugin_.langCfg.getString("UNKNOWNCMD"));
+        languageMap_.put("uncmdh", this.plugin_.langCfg.getString("UNKNOWNCMDH"));
+        languageMap_.put("configre", this.plugin_.langCfg.getString("CONFREL"));
+        languageMap_.put("sc", this.plugin_.langCfg.getString("SC"));
+        languageMap_.put("schelp", this.plugin_.langCfg.getString("SCHELP"));
+        languageMap_.put("scre", this.plugin_.langCfg.getString("SCRE"));
+        languageMap_.put("sccs", this.plugin_.langCfg.getString("SCCS"));
+        languageMap_.put("slone", this.plugin_.langCfg.getString("SLONE"));
+        languageMap_.put("sltwo", this.plugin_.langCfg.getString("SLTWO"));
+        languageMap_.put("signmsg", this.plugin_.langCfg.getString("SIGNMSG"));
+        languageMap_.put("signmsgb", this.plugin_.langCfg.getString("SIGNMSGB"));
+        languageMap_.put("notenmoney", this.plugin_.langCfg.getString("NOTENMONEY"));
+        languageMap_.put("notenspace", this.plugin_.langCfg.getString("NOTENSPACE"));
+        languageMap_.put("updatemsg", this.plugin_.langCfg.getString("UPDATEMSG"));
+        languageMap_.put("sclogo", this.plugin_.langCfg.getString("TAG"));
+        languageMap_.put("colorlist", this.plugin_.langCfg.getString("COLORLIST"));
+        languageMap_.put("formatlist", this.plugin_.langCfg.getString("FORMATLIST"));
+        languageMap_.put("colorcodes", this.plugin_.langCfg.getString("COLORCODES"));
+        languageMap_.put("signname", this.plugin_.langCfg.getString("SIGNNAME"));
+        languageMap_.put("signlore", this.plugin_.langCfg.getString("SIGNLORE"));
+        languageMap_.put("pnoton", this.plugin_.langCfg.getString("PNOTON"));
+        languageMap_.put("givesign", this.plugin_.langCfg.getString("GIVESIGN"));
+        languageMap_.put("invamount", this.plugin_.langCfg.getString("INVAMOUNT"));
+        languageMap_.put("gshelp", this.plugin_.langCfg.getString("GSHELP"));
+        languageMap_.put("notallfl", this.plugin_.langCfg.getString("NOTALLFL"));
         Message.lang = this;
     }
 
@@ -75,6 +117,6 @@ public class LanguageLoader {
      * @return Message.
      */
     public String getLang(String key) {
-        return lg.get(key);
+        return languageMap_.get(key);
     }
 }

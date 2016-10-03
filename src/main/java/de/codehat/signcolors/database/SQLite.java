@@ -33,7 +33,6 @@ public class SQLite extends Database {
     public SQLite(Plugin plugin, String dbLocation) {
         super(plugin);
         this.dbLocation = dbLocation;
-        this.connection = null;
     }
 
     @Override
@@ -80,6 +79,7 @@ public class SQLite extends Database {
         if (connection != null) {
             try {
                 connection.close();
+                connection = null;
             } catch (SQLException e) {
                 plugin.getLogger().log(Level.SEVERE, "Error closing the SQLite Connection!");
                 e.printStackTrace();

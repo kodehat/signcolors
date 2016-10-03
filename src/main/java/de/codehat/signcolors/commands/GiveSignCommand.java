@@ -38,7 +38,7 @@ public class GiveSignCommand extends BaseCommand {
                     if (!Utils.isInteger(args[2]) || Integer.valueOf(args[2]) < 1 || Integer.valueOf(args[2]) > 64) {
                         Message.sendLogoMsg(sender, lang.getLang("invamount"));
                     } else {
-                        p.getInventory().addItem(this.plugin.getSign(Integer.valueOf(args[2])));
+                        p.getInventory().addItem(this.plugin.getSignManager().getSign(Integer.valueOf(args[2])));
                         Message.sendLogoMsg(sender, String.format(lang.getLang("givesign"), p.getName(), String.valueOf(Integer.valueOf(args[2]))));
                     }
                 }

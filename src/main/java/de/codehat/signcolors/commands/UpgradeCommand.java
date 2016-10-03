@@ -59,7 +59,7 @@ public class UpgradeCommand extends BaseCommand {
                         Block b = plugin.getServer().getWorld(parts[0]).getBlockAt(l);
                         if (b.getType().equals(Material.SIGN) || b.getType().equals(Material.SIGN_POST)
                                 || b.getType().equals(Material.WALL_SIGN)) {
-                            plugin.addSign(l);
+                            plugin.getPluginDatabase().addSign(l);
                             locations++;
                         } else {
                             fails++;
