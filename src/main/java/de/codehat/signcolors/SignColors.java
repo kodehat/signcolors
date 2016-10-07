@@ -14,11 +14,11 @@ import de.codehat.signcolors.listener.BlockListener;
 import de.codehat.signcolors.listener.PlayerListener;
 import de.codehat.signcolors.listener.SignChangeListener;
 import de.codehat.signcolors.logger.PluginLogger;
+import de.codehat.signcolors.manager.BackupManager;
+import de.codehat.signcolors.manager.SignManager;
 import de.codehat.signcolors.updater.UpdateCallback;
 import de.codehat.signcolors.updater.UpdateResult;
 import de.codehat.signcolors.updater.Updater;
-import de.codehat.signcolors.util.BackupManager;
-import de.codehat.signcolors.util.SignManager;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -41,7 +41,7 @@ public class SignColors extends JavaPlugin implements Listener {
 
     /*
      * ---------------------------------------------------------
-     *  Static Variables
+     *  Static/Final Variables
      * ---------------------------------------------------------
      */
 
@@ -317,7 +317,8 @@ public class SignColors extends JavaPlugin implements Listener {
         if (getConfig().getBoolean("updatecheck")) {
             final PluginDescriptionFile plugin = getDescription();
             this.log_.info("Checking for Updates...");
-            this.getServer().getScheduler().runTaskAsynchronously(this, new Updater(plugin.getVersion(), new UpdateCallback<UpdateResult, String>() {
+            this.getServer().getScheduler().runTaskAsynchronously(this, new Updater(plugin.getVersion(),
+                    new UpdateCallback<UpdateResult, String>() {
                 @Override
                 public void call(UpdateResult result, String version) {
                     switch (result) {

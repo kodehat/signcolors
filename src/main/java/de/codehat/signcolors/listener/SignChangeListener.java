@@ -131,7 +131,8 @@ public class SignChangeListener implements Listener {
         // Set sign lines.
         event.setLine(0, Message.replaceColors("&6[&3SC&6]"));
         event.setLine(1, Message.replaceColors(lang.getLang("sltwo")));
-        event.setLine(2, Message.replaceColors(String.format("&8%s : %s", String.valueOf(amount), String.valueOf(price))));
+        event.setLine(2, Message.replaceColors(String.format("&8%s : %s", String.valueOf(amount),
+                String.valueOf(price))));
         event.setLine(3, Message.replaceColors(lang.getLang("slone")));
     }
 

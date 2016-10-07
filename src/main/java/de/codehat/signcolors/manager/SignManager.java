@@ -3,9 +3,10 @@
  * This file is part of 'SignColors' and is licensed under GPLv3.
  */
 
-package de.codehat.signcolors.util;
+package de.codehat.signcolors.manager;
 
 import de.codehat.signcolors.SignColors;
+import de.codehat.signcolors.util.Message;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;

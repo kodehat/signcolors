@@ -3,9 +3,11 @@
  * This file is part of 'SignColors' and is licensed under GPLv3.
  */
 
-package de.codehat.signcolors.util;
+package de.codehat.signcolors.manager;
 
 import de.codehat.signcolors.SignColors;
+import de.codehat.signcolors.util.Utils;
+import de.codehat.signcolors.util.ZipUtils;
 
 import java.io.File;
 import java.io.IOException;

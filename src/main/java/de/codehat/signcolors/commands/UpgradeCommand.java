@@ -36,10 +36,10 @@ public class UpgradeCommand extends BaseCommand {
         final File old_db = new File(this.plugin.getDataFolder().toPath().toString() + File.separator + "data" + File.separator
                 + "signs.db");
         if (!old_db.exists()) {
-            Message.sendLogoMsg(sender, "&cCannot import old data, because database file 'signs.db' is missing!");
+            Message.sendLogoMsg(sender, lang.getLang("olddbmiss"));
             return;
         }
-        Message.sendLogoMsg(sender, "&aStarting import and check of all old sign locations...");
+        Message.sendLogoMsg(sender, lang.getLang("importstart"));
         this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, new Runnable() {
             @Override
             public void run() {
@@ -72,7 +72,7 @@ public class UpgradeCommand extends BaseCommand {
                 File rename_file = new File(plugin.getDataFolder().toPath().toString() + File.separator + "data" + File.separator
                         + "signs.db.imported");
                 if (!old_db.renameTo(rename_file)) plugin.getLogger().warning("Could not rename old database file!");
-                Message.sendLogoMsg(sender, String.format("&aRemoved &6%s &ainvalid sign locations and imported &6%s &asign locations from the old database.",
+                Message.sendLogoMsg(sender, String.format(lang.getLang("importfinish"),
                         String.valueOf(fails), String.valueOf(locations)));
             }
         });

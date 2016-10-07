@@ -107,6 +107,9 @@ public class LanguageLoader {
         languageMap_.put("invamount", this.plugin_.langCfg.getString("INVAMOUNT"));
         languageMap_.put("gshelp", this.plugin_.langCfg.getString("GSHELP"));
         languageMap_.put("notallfl", this.plugin_.langCfg.getString("NOTALLFL"));
+        languageMap_.put("olddbmiss", this.plugin_.langCfg.getString("OLDDBMISS"));
+        languageMap_.put("importstart", this.plugin_.langCfg.getString("IMPORTSTART"));
+        languageMap_.put("importfinish", this.plugin_.langCfg.getString("IMPORTFINISH"));
         Message.lang = this;
     }
 

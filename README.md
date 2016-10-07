@@ -37,6 +37,7 @@ For `/sc` you can alternatively use `/signcolors`
 - `signcolors.listcodes` - Allows you to see the color/format codes list.
 - `signcolors.givesign` - Allows you to use the `/sc givesign` command.
 - `signcolors.blockedfirstlines.bypass` - Allows you to bypass the blocked first lines.
+- `signcolors.upgrade` - Allows you to execute the `/sc upgrade` command.
 
 ## Add your own language
 
@@ -48,9 +49,8 @@ in the `config.yml` to your language file code. In the example above it would be
 
 Link: [http://www.spigotmc.org/resources/signcolors.6135/](http://www.spigotmc.org/resources/signcolors.6135/ "SignColors on SpigotMC")
 
-## Status for v0.7.* or v0.8
+## Status for v0.8
 
- * Add possibility to change the costs of a colored sign directly on [SC] sign.
  * Make the Logger more useful.
  * Make suggestions.
 
