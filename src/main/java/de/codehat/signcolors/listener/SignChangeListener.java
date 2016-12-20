@@ -92,13 +92,21 @@ public class SignChangeListener implements Listener {
 
                     // Check if entered types are valid for Integer and Double.
                     if (!Utils.isInteger(sign_data[0].trim()) || !Utils.isDouble(sign_data[1].trim())) {
-                        Message.sendLogoMsg(p, "&cIncorrect format of sign amount or price!");
+                        Message.sendLogoMsg(p, lang.getLang("incformatsign"));
+                        e.setCancelled(true);
                         return;
                     }
 
                     // Get amount and price.
                     int amount = Integer.valueOf(sign_data[0].trim());
                     Double price = Double.valueOf(sign_data[1].trim());
+
+                    // Return if amount or price 0 or lower
+                    if (amount <= 0 || price <= 0) {
+                        Message.sendLogoMsg(p, lang.getLang("priceamounttolow"));
+                        e.setCancelled(true);
+                        return;
+                    }
 
                     // Set sign lines.
                     this.setSignColorsSign(e, amount, price);

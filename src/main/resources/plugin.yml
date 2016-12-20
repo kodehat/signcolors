@@ -4,11 +4,11 @@ author: CodeHat
 website: https://www.spigotmc.org/resources/signcolors.6135/
 softdepend: [Vault]
 description: Make colored signs.
-version: 0.8
+version: 1.0
 
 commands:
   sc:
-    description: Shows info about SignColors.
+    description: Shows information about SignColors.
     usage: /<command>
     aliases: [signcolors]
     

@@ -16,8 +16,6 @@ import de.codehat.signcolors.listener.SignChangeListener;
 import de.codehat.signcolors.logger.PluginLogger;
 import de.codehat.signcolors.manager.BackupManager;
 import de.codehat.signcolors.manager.SignManager;
-import de.codehat.signcolors.updater.UpdateCallback;
-import de.codehat.signcolors.updater.UpdateResult;
 import de.codehat.signcolors.updater.Updater;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.ChatColor;
@@ -37,6 +35,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * Main plugin class of 'SignColors' plugin.
+ */
 public class SignColors extends JavaPlugin implements Listener {
 
     /*
@@ -107,15 +108,7 @@ public class SignColors extends JavaPlugin implements Listener {
         PluginDescriptionFile plugin = this.getDescription();
         // Close database if needed.
         if (this.database_.getConnection() != null) {
-            try {
-                this.log_.info("Closing database...");
-                this.database_.getConnection().close();
-                this.log_.info("Database successfully closed.");
-            } catch (Exception e) {
-                this.log_.info("An Error occured! Error:");
-                e.printStackTrace();
-                this.plog_.warn(e.getMessage(), true);
-            }
+            this.closeDatabase();
         }
         // Close logger if needed.
         if (this.plog_ != null) this.plog_.close();
@@ -189,8 +182,8 @@ public class SignColors extends JavaPlugin implements Listener {
             // Create folders if needed.
             if (!this.getDataFolder().exists()) {
                 if (!this.getDataFolder().mkdirs()) {
-                    this.log_.warning("Could not create the data folder for the plugin! Please check if you have enough " +
-                            "permissions to create folders!");
+                    this.log_.warning("Could not create the data folder for the plugin! " +
+                            "Please check if you have enough permissions to create folders!");
                     return;
                 }
             }
@@ -226,10 +219,13 @@ public class SignColors extends JavaPlugin implements Listener {
      */
     public void loadDatabase() {
         if (this.isSignCrafting && (this.database_ == null || this.database_.getConnection() == null)) {
-            this.getLogger().info("Using database type: " + this.getConfig().getString("database_type").toUpperCase());
+            this.getLogger().info("Using database type: "
+                    + this.getConfig().getString("database_type").toUpperCase());
             if (this.getConfig().getString("database_type").equals("mysql")) {
-                MySQL mysql = new MySQL(this, this.getConfig().getString("mysql.host"), this.getConfig().getString("mysql.port"),
-                        this.getConfig().getString("mysql.database"), this.getConfig().getString("mysql.username"),
+                MySQL mysql = new MySQL(this, this.getConfig().getString("mysql.host"),
+                        this.getConfig().getString("mysql.port"),
+                        this.getConfig().getString("mysql.database"),
+                        this.getConfig().getString("mysql.username"),
                         this.getConfig().getString("mysql.password"));
                 mysql.openConnection();
                 this.database_ = mysql;
@@ -243,10 +239,12 @@ public class SignColors extends JavaPlugin implements Listener {
                     e.printStackTrace();
                 }
             } else {
-                File db_dir = new File(this.getDataFolder().toPath().toString() + File.separator + "data" + File.separator);
+                File db_dir = new File(this.getDataFolder().toPath().toString() + File.separator + "data"
+                        + File.separator);
                 if (!db_dir.exists()) {
                     if (!db_dir.mkdir()) {
-                        this.log_.warning("Could not create 'data' folder! Please create it manually and restart the server!");
+                        this.log_.warning("Could not create 'data' folder! " +
+                                "Please create it manually and restart the server!");
                         return;
                     }
                 }
@@ -264,15 +262,7 @@ public class SignColors extends JavaPlugin implements Listener {
                 }
             }
         } else if (!this.isSignCrafting && this.database_.getConnection() != null) {
-            try {
-                this.log_.info("Closing database...");
-                this.database_.getConnection().close();
-                this.log_.info("Database successfully closed.");
-            } catch (Exception e) {
-                this.log_.info("An Error occured! Error:");
-                e.printStackTrace();
-                this.plog_.warn(e.getMessage(), true);
-            }
+            this.closeDatabase();
         }
     }
 
@@ -318,28 +308,25 @@ public class SignColors extends JavaPlugin implements Listener {
             final PluginDescriptionFile plugin = getDescription();
             this.log_.info("Checking for Updates...");
             this.getServer().getScheduler().runTaskAsynchronously(this, new Updater(plugin.getVersion(),
-                    new UpdateCallback<UpdateResult, String>() {
-                @Override
-                public void call(UpdateResult result, String version) {
-                    switch (result) {
-                        case NEEDED:
-                            getServer().getConsoleSender().sendMessage("[SignColors] " + ChatColor.GREEN
-                                    + "A new version is available: v" + version);
-                            getServer().getConsoleSender().sendMessage("[SignColors] " + ChatColor.GREEN
-                                    + "Get it from: " + ChatColor.GOLD + Updater.getDownloadUrl());
-                            info("New version available: v" + version, true);
-                            sendUpdateMsgToPlayer = true;
-                            updateLink = Updater.getDownloadUrl();
-                            updateVersion = version;
-                            break;
-                        case UNNEEDED:
-                            log_.info("No new version available");
-                            break;
-                        default:
-                            log_.info("Could not check for Updates");
-                    }
-                }
-            }));
+                    (result, version) -> {
+                        switch (result) {
+                            case NEEDED:
+                                getServer().getConsoleSender().sendMessage("[SignColors] " + ChatColor.GREEN
+                                        + "A new version is available: v" + version);
+                                getServer().getConsoleSender().sendMessage("[SignColors] " + ChatColor.GREEN
+                                        + "Get it from: " + ChatColor.GOLD + Updater.getDownloadUrl());
+                                info("New version available: v" + version, true);
+                                sendUpdateMsgToPlayer = true;
+                                updateLink = Updater.getDownloadUrl();
+                                updateVersion = version;
+                                break;
+                            case UNNEEDED:
+                                log_.info("No new version available");
+                                break;
+                            default:
+                                log_.info("Could not check for Updates");
+                        }
+                    }));
         }
     }
 
@@ -350,6 +337,18 @@ public class SignColors extends JavaPlugin implements Listener {
      */
     public Database getPluginDatabase() {
         return this.database_;
+    }
+
+    private void closeDatabase() {
+        try {
+            this.log_.info("Closing database...");
+            this.database_.getConnection().close();
+            this.log_.info("Database successfully closed.");
+        } catch (Exception e) {
+            this.log_.info("An Error occured! Error:");
+            e.printStackTrace();
+            this.plog_.warn(e.getMessage(), true);
+        }
     }
 
     /**
@@ -386,6 +385,7 @@ public class SignColors extends JavaPlugin implements Listener {
      * @param msg    Message to log.
      * @param toFile Log it to file?
      */
+    @SuppressWarnings("unused")
     public void warn(String msg, boolean toFile) {
         if (this.plog_ != null) this.plog_.warn(msg, toFile);
     }

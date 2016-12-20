@@ -90,7 +90,7 @@ public class PlayerListener implements Listener {
 
                         // Check if the amount and the price on the sign is valid.
                         if (!Utils.isInteger(sign_data[0].trim()) || !Utils.isDouble(sign_data[1].trim())) {
-                            Message.sendLogoMsg(p, "&cThis sign is incorrectly formatted! Contact your admin.");
+                            Message.sendLogoMsg(p, lang.getLang("incorrectformat"));
                             return;
                         }
 
@@ -125,7 +125,8 @@ public class PlayerListener implements Listener {
                         p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.75F, 1F);
                         Message.sendMsg(p, "&6-" + SignColors.ECONOMY.format(price) + " &a--->>>&6 "
                                 + SignColors.ECONOMY.format(SignColors.ECONOMY.getBalance(p)));
-                        Message.sendMsg(p, lang.getLang("signmsg") + amount + lang.getLang("signmsgb"));
+                        Message.sendMsg(p, lang.getLang("signmsg") + amount
+                                + lang.getLang("signmsgb"));
                     } else {
                         Message.sendMsg(p, lang.getLang("noaction"));
                     }

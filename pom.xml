@@ -11,7 +11,7 @@
 
     <groupId>de.codehat</groupId>
     <artifactId>signcolors</artifactId>
-    <version>0.8-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <name>SignColors</name>
 
     <repositories>
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.10.2-R0.1-SNAPSHOT</version>
+            <version>1.11-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!--Vault API-->
@@ -71,8 +71,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.3</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
             <plugin>

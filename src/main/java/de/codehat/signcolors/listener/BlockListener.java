@@ -68,7 +68,8 @@ public class BlockListener implements Listener {
             this.plugin_.getPluginDatabase().deleteSign(b.getLocation());
             b.setType(Material.AIR);
             if (p.getGameMode().equals(GameMode.SURVIVAL)) {
-                b.getWorld().dropItemNaturally(b.getLocation(), new ItemStack(this.plugin_.getSignManager().getSign(1)));
+                b.getWorld().dropItemNaturally(b.getLocation(),
+                        new ItemStack(this.plugin_.getSignManager().getSign(1)));
             }
             e.setCancelled(true);
         }

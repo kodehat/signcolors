@@ -103,7 +103,7 @@
 # metrics: true
 # --------------------------------------------------------
 # Config version. Don't change it!
-# configversion: 3
+# configversion: 4
 # PLUGIN SETTINGS:
 colorsymbol: '&'
 signcrafting: true

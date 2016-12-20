@@ -110,6 +110,9 @@ public class LanguageLoader {
         languageMap_.put("olddbmiss", this.plugin_.langCfg.getString("OLDDBMISS"));
         languageMap_.put("importstart", this.plugin_.langCfg.getString("IMPORTSTART"));
         languageMap_.put("importfinish", this.plugin_.langCfg.getString("IMPORTFINISH"));
+        languageMap_.put("incorrectformat", this.plugin_.langCfg.getString("INCORRECTFORMAT"));
+        languageMap_.put("priceamounttolow", this.plugin_.langCfg.getString("PRICEAMOUNTTOLOW"));
+        languageMap_.put("incformatsign", this.plugin_.langCfg.getString("INCFORMATSIGN"));
         Message.lang = this;
     }
 

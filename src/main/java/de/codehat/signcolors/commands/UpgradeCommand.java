@@ -33,48 +33,45 @@ public class UpgradeCommand extends BaseCommand {
             Message.sendLogoMsg(sender, lang.getLang("nocmd"));
             return;
         }
-        final File old_db = new File(this.plugin.getDataFolder().toPath().toString() + File.separator + "data" + File.separator
-                + "signs.db");
+        final File old_db = new File(this.plugin.getDataFolder().toPath().toString() + File.separator + "data"
+                + File.separator + "signs.db");
         if (!old_db.exists()) {
             Message.sendLogoMsg(sender, lang.getLang("olddbmiss"));
             return;
         }
         Message.sendLogoMsg(sender, lang.getLang("importstart"));
-        this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, new Runnable() {
-            @Override
-            public void run() {
-                SQLite sqlite = new SQLite(plugin, "data" + File.separator + "signs.db");
-                Connection connection = sqlite.openConnection();
-                int locations = 0;
-                int fails = 0;
-                try {
-                    PreparedStatement ps = connection.prepareStatement("SELECT * FROM signs");
-                    ResultSet rs  = ps.executeQuery();
-                    String location;
-                    while (rs.next()) {
-                        location = rs.getString("location");
-                        String[] parts = location.split(",");
-                        Location l = new Location(plugin.getServer().getWorld(parts[0]), Double.parseDouble(parts[1]),
-                                Double.parseDouble(parts[2]), Double.parseDouble(parts[3]));
-                        Block b = plugin.getServer().getWorld(parts[0]).getBlockAt(l);
-                        if (b.getType().equals(Material.SIGN) || b.getType().equals(Material.SIGN_POST)
-                                || b.getType().equals(Material.WALL_SIGN)) {
-                            plugin.getPluginDatabase().addSign(l);
-                            locations++;
-                        } else {
-                            fails++;
-                        }
+        this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () -> {
+            SQLite sqlite = new SQLite(plugin, "data" + File.separator + "signs.db");
+            Connection connection = sqlite.openConnection();
+            int locations = 0;
+            int fails = 0;
+            try {
+                PreparedStatement ps = connection.prepareStatement("SELECT * FROM signs");
+                ResultSet rs  = ps.executeQuery();
+                String location;
+                while (rs.next()) {
+                    location = rs.getString("location");
+                    String[] parts = location.split(",");
+                    Location l = new Location(plugin.getServer().getWorld(parts[0]), Double.parseDouble(parts[1]),
+                            Double.parseDouble(parts[2]), Double.parseDouble(parts[3]));
+                    Block b = plugin.getServer().getWorld(parts[0]).getBlockAt(l);
+                    if (b.getType().equals(Material.SIGN) || b.getType().equals(Material.SIGN_POST)
+                            || b.getType().equals(Material.WALL_SIGN)) {
+                        plugin.getPluginDatabase().addSign(l);
+                        locations++;
+                    } else {
+                        fails++;
                     }
-                    connection.close();
-                } catch (SQLException exception) {
-                    exception.printStackTrace();
                 }
-                File rename_file = new File(plugin.getDataFolder().toPath().toString() + File.separator + "data" + File.separator
-                        + "signs.db.imported");
-                if (!old_db.renameTo(rename_file)) plugin.getLogger().warning("Could not rename old database file!");
-                Message.sendLogoMsg(sender, String.format(lang.getLang("importfinish"),
-                        String.valueOf(fails), String.valueOf(locations)));
+                connection.close();
+            } catch (SQLException exception) {
+                exception.printStackTrace();
             }
+            File rename_file = new File(plugin.getDataFolder().toPath().toString() + File.separator + "data"
+                    + File.separator + "signs.db.imported");
+            if (!old_db.renameTo(rename_file)) plugin.getLogger().warning("Could not rename old database file!");
+            Message.sendLogoMsg(sender, String.format(lang.getLang("importfinish"),
+                    String.valueOf(fails), String.valueOf(locations)));
         });
     }
 }
