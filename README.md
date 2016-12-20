@@ -1,9 +1,11 @@
-SignColors v0.8.* by CodeHat [![Build Status](https://ci.codehat.de/buildStatus/icon?job=SignColors)](https://ci.codehat.de/job/SignColors/)
+SignColors v1.0.0 by CodeHat [![Build Status](https://ci.codehat.de/buildStatus/icon?job=SignColors)](https://ci.codehat.de/job/SignColors/)
 ========================================================================================================================================================
 
 Repository of the SignColors plugin.
 
 ## Development Builds
+
+*Currently offline due to server changes!!!*
 
 **NOTE!:**
 Development builds for SignColors can be found at the below server. These builds may be unstable and can cause errors. Use them at your own risk!
@@ -19,7 +21,7 @@ For `/sc` you can alternatively use `/signcolors`
 - `/sc colorsymbol [symbol]` - Changes the color symbol.
 - `/sc givesign [player] [amount]` - Give a player colored signs.
 - `/sc colorcodes` - Shows you a color/format codes list.
-- `/sc upgrade` - Upgrades the old database format from version 0.7.1 and earlier to the new database format of version 0.8.0 and later.
+- `/sc upgrade` - Upgrades the old database format from version 0.7.1 and earlier to the new database format of version 1.0.0 and later.
 
 ## Permissions
 
@@ -49,10 +51,12 @@ in the `config.yml` to your language file code. In the example above it would be
 
 Link: [http://www.spigotmc.org/resources/signcolors.6135/](http://www.spigotmc.org/resources/signcolors.6135/ "SignColors on SpigotMC")
 
-## Status for v0.8
+## Status for v1.1
 
- * Make the Logger more useful.
- * Make suggestions.
+ * Add a `/sc migrate` command, to migrate from MySQL to SQLite and vise versa.
+ * Remove Logger or make it more useful.
+ * More comments in code.
+ * Make suggestions either here or at Spigot.
 
 ## License
 
