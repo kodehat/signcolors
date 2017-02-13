@@ -1,9 +1,12 @@
 /*
- * Copyright (c) 2016 CodeHat.
+ * Copyright (c) 2017 CodeHat.
  * This file is part of 'SignColors' and is licensed under GPLv3.
  */
 
 package de.codehat.signcolors.util;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import javax.net.ssl.*;
 import java.io.BufferedReader;
@@ -39,7 +42,10 @@ public class HttpRequest {
         }
         in.close();
 
-        return response.toString();
+        JSONParser parser = new JSONParser();
+        JSONObject json = (JSONObject) parser.parse(response.toString());
+
+        return (String) json.get("version");
     }
 
     private static SSLSocketFactory createSslSocketFactory() throws Exception {

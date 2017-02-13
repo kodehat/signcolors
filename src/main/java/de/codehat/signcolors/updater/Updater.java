@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 CodeHat.
+ * Copyright (c) 2017 CodeHat.
  * This file is part of 'SignColors' and is licensed under GPLv3.
  */
 
@@ -9,7 +9,7 @@ import de.codehat.signcolors.util.HttpRequest;
 
 public class Updater implements Runnable {
 
-    private static final String URL = "https://codehat.de/api/spigot/signcolors/version";
+    private static final String URL = "https://api.codehat.de/plugin/1";
     private String plugin_version;
     private UpdateCallback<UpdateResult, String> c;
 
