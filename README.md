@@ -1,4 +1,4 @@
-SignColors v1.0.0 by CodeHat [![Build Status](https://travis-ci.org/Pixelhash/SignColors.svg?branch=master)](https://travis-ci.org/Pixelhash/SignColors)
+SignColors [![Build Status](https://travis-ci.org/Pixelhash/SignColors.svg?branch=master)](https://travis-ci.org/Pixelhash/SignColors)
 ========================================================================================================================================================
 
 Repository of the SignColors plugin.
