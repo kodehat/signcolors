@@ -25,7 +25,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.mcstats.Metrics;
 
 import java.io.File;
 import java.io.IOException;
@@ -135,7 +134,6 @@ public class SignColors extends JavaPlugin implements Listener {
         }
         this.loadDatabase();
         this.checkUpdates();
-        this.startMetrics();
         PluginDescriptionFile plugin = this.getDescription();
         this.log_.info("Version " + plugin.getVersion() + " by CodeHat enabled.");
         super.onEnable();
@@ -281,23 +279,6 @@ public class SignColors extends JavaPlugin implements Listener {
         }
         ECONOMY = rsp.getProvider();
         return ECONOMY != null;
-    }
-
-    /**
-     * Starts metrics service.
-     */
-    public void startMetrics() {
-        if (this.getConfig().getBoolean("metrics")) {
-            Metrics metrics;
-            try {
-                metrics = new Metrics(this);
-                metrics.start();
-            } catch (IOException e) {
-                this.log_.info("Metrics: Failed to submit the stats :-(");
-                e.printStackTrace();
-                this.plog_.warn(e.getMessage(), true);
-            }
-        }
     }
 
     /**

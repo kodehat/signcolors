@@ -144,6 +144,5 @@ mysql:
   password: 'ilovemc'
   table_prefix: 'sc_'
 updatecheck: true
-metrics: true
 logging: false
 configversion: 4

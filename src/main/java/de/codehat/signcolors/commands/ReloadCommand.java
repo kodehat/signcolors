@@ -26,7 +26,6 @@ public class ReloadCommand extends BaseCommand {
         this.plugin.getSignManager().oldSignAmount = this.plugin.getConfig().getInt("signamount.crafting");
         this.plugin.reloadConfig();
         this.plugin.setupLogger();
-        this.plugin.startMetrics();
         this.lang.setupLanguage();
         this.lang.loadLanguage();
         this.plugin.getSignManager().removeRecipe();
