@@ -21,13 +21,11 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -37,7 +35,7 @@ import java.util.logging.Logger;
 /**
  * Main plugin class of 'SignColors' plugin.
  */
-public class SignColors extends JavaPlugin implements Listener {
+public class SignColors extends JavaPlugin {
 
     /*
      * ---------------------------------------------------------
