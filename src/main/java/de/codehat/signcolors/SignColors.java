@@ -18,6 +18,7 @@ import de.codehat.signcolors.manager.BackupManager;
 import de.codehat.signcolors.manager.SignManager;
 import de.codehat.signcolors.updater.Updater;
 import net.milkbowl.vault.economy.Economy;
+import org.bstats.Metrics;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -110,7 +111,6 @@ public class SignColors extends JavaPlugin {
         // Close logger if needed.
         if (this.plog_ != null) this.plog_.close();
         this.log_.info("Version " + plugin.getVersion() + " by CodeHat disabled.");
-        super.onDisable();
     }
 
     @Override
@@ -131,10 +131,15 @@ public class SignColors extends JavaPlugin {
             if (this.plog_ != null) this.plog_.warn("Vault is NOT installed!", true);
         }
         this.loadDatabase();
+        if (this.getConfig().getBoolean("metrics")) {
+            Metrics metrics = new Metrics(this);
+            this.log_.info("Metrics are ENABLED :)");
+        } else {
+            this.log_.info("Metrics are DISABLED :(");
+        }
         this.checkUpdates();
         PluginDescriptionFile plugin = this.getDescription();
         this.log_.info("Version " + plugin.getVersion() + " by CodeHat enabled.");
-        super.onEnable();
     }
 
     /*
@@ -168,6 +173,7 @@ public class SignColors extends JavaPlugin {
 
         // Set executor for /sc.
         this.getCommand("sc").setExecutor(new CommandHandler(this, this.langLoader_));
+        this.getCommand("sc").setTabCompleter(new TabCompletion());
     }
 
     /**

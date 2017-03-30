@@ -4,7 +4,7 @@ author: CodeHat
 website: https://www.spigotmc.org/resources/signcolors.6135/
 softdepend: [Vault]
 description: Make colored signs.
-version: 1.0.2
+version: 1.1.0
 
 commands:
   sc:

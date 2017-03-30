@@ -1,114 +1,40 @@
-# ###########################################
-# ######## _________________________ ########
-# ########|                         |########
-# ########|       SignColors        |########
-# ########|           by            |########
-# ########|         CodeHat         |########
-# ########|  Licensed under GPLv3.  |########
-# ########|_________________________|########
-# ####################<|>####################
-# ####################<|>####################
-# ####################<|>####################
-# ####################<|>####################
-# CONFIG EXPLANATION:
-# --------------------------------------------------------
-# The symbol in front of the colorcode e.g. &6 (= GOLD).
-# colorsymbol: '&'
-# --------------------------------------------------------
-# Should players be able to craft colored signs?
-# signcrafting: true
-# --------------------------------------------------------
-# There are two different types of recipes:
-# "shaped": They have a pattern defining where you have
-# to place your items/blocks on the workbench.
-# "shapeless": They do not have a pattern and you can
-# place the ingredients on your workbench where you want.
-# recipetype: 'shaped'
-# --------------------------------------------------------
-# ONLY enabled if "recipetype" is set to "shaped"!
-# At first you define your items/blocks you want to use in
-# your recipe and give them a letter as a variable name.
-# E.g. S: 'SIGN'
-# You can use data values as well.
-# E.g. T: 'WOOL:9'
-# This would represent Cyan Wool.
-# Generally the ingredients pattern is:
-# VARIABLELETTER: "MATERIALNAME:DATAVALUE"
-# The "craftingshape" represents the workbench. Each line
-# in the list equals a line at the workbench. Here you
-# can use your defined variables and place them where
-# you want. A whitespace represents air.
-# Remember that it is not possible to have more
-# than three characters (whitespace included) in one line!
-#  shaped:
-#    ingredients:
-#      A: 'INK_SACK:1'
-#      B: 'INK_SACK:2'
-#      C: 'INK_SACK:4'
-#      D: 'INK_SACK:11'
-#      S: 'SIGN'
-#    craftingshape:
-#    - 'A B'
-#    - ' S '
-#    - 'C D'
-# --------------------------------------------------------
-# ONLY enabled if "recipetype" is set to "shapeless"!
-# Which items/blocks should they use to craft them?
-# Use material names instead of item IDs! It is not
-# possible to add more than nine different items/blocks!
-# You can easily add an item/block by making a new line
-# like it is shown below with the following pattern:
-# MATERIALNAME:DATAVALUE
-#  shapeless:
-#    ingredients:
-#    - 'INK_SACK:1'
-#    - 'INK_SACK:2'
-#    - 'INK_SACK:4'
-#    - 'INK_SACK:11'
-#    - 'SIGN'
-# --------------------------------------------------------
-# Prevents players to create clickable signs like the
-# plugin's [SC] sign or Essential's [Buy] sign. You
-# are free to add as many you want. And don't worry, the
-# '&' character gets replaced by the current colorsymbol.
-# blocked_firstlines:
-# - '&6[&3SC&6]'
-# - '&1[Buy]'
-# --------------------------------------------------------
-# => sc_sign
-# How many signs should they get from a [SignColors] sign?
-# => crafting
-# How many signs should they get from the crafting recipe?
-# signamount:
-#   crafting: 1
-#   sc_sign: 10
-# --------------------------------------------------------
-# Price for 10 signs from a [SignColors] sign.
-# price: 10.0
-# --------------------------------------------------------
-# Sets the plugin language (DE = german; EN = english;
-# ES = spanish). You can add your own language by adding
-# a YOURLANG.yml file to the languages folder.
-# language: 'EN'
-# --------------------------------------------------------
-# Can be either 'sqlite' or 'mysql'. If you choose 'mysql'
-# you have to enter your mysql data/credentials under the
-# 'mysql:' tree.
-# database_type: 'sqlite'
-# --------------------------------------------------------
-# Should the plugin check for updates.
-# updatecheck: true
-# --------------------------------------------------------
-# Metrics for mcstats.org.
-# metrics: true
-# --------------------------------------------------------
-# Config version. Don't change it!
-# configversion: 4
-# PLUGIN SETTINGS:
+#--------------------------------------------------------
+#  PLUGIN SETTINGS:
+#--------------------------------------------------------
+
+# The symbol in front of the hex code e.g. &6 (= GOLD).
 colorsymbol: '&'
+
+# Should players be able to craft colored signs?
 signcrafting: true
+
+# There are two different types of recipes:
+# "shaped":
+#   They have a certain pattern defining where you have
+#   to place your items/blocks on the workbench.
+#
+# "shapeless":
+#   They don't have a pattern and you can
+#   place the ingredients on your workbench where you want.
 recipetype: 'shaped'
+
+# Recipe settings.
 recipes:
+  # ONLY enabled if "recipetype" is set to "shaped"!
+  # At first you define your items/blocks you want to use in
+  # your recipe and give them a letter as a variable name.
+  # E.g. S: 'SIGN'
+  # You can use data values as well.
+  # E.g. T: 'WOOL:9'
+  # This would represent Cyan Wool.
+  # Generally the ingredients pattern is:
+  # VARIABLELETTER: "MATERIALNAME:DATAVALUE"
+  # The "craftingshape" represents the workbench. Each line
+  # in the list equals a line at the workbench. Here you
+  # can use your defined variables and place them where
+  # you want. A whitespace represents air.
+  # Remember that it is not possible to have more
+  # than three characters (whitespace included) in one line!
   shaped:
     ingredients:
       A: 'INK_SACK:1'
@@ -120,6 +46,11 @@ recipes:
     - 'A B'
     - ' S '
     - 'C D'
+
+  # ONLY enabled if "recipetype" is set to "shapeless"!
+  # Each line in the list equals an item/block on the workbench.
+  # The order doesn't matter, because the recipe is shapeless.
+  # You can add up to nine items/blocks.
   shapeless:
     ingredients:
     - 'INK_SACK:1'
@@ -127,14 +58,34 @@ recipes:
     - 'INK_SACK:4'
     - 'INK_SACK:11'
     - 'SIGN'
+
+# Prevents players to create clickable signs like the
+# plugin's [SC] sign or Essential's [Buy] sign. You
+# are free to add as many as you want. And don't worry, the
+# '&' character gets replaced by the color char.
 blocked_firstlines:
 - '&6[&3SC&6]'
 - '&1[Buy]'
+
+# => crafting
+# Amount of colored signs by using the crafting recipe.
+# => sc_sign
+# Default amounts of colored signs from a [SignColors] sign.
 signamount:
   crafting: 1
   sc_sign: 10
+
+# Default price from [SignColors] signs.
 price: 100.0
+
+# Sets the plugin language (DE = german; EN = english;
+# ES = spanish). You can add your own language by adding
+# a YOURLANG.yml file to the languages folder.
 language: 'EN'
+
+# Can be either 'sqlite' or 'mysql'. If you choose 'mysql'
+# you have to enter your mysql data/credentials under the
+# 'mysql:' tree.
 database_type: 'sqlite'
 mysql:
   host: '127.0.0.1'
@@ -143,6 +94,14 @@ mysql:
   username: 'steve'
   password: 'ilovemc'
   table_prefix: 'sc_'
+
+# Send some statistics to bstats.org.
+metrics: true
+
+# Should the plugin check for updates.
 updatecheck: true
+
 logging: false
-configversion: 4
+
+# Current version of the config. DO NOT TOUCH IT!!!
+configversion: 5
