@@ -15,84 +15,91 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class BackupManager {
+public class BackupManager extends Manager {
 
-    // Config version.
-    private static final int CONFIG_VERSION = 4;
+    // Current version of the config
+    private static final int CONFIG_VERSION = 5;
 
-    // Plugin instance.
-    private SignColors plugin_;
-
-    public BackupManager(SignColors signColors) {
-        this.plugin_ = signColors;
+    public BackupManager(SignColors plugin) {
+        super(plugin);
     }
 
     /**
-     * Check the current config version and create new if needed.
+     * Checks the current config version and creates new one if necessary.
      */
     public void checkConfigVersion() {
-        if (CONFIG_VERSION > this.plugin_.getConfig().getInt("configversion")) {
+        if (CONFIG_VERSION > this.getPlugin().getConfig().getInt("configversion")) {
             // Backup old config file and languages folder to be able to update them.
-            this.backupConfig();
-            this.backupLanguages();
-            this.plugin_.loadConfig();
+            this.backupOldConfig();
+            this.backupOldLangFiles();
+            this.getPlugin().saveDefaultConfig();
         }
     }
 
     /**
-     * Makes a backup of the current config.yml.
+     * Makes a backup of the current config.
      */
-    private void backupConfig() {
-        File oldConfigBackup = new File(this.plugin_.getDataFolder(), "config.yml.old");
-        // Delete old config.yml if it exists.
+    private void backupOldConfig() {
+        File oldConfigBackup = new File(this.getPlugin().getDataFolder(), "config.yml.old");
+        // Delete old config backup if it exists
         if (oldConfigBackup.exists()) {
             if (!oldConfigBackup.delete()) {
-                this.plugin_.getLogger().warning("Could not delete old config backup file! " +
+                SignColors.logError("Could not delete old config file backup! " +
                         "Please delete it manually and restart the server!");
-                return;
+                SignColors.logError("Disabling this plugin until problem has been fixed!");
+                this.getPlugin().getServer().getPluginManager().disablePlugin(this.getPlugin());
             }
         }
-        Path sourceConfig = Paths.get(this.plugin_.getDataFolder().toPath().toString() + File.separator
+        Path sourceConfig = Paths.get(this.getPlugin().getDataFolder().toPath().toString() + File.separator
                 + "config.yml");
-        Path targetConfig = Paths.get(this.plugin_.getDataFolder().toPath().toString() + File.separator
+        Path targetConfig = Paths.get(this.getPlugin().getDataFolder().toPath().toString() + File.separator
                 + "config.yml.old");
         try {
-            // Make a backup of the current config.yml -> config.yml.old.
+            // Make a backup of the current config -> config.yml.old
             Files.copy(sourceConfig, targetConfig);
-        } catch (IOException e1) {
-            e1.printStackTrace();
+        } catch (IOException exception) {
+            SignColors.logError("Couldn't backup old config! Delete config manually and restart the server!");
+            SignColors.logError("Disabling this plugin until problem has been fixed!");
+            exception.printStackTrace();
+            this.getPlugin().getServer().getPluginManager().disablePlugin(this.getPlugin());
         }
-        this.plugin_.getLogger().info("Made a backup of the old config.yml!");
-        File config = new File(this.plugin_.getDataFolder().toPath().toString() + File.separator + "config.yml");
-        // Delete the old config.yml to be able to create the updated one.
+        SignColors.info("Made a backup of the old config!");
+        File config = new File(this.getPlugin().getDataFolder().toPath().toString() + File.separator
+                + "config.yml");
+        // Delete the old config to be able to create the new one
         if (!config.delete()) {
-            this.plugin_.getLogger().warning("Could not delete old config file! "
-                    + "Please delete it manually and restart the server!");
+            SignColors.logError("Could not delete old config! Please delete it manually and restart the server!");
+            SignColors.logError("Disabling this plugin until problem has been fixed!");
+            this.getPlugin().getServer().getPluginManager().disablePlugin(this.getPlugin());
         }
     }
 
     /**
      * Makes a backup of the current 'languages' folder.
      */
-    private void backupLanguages() {
-        File oldLangBackup = new File(this.plugin_.getDataFolder().toPath().toString() + File.separator
+    private void backupOldLangFiles() {
+        File oldLangBackup = new File(this.getPlugin().getDataFolder().toPath().toString() + File.separator
                 + "languages.old.zip");
-        // Delete old languages backup .zip file if it exists.
+        // Delete old languages backup file if it exists
         if (oldLangBackup.exists()) {
             if (!oldLangBackup.delete()) {
-                this.plugin_.getLogger().warning("Could not delete old languages backup file! "
+                SignColors.logError("Could not delete old languages backup file! "
                         + "Please delete it manually and restart the server!");
-                return;
+                SignColors.logError("Disabling this plugin until problem has been fixed!");
+                this.getPlugin().getServer().getPluginManager().disablePlugin(this.getPlugin());
             }
         }
-        // Create a .zip file of the current 'languages' folder.
-        ZipUtils.zipFolder(this.plugin_.getDataFolder().toPath().toString() + File.separator + "languages",
-                this.plugin_.getDataFolder().toPath().toString() + File.separator + "languages.old.zip");
-        this.plugin_.getLogger().info("Made a backup of the old languages folder!");
-        // Delete the old 'languages' folder to be able to create the updated one.
-        if (!Utils.deleteDirectory(new File(this.plugin_.getDataFolder().toPath().toString() + File.separator
-                + "languages"))) {
-            this.plugin_.getLogger().warning("Could not delete the old languages folder");
+        // Create a .zip file of the current 'languages' folder
+        ZipUtils.zipFolder(this.getPlugin().getDataFolder().toPath().toString() + File.separator
+                + "languages", this.getPlugin().getDataFolder().toPath().toString() + File.separator
+                + "languages.old.zip");
+        SignColors.info("Made a backup of the old languages folder!");
+        // Delete the old 'languages' folder to be able to create the updated one
+        if (!Utils.deleteDirectory(new File(this.getPlugin().getDataFolder().toPath().toString()
+                + File.separator + "languages"))) {
+            SignColors.logError("Could not delete the old languages folder");
+            SignColors.logError("Disabling this plugin until problem has been fixed!");
+            this.getPlugin().getServer().getPluginManager().disablePlugin(this.getPlugin());
         }
     }
 }

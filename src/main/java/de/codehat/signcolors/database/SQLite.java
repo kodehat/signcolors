@@ -5,6 +5,7 @@
 
 package de.codehat.signcolors.database;
 
+import de.codehat.signcolors.SignColors;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
@@ -14,47 +15,50 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Level;
 
-/**
- * Connects to and uses a SQLite database
- *
- * @author tips48
- */
 public class SQLite extends Database {
-    private final String dbLocation;
 
+    private String databaseLocation;
     private Connection connection;
 
     /**
-     * Creates a new SQLite instance
+     * Represents the connection to a SQLite database.
      *
-     * @param plugin     Plugin instance
-     * @param dbLocation Location of the Database (Must end in .db)
+     * @param plugin     The plugin instance.
+     * @param databaseLocation Location of the SQLite database.
      */
-    public SQLite(Plugin plugin, String dbLocation) {
-        super(plugin);
-        this.dbLocation = dbLocation;
+    public SQLite(Plugin plugin, String databaseLocation) {
+        super(plugin, DatabaseType.SQLITE);
+        this.databaseLocation = databaseLocation;
     }
 
     @Override
     public Connection openConnection() {
-        File file = new File(plugin.getDataFolder().toPath().toString() + File.separator + dbLocation);
+        File file = new File(this.plugin.getDataFolder().getAbsolutePath() + File.separator
+                + databaseLocation);
         if (!(file.exists())) {
             try {
                 file.createNewFile();
-            } catch (IOException e) {
-                plugin.getLogger().log(Level.SEVERE, "Unable to create database!");
-                e.printStackTrace();
+            } catch (IOException exception) {
+                SignColors.logError("Unable to create SQLite database!");
+                SignColors.logError("Disabling this plugin until problem has been fixed!");
+                exception.printStackTrace();
+                this.plugin.getServer().getPluginManager().disablePlugin(this.plugin);
             }
         }
         try {
             Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite:" + plugin.getDataFolder().toPath().toString() + File.separator + dbLocation);
-        } catch (SQLException e) {
-            plugin.getLogger().log(Level.SEVERE, "Could not connect to SQLite server! because: " + e.getMessage());
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            plugin.getLogger().log(Level.SEVERE, "JDBC Driver not found!");
-            e.printStackTrace();
+            connection = DriverManager.getConnection("jdbc:sqlite:" + this.plugin.getDataFolder().getAbsolutePath()
+                    + File.separator + databaseLocation);
+        } catch (SQLException exception) {
+            SignColors.logError("Can't connect to SQLite database!");
+            SignColors.logError("Disabling this plugin until problem has been fixed!");
+            exception.printStackTrace();
+            this.plugin.getServer().getPluginManager().disablePlugin(this.plugin);
+        } catch (ClassNotFoundException exception) {
+            SignColors.logError("JDBC Driver not found!");
+            SignColors.logError("Disabling this plugin until problem has been fixed!");
+            exception.printStackTrace();
+            this.plugin.getServer().getPluginManager().disablePlugin(this.plugin);
         }
         return connection;
     }
@@ -63,8 +67,8 @@ public class SQLite extends Database {
     public boolean checkConnection() {
         try {
             return !(connection.isClosed());
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
             return false;
         }
     }
@@ -80,9 +84,9 @@ public class SQLite extends Database {
             try {
                 connection.close();
                 connection = null;
-            } catch (SQLException e) {
+            } catch (SQLException exception) {
                 plugin.getLogger().log(Level.SEVERE, "Error closing the SQLite Connection!");
-                e.printStackTrace();
+                exception.printStackTrace();
             }
         }
     }

@@ -10,16 +10,17 @@ import de.codehat.signcolors.database.Database;
 import de.codehat.signcolors.database.MySQL;
 import de.codehat.signcolors.database.SQLite;
 import de.codehat.signcolors.languages.LanguageLoader;
-import de.codehat.signcolors.listener.BlockListener;
-import de.codehat.signcolors.listener.PlayerListener;
-import de.codehat.signcolors.listener.SignChangeListener;
-import de.codehat.signcolors.logger.PluginLogger;
+import de.codehat.signcolors.listeners.BlockListener;
+import de.codehat.signcolors.listeners.PlayerListener;
+import de.codehat.signcolors.listeners.PluginListener;
+import de.codehat.signcolors.listeners.SignChangeListener;
 import de.codehat.signcolors.manager.BackupManager;
+import de.codehat.signcolors.manager.LanguageManager;
+import de.codehat.signcolors.manager.Manager;
 import de.codehat.signcolors.manager.SignManager;
 import de.codehat.signcolors.updater.Updater;
 import net.milkbowl.vault.economy.Economy;
 import org.bstats.Metrics;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -33,196 +34,179 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-/**
- * Main plugin class of 'SignColors' plugin.
- */
 public class SignColors extends JavaPlugin {
 
-    /*
-     * ---------------------------------------------------------
-     *  Static/Final Variables
-     * ---------------------------------------------------------
-     */
-
-    // All available colorcodes.
+    // All available colorcodes
     public static final String ALL_COLOR_CODES = "0123456789abcdefklmnor";
 
-    // Vault support.
-    public static Economy ECONOMY;
+    // Vault instance
+    private static Economy econ = null;
 
-    /*
-     * ---------------------------------------------------------
-     *  Public Variables
-     * ---------------------------------------------------------
-     */
+    // Logger instance
+    private static Logger logger;
 
     // The language FileConfiguration.
     public FileConfiguration langCfg;
-
-    // Strings used by the updater.
-    public String updateLink, updateVersion;
-
     // Player 'last sign' HashMap.
     public List<Player> signPlayers = new ArrayList<>();
-
+    // Shows if a newer version of this plugin is available
+    private boolean updateAvailable = false;
+    // If a newer version is available, the version number is saved here
+    private String newerVersion;
+    // The command manager
+    private CommandManager commandManager = new CommandManager(this);
     // Shows whether the 'signcrafting' option is enabled or disabled.
-    public boolean isSignCrafting;
-
-    // Shows if sending an update message is allowed.
-    public boolean sendUpdateMsgToPlayer;
-
-    /*
-     * ---------------------------------------------------------
-     *  Private Variables
-     * ---------------------------------------------------------
-     */
-
-    // Minecraft and plugin logger.
-    private Logger log_ = Logger.getLogger("Minecraft");
-    private PluginLogger plog_;
-
+    private boolean signcrafting;
     // Database Connection.
-    private Database database_;
+    private Database database;
 
     // The language module.
-    private LanguageLoader langLoader_ = new LanguageLoader(this);
+    private LanguageManager languageManager;
 
     // Backup Manager.
-    private BackupManager backupManager_ = new BackupManager(this);
+    private BackupManager backupManager;
 
     // Sign Manager.
-    private SignManager signManager_ = new SignManager(this);
+    private SignManager signManager;
 
-    /*
-     * ---------------------------------------------------------
-     *  JavaPlugin Methods
-     * ---------------------------------------------------------
+    /**
+     * Log an info message to console.
+     *
+     * @param message The message to log.
      */
+    public static void info(String message) {
+        logger.info(message);
+    }
+
+    /**
+     * Log a warning message to console.
+     *
+     * @param message The message to log.
+     */
+    public static void logError(String message) {
+        logger.severe(message);
+    }
+
+    /**
+     * Get the econ instance.
+     *
+     * @return The econ instance.
+     */
+    public static Economy getEconomy() {
+        return econ;
+    }
 
     @Override
     public void onDisable() {
-        this.reloadConfig();
-        this.saveConfig();
-        PluginDescriptionFile plugin = this.getDescription();
-        // Close database if needed.
-        if (this.database_.getConnection() != null) {
+        // Close the database if necessary
+        if (this.database.getConnection() != null) {
             this.closeDatabase();
         }
-        // Close logger if needed.
-        if (this.plog_ != null) this.plog_.close();
-        this.log_.info("Version " + plugin.getVersion() + " by CodeHat disabled.");
+        // Log "disable" message
+        PluginDescriptionFile pluginDescriptionFile = this.getDescription();
+        info(String.format("Version %s by %s disabled.", pluginDescriptionFile.getVersion(),
+                pluginDescriptionFile.getAuthors().get(0)));
     }
 
     @Override
     public void onEnable() {
-        this.log_ = this.getLogger();
-        this.loadConfig();
-        this.backupManager_.checkConfigVersion();
-        this.setupLogger();
-        this.langLoader_.setupLanguage();
-        this.langLoader_.loadLanguage();
-        this.signManager_.setupColoredSigns();
-        this.registerListeners();
-        this.registerCommands();
-        // Check if Vault is installed.
+        logger = this.getLogger();
+
+        // Save the default config, if it doesn't exist.
+        this.saveDefaultConfig();
+
+        //TODO: Setup managers here.
+        this.loadManagers();
+
+        // Setup Vault
         if (!this.setupEconomy()) {
-            this.log_.info("Some features won't work, because no Vault/Economy dependency found!");
-            this.log_.info("Please install this dependency!");
-            if (this.plog_ != null) this.plog_.warn("Vault is NOT installed!", true);
+            logError("Some features won't work, because Vault is missing!");
+            logError("Please install Vault!");
         }
+
+        // Register listeners
+        this.registerListeners();
+        // Register commands
+        this.registerCommands();
+
+
+        //TODO: Other methods.
+        // Load database
         this.loadDatabase();
-        if (this.getConfig().getBoolean("metrics")) {
-            Metrics metrics = new Metrics(this);
-            this.log_.info("Metrics are ENABLED :)");
-        } else {
-            this.log_.info("Metrics are DISABLED :(");
-        }
-        this.checkUpdates();
-        PluginDescriptionFile plugin = this.getDescription();
-        this.log_.info("Version " + plugin.getVersion() + " by CodeHat enabled.");
+
+        // Setup metrics
+        this.setupMetrics();
+
+        // Start update check
+        this.checkForUpdate();
+
+        // Log enable message
+        PluginDescriptionFile pluginDescriptionFile = this.getDescription();
+        logger.info(String.format("Version %s by %s enabled.", pluginDescriptionFile.getVersion(),
+                pluginDescriptionFile.getAuthors().get(0)));
+
+        this.backupManager.checkConfigVersion();
+        this.signManager.setupColoredSigns();
+
+        this.checkForUpdate();
+
     }
 
-    /*
-     * ---------------------------------------------------------
-     *  Plugin Methods
-     * ---------------------------------------------------------
-     */
-
     /**
-     * Registers all SignColors listener.
+     * Registers the plugin's listeners.
      */
     private void registerListeners() {
-        new PlayerListener(this, this.langLoader_);
-        new SignChangeListener(this, this.langLoader_);
-        new BlockListener(this, this.langLoader_);
+        // All available listeners
+        PluginListener[] listeners = {
+                new PlayerListener(this),
+                new BlockListener(this),
+                new SignChangeListener(this)
+        };
+
+        // Loop through all listeners and register each of them
+        for (PluginListener listener : listeners) {
+            this.getServer().getPluginManager().registerEvents(listener, this);
+        }
     }
 
     /**
-     * Registers all SignColors commands.
+     * Registers the plugin's commands.
      */
     private void registerCommands() {
-        CommandHandler cmdh = new CommandHandler(this, this.langLoader_);
+        // Register all commands
+        this.commandManager.registerCommand("", new InfoCommand(this));
+        this.commandManager.registerCommand("colorcodes", new ColorCodesCommand(this));
+        this.commandManager.registerCommand("colorsymbol", new ColorSymbolCommand(this));
+        this.commandManager.registerCommand("givesign", new GiveSignCommand(this));
+        this.commandManager.registerCommand("help", new HelpCommand(this));
+        this.commandManager.registerCommand("reload", new ReloadCommand(this));
+        this.commandManager.registerCommand("upgrade", new UpgradeCommand(this));
 
-        // Register all subcommands.
-        cmdh.registerNewCommand("help", new HelpCommand(this, this.langLoader_));
-        cmdh.registerNewCommand("reload", new ReloadCommand(this, this.langLoader_));
-        cmdh.registerNewCommand("colorcodes", new ColorCodesCommand(this, this.langLoader_));
-        cmdh.registerNewCommand("givesign", new GiveSignCommand(this, this.langLoader_));
-        cmdh.registerNewCommand("colorsymbol", new ColorSymbolCommand(this, this.langLoader_));
-        cmdh.registerNewCommand("upgrade", new UpgradeCommand(this, this.langLoader_));
-
-        // Set executor for /sc.
-        this.getCommand("sc").setExecutor(new CommandHandler(this, this.langLoader_));
+        // Set command executor
+        this.getCommand("sc").setExecutor(this.commandManager);
+        // Set tab completer
         this.getCommand("sc").setTabCompleter(new TabCompletion());
     }
 
     /**
-     * Loads the config.yml file.
+     * Load the plugin's managers.
      */
-    public void loadConfig() {
-        try {
-            // Create folders if needed.
-            if (!this.getDataFolder().exists()) {
-                if (!this.getDataFolder().mkdirs()) {
-                    this.log_.warning("Could not create the data folder for the plugin! " +
-                            "Please check if you have enough permissions to create folders!");
-                    return;
-                }
-            }
-            File file = new File(getDataFolder(), "config.yml");
-            if (!file.exists()) {
-                // Config not found.
-                this.getLogger().info("config.yml not found, creating!");
-                this.saveDefaultConfig();
-            } else {
-                // Config found.
-                this.getLogger().info("config.yml found, loading!");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        this.reloadConfig();
+    private void loadManagers() {
+        this.backupManager = new BackupManager(this);
+        this.languageManager = new LanguageManager(this);
+        this.signManager = new SignManager(this);
+
+        this.backupManager.checkConfigVersion();
+        this.languageManager.setupLanguage();
+        this.signManager.setupColoredSigns();
     }
 
     /**
-     * Configures the PluginLogger.
-     */
-    public void setupLogger() {
-        if (this.getConfig().getBoolean("logging")) {
-            this.plog_ = new PluginLogger(this);
-        } else if (!this.getConfig().getBoolean("logging") && this.plog_ != null) {
-            this.plog_.close();
-            this.plog_ = null;
-        }
-    }
-
-    /**
-     * Loads the database for the location of the signs.
+     * Loads the database for the locations of the placed colored signs.
      */
     public void loadDatabase() {
-        if (this.isSignCrafting && (this.database_ == null || this.database_.getConnection() == null)) {
-            this.getLogger().info("Using database type: "
-                    + this.getConfig().getString("database_type").toUpperCase());
+        if (this.isSigncrafting() && (this.database == null || this.database.getConnection() == null)) {
+            info("Loading database (" + this.getConfig().getString("database_type").toUpperCase() + ").");
             if (this.getConfig().getString("database_type").equals("mysql")) {
                 MySQL mysql = new MySQL(this, this.getConfig().getString("mysql.host"),
                         this.getConfig().getString("mysql.port"),
@@ -230,48 +214,39 @@ public class SignColors extends JavaPlugin {
                         this.getConfig().getString("mysql.username"),
                         this.getConfig().getString("mysql.password"));
                 mysql.openConnection();
-                this.database_ = mysql;
-                PreparedStatement ps;
-                try {
-                    ps = this.database_.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS "
-                            + this.getConfig().getString("mysql.table_prefix")
-                            + "sign_locations (world VARCHAR(50), x INT, y INT, z INT)");
-                    ps.executeUpdate();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                this.database = mysql;
             } else {
-                File db_dir = new File(this.getDataFolder().toPath().toString() + File.separator + "data"
+                File databaseDir = new File(this.getDataFolder().getAbsolutePath() + File.separator + "data"
                         + File.separator);
-                if (!db_dir.exists()) {
-                    if (!db_dir.mkdir()) {
-                        this.log_.warning("Could not create 'data' folder! " +
+                if (!databaseDir.exists()) {
+                    if (!databaseDir.mkdir()) {
+                        logError("Could not create 'data' folder! " +
                                 "Please create it manually and restart the server!");
-                        return;
+                        logError("Disabling this plugin until problem has been fixed!");
+                        this.getServer().getPluginManager().disablePlugin(this);
                     }
                 }
                 SQLite sqlite = new SQLite(this, "data" + File.separator + "sign_locations.db");
                 sqlite.openConnection();
-                this.database_ = sqlite;
-                PreparedStatement ps;
-                try {
-                    ps = this.database_.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS "
-                            + this.getConfig().getString("mysql.table_prefix")
-                            + "sign_locations (world VARCHAR(50), x INT, y INT, z INT)");
-                    ps.executeUpdate();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                this.database = sqlite;
             }
-        } else if (!this.isSignCrafting && this.database_.getConnection() != null) {
+            try {
+                this.database.createTables(this.getConfig().getString("mysql.table_prefix"));
+            } catch (SQLException exception) {
+                logError("Could not create necessary database tables!");
+                logError("Disabling this plugin until problem has been fixed!");
+                exception.printStackTrace();
+                this.getServer().getPluginManager().disablePlugin(this);
+            }
+        } else if (!this.isSigncrafting() && this.database.getConnection() != null) {
             this.closeDatabase();
         }
     }
 
     /**
-     * Setups vault.
+     * Initializes vault for economy support.
      *
-     * @return True on a successfull economy setup, false if economy setup fails.
+     * @return true if vault is there and ready, false if not.
      */
     private boolean setupEconomy() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
@@ -281,68 +256,115 @@ public class SignColors extends JavaPlugin {
         if (rsp == null) {
             return false;
         }
-        ECONOMY = rsp.getProvider();
-        return ECONOMY != null;
+        econ = rsp.getProvider();
+        return econ != null;
     }
 
     /**
-     * Checks for plugin updates.
+     * Starts the update check task.
      */
-    private void checkUpdates() {
-        if (getConfig().getBoolean("updatecheck")) {
-            final PluginDescriptionFile plugin = getDescription();
-            this.log_.info("Checking for Updates...");
-            this.getServer().getScheduler().runTaskAsynchronously(this, new Updater(plugin.getVersion(),
-                    (result, version) -> {
+    private void checkForUpdate() {
+        if (this.getConfig().getBoolean("updatecheck")) {
+            info("Looking for a newer version...");
+            final PluginDescriptionFile pluginDescriptionFile = getDescription();
+            this.getServer().getScheduler().runTaskAsynchronously(this,
+                    new Updater(pluginDescriptionFile.getVersion(), (result, newVersion) -> {
                         switch (result) {
-                            case NEEDED:
-                                getServer().getConsoleSender().sendMessage("[SignColors] " + ChatColor.GREEN
-                                        + "A new version is available: v" + version);
-                                getServer().getConsoleSender().sendMessage("[SignColors] " + ChatColor.GREEN
-                                        + "Get it from: " + ChatColor.GOLD + Updater.getDownloadUrl());
-                                info("New version available: v" + version, true);
-                                sendUpdateMsgToPlayer = true;
-                                updateLink = Updater.getDownloadUrl();
-                                updateVersion = version;
+                            case AVAILABLE:
+                                info("A newer version is available (v" + newVersion + ")!");
+                                info("Get it from: " + Updater.getSpigotUrl());
+                                this.updateAvailable = true;
+                                this.newerVersion = newVersion;
                                 break;
-                            case UNNEEDED:
-                                log_.info("No new version available");
+                            case UNAVAILABLE:
+                                info("No newer version available.");
                                 break;
                             default:
-                                log_.info("Could not check for Updates");
+                                logError("Checking for a newer version FAILED :(");
                         }
                     }));
+        } else {
+            info("Looking for a newer version is DISABLED :(");
         }
     }
 
     /**
-     * Return the plugin database.
+     * Enables or disabled metrics based on the 'metrics' config value.
+     */
+    private void setupMetrics() {
+        if (this.getConfig().getBoolean("metrics")) {
+            new Metrics(this);
+            info("Metrics are ENABLED :)");
+        } else {
+            info("Metrics are DISABLED :(");
+        }
+    }
+
+    /**
+     * Same as {@link LanguageManager#getStr(String)}
+     */
+    public String getStr(String key) {
+        return this.languageManager.getStr(key);
+    }
+
+    /**
+     * Get the version number of newest update.
+     *
+     * @return The version string.
+     */
+    public String getNewerVersion() {
+        return newerVersion;
+    }
+
+    /**
+     * Shows if a newer version of plugin is available.
+     *
+     * @return true if available, false if not.
+     */
+    public boolean isUpdateAvailable() {
+        return updateAvailable;
+    }
+
+    /**
+     * Is the possibility to craft colored signs enabled or disabled?
+     *
+     * @return true if enabled, false if not.
+     */
+    public boolean isSigncrafting() {
+        return signcrafting;
+    }
+
+    /**
+     * Enable or disable to possibility to craft colored signs.
+     *
+     * @param signcrafting true to enable, false to disable.
+     */
+    public void setSigncrafting(boolean signcrafting) {
+        this.signcrafting = signcrafting;
+    }
+
+    /**
+     * Get the plugin's database.
      *
      * @return The database. Either MySQL or SQLite.
      */
     public Database getPluginDatabase() {
-        return this.database_;
+        return this.database;
     }
 
     private void closeDatabase() {
         try {
-            this.log_.info("Closing database...");
-            this.database_.getConnection().close();
-            this.log_.info("Database successfully closed.");
+            info("Closing database...");
+            this.database.getConnection().close();
+            info("Database successfully closed.");
         } catch (Exception e) {
-            this.log_.info("An Error occured! Error:");
+            logError("An error occured while closing the database!");
             e.printStackTrace();
-            this.plog_.warn(e.getMessage(), true);
         }
     }
 
-    /**
-     * Return the plugin's language loader.
-     *
-     * @return The language loader.
-     */
-    public LanguageLoader getLanguageLoader() {
-        return this.langLoader_;
+    public LanguageManager getLanguageManager() {
+        return languageManager;
     }
 
     /**
@@ -351,27 +373,6 @@ public class SignColors extends JavaPlugin {
      * @return The sign manager.
      */
     public SignManager getSignManager() {
-        return this.signManager_;
-    }
-
-    /**
-     * Logs with INFO level.
-     *
-     * @param msg    Message to log.
-     * @param toFile Log it to file?
-     */
-    private void info(String msg, boolean toFile) {
-        if (this.plog_ != null) this.plog_.info(msg, toFile);
-    }
-
-    /**
-     * Logs with INFO level.
-     *
-     * @param msg    Message to log.
-     * @param toFile Log it to file?
-     */
-    @SuppressWarnings("unused")
-    public void warn(String msg, boolean toFile) {
-        if (this.plog_ != null) this.plog_.warn(msg, toFile);
+        return this.signManager;
     }
 }

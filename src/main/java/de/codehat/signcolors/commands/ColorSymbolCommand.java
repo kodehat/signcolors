@@ -11,27 +11,27 @@ import de.codehat.signcolors.util.Message;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-public class ColorSymbolCommand extends BaseCommand {
+public class ColorSymbolCommand extends AbstractCommand {
 
-    public ColorSymbolCommand(SignColors plugin, LanguageLoader lang) {
-        super(plugin, lang);
+    public ColorSymbolCommand(SignColors plugin) {
+        super(plugin);
     }
 
     @Override
     public void onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!sender.hasPermission("signcolors.colorsymbol")) {
-            Message.sendLogoMsg(sender, lang.getLang("nocmd"));
+            Message.sendWithLogo(sender, lang.getLang("nocmd"));
             return;
         }
         if (args.length == 1) {
-            Message.sendLogoMsg(sender, "&a/sc colorsymbol &c[symbol]");
+            Message.sendWithLogo(sender, "&a/sc colorsymbol &c[symbol]");
         } else {
             if (args[1].length() == 1) {
-                this.plugin.getConfig().set("colorsymbol", args[1]);
-                this.plugin.saveConfig();
-                Message.sendLogoMsg(sender, lang.getLang("csch") + " &c" + args[1]);
+                this.getPlugin().getConfig().set("colorsymbol", args[1]);
+                this.getPlugin().saveConfig();
+                Message.sendWithLogo(sender, lang.getLang("csch") + " &c" + args[1]);
             } else {
-                Message.sendLogoMsg(sender, lang.getLang("cschtma"));
+                Message.sendWithLogo(sender, lang.getLang("cschtma"));
             }
         }
     }

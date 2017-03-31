@@ -101,7 +101,5 @@ metrics: true
 # Should the plugin check for updates.
 updatecheck: true
 
-logging: false
-
 # Current version of the config. DO NOT TOUCH IT!!!
 configversion: 5

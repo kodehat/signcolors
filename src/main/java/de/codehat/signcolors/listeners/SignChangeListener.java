@@ -3,10 +3,9 @@
  * This file is part of 'SignColors' and is licensed under GPLv3.
  */
 
-package de.codehat.signcolors.listener;
+package de.codehat.signcolors.listeners;
 
 import de.codehat.signcolors.SignColors;
-import de.codehat.signcolors.languages.LanguageLoader;
 import de.codehat.signcolors.util.Message;
 import de.codehat.signcolors.util.Utils;
 import org.bukkit.Material;
@@ -15,28 +14,15 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class SignChangeListener implements Listener {
+public class SignChangeListener extends PluginListener {
 
-    // Instances
-    private SignColors plugin;
-    private LanguageLoader lang;
-
-    /**
-     * Constructor.
-     *
-     * @param instance SignColors instance.
-     * @param lang     LanguageLoader instance.
-     */
-    public SignChangeListener(SignColors instance, LanguageLoader lang) {
-        this.plugin = instance;
-        this.lang = lang;
-        this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
+    public SignChangeListener(SignColors plugin) {
+        super(plugin);
     }
 
     /**
@@ -49,21 +35,21 @@ public class SignChangeListener implements Listener {
     public void onSignChange(SignChangeEvent e) {
         Player p = e.getPlayer();
         ItemStack i = p.getInventory().getItemInMainHand();
-        if (this.plugin.isSignCrafting) {
+        if (this.getPlugin().isSignCrafting) {
             if (!p.hasPermission("signcolors.craftsign.bypass")) {
                 if (i.getType() == Material.AIR) {
-                    if (this.plugin.signPlayers.contains(p)) {
-                        if (this.plugin.signPlayers.contains(p)) this.plugin.signPlayers.remove(p);
+                    if (this.getPlugin().signPlayers.contains(p)) {
+                        if (this.getPlugin().signPlayers.contains(p)) this.getPlugin().signPlayers.remove(p);
                         setSignColors(e, p);
                         Block b = e.getBlock();
-                        this.plugin.getPluginDatabase().addSign(b.getLocation());
+                        this.getPlugin().getPluginDatabase().addSign(b.getLocation());
                     }
                 } else {
                     if (i.getItemMeta().hasLore()) {
-                        if (this.plugin.signPlayers.contains(p)) this.plugin.signPlayers.remove(p);
+                        if (this.getPlugin().signPlayers.contains(p)) this.getPlugin().signPlayers.remove(p);
                         setSignColors(e, p);
                         Block b = e.getBlock();
-                        this.plugin.getPluginDatabase().addSign(b.getLocation());
+                        this.getPlugin().getPluginDatabase().addSign(b.getLocation());
                     }
                 }
             } else {
@@ -92,7 +78,7 @@ public class SignChangeListener implements Listener {
 
                     // Check if entered types are valid for Integer and Double.
                     if (!Utils.isInteger(sign_data[0].trim()) || !Utils.isDouble(sign_data[1].trim())) {
-                        Message.sendLogoMsg(p, lang.getLang("incformatsign"));
+                        Message.sendWithLogo(p, lang.getLang("incformatsign"));
                         e.setCancelled(true);
                         return;
                     }
@@ -103,7 +89,7 @@ public class SignChangeListener implements Listener {
 
                     // Return if amount or price 0 or lower
                     if (amount <= 0 || price <= 0) {
-                        Message.sendLogoMsg(p, lang.getLang("priceamounttolow"));
+                        Message.sendWithLogo(p, lang.getLang("priceamounttolow"));
                         e.setCancelled(true);
                         return;
                     }
@@ -116,14 +102,14 @@ public class SignChangeListener implements Listener {
 
                 } else {
                     // Set sign lines with default values.
-                    this.setSignColorsSign(e, this.plugin.getConfig().getInt("signamount.sc_sign"),
-                            this.plugin.getConfig().getDouble("price"));
+                    this.setSignColorsSign(e, this.getPlugin().getConfig().getInt("signamount.sc_sign"),
+                            this.getPlugin().getConfig().getDouble("price"));
 
                     // Play success (anvil) sound.
                     p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_USE, 0.75F, 1F);
                 }
             } else {
-                Message.sendMsg(p, lang.getLang("noaction"));
+                Message.send(p, lang.getLang("noaction"));
             }
         }
     }
@@ -153,11 +139,11 @@ public class SignChangeListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void checkFirstLine(SignChangeEvent e) {
         @SuppressWarnings("unchecked")
-        List<String> blocked_lines = (List<String>) this.plugin.getConfig().getList("blocked_firstlines");
+        List<String> blocked_lines = (List<String>) this.getPlugin().getConfig().getList("blocked_firstlines");
         for (String blocked_line : blocked_lines) {
             if (e.getLine(0).trim().contains(Message.replaceColors(blocked_line))
                     && !e.getPlayer().hasPermission("signcolors.blockedfirstlines.bypass")) {
-                Message.sendLogoMsg(e.getPlayer(), lang.getLang("notallfl"));
+                Message.sendWithLogo(e.getPlayer(), lang.getLang("notallfl"));
                 e.setCancelled(true);
             }
         }
@@ -170,7 +156,7 @@ public class SignChangeListener implements Listener {
      * @param p Player writing on the sign.
      */
     private void setSignColors(SignChangeEvent e, Player p) {
-        String colorChar = this.plugin.getConfig().getString("colorsymbol");
+        String colorChar = this.getPlugin().getConfig().getString("colorsymbol");
         for (int line = 0; line < 4; line++) {
             if (e.getLine(line).isEmpty() || !e.getLine(line).contains(colorChar)) continue;
             String[] colorline = e.getLine(line).split(colorChar);

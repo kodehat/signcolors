@@ -15,9 +15,6 @@ import java.sql.SQLException;
 
 /**
  * Abstract Database class, serves as a base for any connection method (MySQL, SQLite, etc.)
- *
- * @author -_Husky_-
- * @author tips48
  */
 public abstract class Database {
 
@@ -25,14 +22,19 @@ public abstract class Database {
      * Plugin instance, use for plugin.getDataFolder() and plugin.getLogger()
      */
     protected Plugin plugin;
+    /**
+     * Current type of the database. Either MYSQL or SQLITE.
+     */
+    protected DatabaseType databaseType;
 
     /**
      * Creates a new Database
      *
      * @param plugin Plugin instance
      */
-    protected Database(Plugin plugin) {
+    protected Database(Plugin plugin, DatabaseType databaseType) {
         this.plugin = plugin;
+        this.databaseType = databaseType;
     }
 
     /**
@@ -60,6 +62,18 @@ public abstract class Database {
      * Closes the connection with the database
      */
     public abstract void closeConnection();
+
+    /**
+     * Creates all necessary tables in the database.
+     *
+     * @param tablePrefix The table prefix which should be used (e.g. 'signcolors_').
+     * @throws SQLException Throwed if it wasn't possible to create the tables.
+     */
+    public void createTables(String tablePrefix) throws SQLException {
+        PreparedStatement preparedStatement = this.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS "
+                + tablePrefix + "sign_locations (world VARCHAR(50), x INT, y INT, z INT)");
+        preparedStatement.executeUpdate();
+    }
 
     /**
      * Adds a location of a sign to the database.
@@ -121,5 +135,9 @@ public abstract class Database {
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
+    }
+
+    public enum DatabaseType {
+        MYSQL, SQLITE
     }
 }

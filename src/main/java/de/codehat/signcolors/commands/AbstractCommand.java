@@ -10,14 +10,21 @@ import de.codehat.signcolors.languages.LanguageLoader;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-public abstract class BaseCommand {
+public abstract class AbstractCommand {
 
-    protected SignColors plugin;
-    protected LanguageLoader lang;
+    private SignColors plugin;
 
-    public BaseCommand(SignColors plugin, LanguageLoader lang) {
+    AbstractCommand(SignColors plugin) {
         this.plugin = plugin;
-        this.lang = lang;
+    }
+
+    /**
+     * Get the plugin instance.
+     *
+     * @return The plugin instance.
+     */
+    public SignColors getPlugin() {
+        return this.plugin;
     }
 
     public abstract void onCommand(CommandSender sender, Command cmd, String label, String[] args);

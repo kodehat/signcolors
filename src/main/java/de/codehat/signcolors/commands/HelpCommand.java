@@ -11,26 +11,27 @@ import de.codehat.signcolors.util.Message;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-public class HelpCommand extends BaseCommand {
+public class HelpCommand extends AbstractCommand {
 
-    public HelpCommand(SignColors plugin, LanguageLoader lang) {
-        super(plugin, lang);
+    public HelpCommand(SignColors plugin) {
+        super(plugin);
     }
 
     @Override
     public void onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!sender.hasPermission("signcolors.help")) {
-            Message.sendLogoMsg(sender, lang.getLang("nocmd"));
+            Message.sendWithLogo(sender, this.getPlugin().getStr("NOCMDACCESS"));
             return;
         }
-        Message.sendMsg(sender, "&6+--------------------[&3SignColors&6]--------------------+");
-        Message.sendMsg(sender, "&6/sc &a--- " + lang.getLang("sc"));
-        Message.sendMsg(sender, "&6/sc help &a--- " + lang.getLang("schelp"));
-        Message.sendMsg(sender, "&6/sc reload &a--- " + lang.getLang("scre"));
-        Message.sendMsg(sender, "&6/sc colorsymbol [symbol] &a--- " + lang.getLang("sccs"));
-        Message.sendMsg(sender, "&6/sc givesign [player] [amount] &a--- " + lang.getLang("gshelp"));
-        Message.sendMsg(sender, "&6/sc colorcodes &a--- " + lang.getLang("colorcodes"));
-        Message.sendMsg(sender, "&6+--------------------------------------------------+");
+        Message.send(sender, "&6+--------------------[&3SignColors&6]--------------------+");
+        Message.send(sender, "&6/sc &a--- " + this.getPlugin().getStr("SC"));
+        Message.send(sender, "&6/sc help &a--- " + this.getPlugin().getStr("SCHELP"));
+        Message.send(sender, "&6/sc reload &a--- " + this.getPlugin().getStr("SCRE"));
+        Message.send(sender, "&6/sc colorsymbol [symbol] &a--- " + this.getPlugin().getStr("SCCS"));
+        Message.send(sender, "&6/sc givesign [player] [amount] &a--- "
+                + this.getPlugin().getStr("GSHELP"));
+        Message.send(sender, "&6/sc colorcodes &a--- " + this.getPlugin().getStr("COLORCODES"));
+        Message.send(sender, "&6+--------------------------------------------------+");
     }
 
 }

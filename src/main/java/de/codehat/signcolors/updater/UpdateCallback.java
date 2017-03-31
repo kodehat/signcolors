@@ -5,6 +5,7 @@
 
 package de.codehat.signcolors.updater;
 
+@FunctionalInterface
 public interface UpdateCallback<T, S> {
 
     /**

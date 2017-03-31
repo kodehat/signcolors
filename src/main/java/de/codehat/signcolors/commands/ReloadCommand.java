@@ -11,26 +11,25 @@ import de.codehat.signcolors.util.Message;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-public class ReloadCommand extends BaseCommand {
+public class ReloadCommand extends AbstractCommand {
 
-    public ReloadCommand(SignColors plugin, LanguageLoader lang) {
-        super(plugin, lang);
+    public ReloadCommand(SignColors plugin) {
+        super(plugin);
     }
 
     @Override
     public void onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!sender.hasPermission("signcolors.reload")) {
-            Message.sendLogoMsg(sender, lang.getLang("nocmd"));
+            Message.sendWithLogo(sender, lang.getLang("nocmd"));
             return;
         }
-        this.plugin.getSignManager().oldSignAmount = this.plugin.getConfig().getInt("signamount.crafting");
-        this.plugin.reloadConfig();
-        this.plugin.setupLogger();
+        this.getPlugin().getSignManager().oldSignAmount = this.getPlugin().getConfig().getInt("signamount.crafting");
+        this.getPlugin().reloadConfig();
         this.lang.setupLanguage();
         this.lang.loadLanguage();
-        this.plugin.getSignManager().removeRecipe();
-        this.plugin.getSignManager().setupColoredSigns();
-        this.plugin.loadDatabase();
-        Message.sendLogoMsg(sender, lang.getLang("configre"));
+        this.getPlugin().getSignManager().removeRecipe();
+        this.getPlugin().getSignManager().setupColoredSigns();
+        this.getPlugin().loadDatabase();
+        Message.sendWithLogo(sender, lang.getLang("configre"));
     }
 }

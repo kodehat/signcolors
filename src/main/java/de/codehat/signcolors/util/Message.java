@@ -5,13 +5,12 @@
 
 package de.codehat.signcolors.util;
 
-import de.codehat.signcolors.languages.LanguageLoader;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 public class Message {
 
-    public static LanguageLoader lang = null;
+    public static String signcolorsLogo;
 
     /**
      * Sends a message with logo.
@@ -19,8 +18,8 @@ public class Message {
      * @param sender  CommadSender.
      * @param message Message to send.
      */
-    public static void sendLogoMsg(CommandSender sender, String message) {
-        sender.sendMessage(replaceColors(lang.getLang("sclogo") + message));
+    public static void sendWithLogo(CommandSender sender, String message) {
+        sender.sendMessage(replaceColors(signcolorsLogo + message));
     }
 
     /**
@@ -29,7 +28,7 @@ public class Message {
      * @param sender  CommandSender.
      * @param message Message to send.
      */
-    public static void sendMsg(CommandSender sender, String message) {
+    public static void send(CommandSender sender, String message) {
         sender.sendMessage(replaceColors(message));
     }
 

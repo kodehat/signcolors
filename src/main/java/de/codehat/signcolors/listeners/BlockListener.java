@@ -3,7 +3,7 @@
  * This file is part of 'SignColors' and is licensed under GPLv3.
  */
 
-package de.codehat.signcolors.listener;
+package de.codehat.signcolors.listeners;
 
 import de.codehat.signcolors.SignColors;
 import de.codehat.signcolors.languages.LanguageLoader;
@@ -18,22 +18,10 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class BlockListener implements Listener {
+public class BlockListener extends PluginListener {
 
-    // Instances
-    private SignColors plugin_;
-    private LanguageLoader lang_;
-
-    /**
-     * Constructor.
-     *
-     * @param instance SignColors instance.
-     * @param lang     LanguageLoader instance.
-     */
-    public BlockListener(SignColors instance, LanguageLoader lang) {
-        this.plugin_ = instance;
-        this.lang_ = lang;
-        this.plugin_.getServer().getPluginManager().registerEvents(this, this.plugin_);
+    public BlockListener(SignColors plugin) {
+        super(plugin);
     }
 
     /**
@@ -46,9 +34,9 @@ public class BlockListener implements Listener {
     public void onLastSignFix(BlockPlaceEvent e) {
         Player p = e.getPlayer();
         ItemStack i = p.getInventory().getItemInMainHand();
-        if (i != null && this.plugin_.isSignCrafting && !p.hasPermission("signcolors.craftsign.bypass")) {
+        if (i != null && this.getPlugin().isSignCrafting && !p.hasPermission("signcolors.craftsign.bypass")) {
             if (i.getAmount() == 1 && i.getType() == Material.SIGN && i.getItemMeta().hasLore()) {
-                this.plugin_.signPlayers.add(p);
+                this.getPlugin().signPlayers.add(p);
             }
         }
     }
@@ -63,13 +51,13 @@ public class BlockListener implements Listener {
     public void onBreakColoredSign(BlockBreakEvent e) {
         Player p = e.getPlayer();
         Block b = e.getBlock();
-        if (this.plugin_.isSignCrafting && (b.getType() == Material.SIGN_POST || b.getType() == Material.WALL_SIGN
-                || b.getType() == Material.SIGN) && this.plugin_.getPluginDatabase().checkSign(b.getLocation())) {
-            this.plugin_.getPluginDatabase().deleteSign(b.getLocation());
+        if (this.getPlugin().isSignCrafting && (b.getType() == Material.SIGN_POST || b.getType() == Material.WALL_SIGN
+                || b.getType() == Material.SIGN) && this.getPlugin().getPluginDatabase().checkSign(b.getLocation())) {
+            this.getPlugin().getPluginDatabase().deleteSign(b.getLocation());
             b.setType(Material.AIR);
             if (p.getGameMode().equals(GameMode.SURVIVAL)) {
                 b.getWorld().dropItemNaturally(b.getLocation(),
-                        new ItemStack(this.plugin_.getSignManager().getSign(1)));
+                        new ItemStack(this.getPlugin().getSignManager().getSign(1)));
             }
             e.setCancelled(true);
         }

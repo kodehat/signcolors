@@ -12,19 +12,19 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-public class ColorCodesCommand extends BaseCommand {
+public class ColorCodesCommand extends AbstractCommand {
 
-    public ColorCodesCommand(SignColors plugin, LanguageLoader lang) {
-        super(plugin, lang);
+    public ColorCodesCommand(SignColors plugin) {
+        super(plugin);
     }
 
     @Override
     public void onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!sender.hasPermission("signcolors.listcodes")) {
-            Message.sendLogoMsg(sender, lang.getLang("nocmd"));
+            Message.sendWithLogo(sender, lang.getLang("nocmd"));
             return;
         }
-        Message.sendMsg(sender, "&6+----&6&o[&3&o" + lang.getLang("colorlist") + "&6&o]&6----+");
+        Message.send(sender, "&6+----&6&o[&3&o" + lang.getLang("colorlist") + "&6&o]&6----+");
         sender.sendMessage(ChatColor.BLACK + "&0 " + ChatColor.DARK_BLUE + " &1 " + ChatColor.DARK_GREEN
                 + " &2 " + ChatColor.DARK_AQUA + " &3");
         sender.sendMessage(ChatColor.DARK_RED + "&4 " + ChatColor.DARK_PURPLE + " &5 " + ChatColor.GOLD
@@ -34,14 +34,14 @@ public class ColorCodesCommand extends BaseCommand {
         sender.sendMessage(ChatColor.RED + "&c " + ChatColor.LIGHT_PURPLE + " &d " + ChatColor.YELLOW + " &e "
                 + ChatColor.WHITE + " &f");
 
-        Message.sendMsg(sender, "&6+---&6&o[&3&o" + lang.getLang("formatlist") + "&6&o]&6---+");
+        Message.send(sender, "&6+---&6&o[&3&o" + lang.getLang("formatlist") + "&6&o]&6---+");
         sender.sendMessage(ChatColor.RESET + "&k " + ChatColor.MAGIC + "Magic");
         sender.sendMessage("&r Reset");
         sender.sendMessage(ChatColor.BOLD + "&l " + ChatColor.RESET + ChatColor.STRIKETHROUGH + " &m"
                 + ChatColor.RESET);
         sender.sendMessage(ChatColor.UNDERLINE + "&n " + ChatColor.RESET + ChatColor.ITALIC + " &o "
                 + ChatColor.RESET);
-        Message.sendMsg(sender, "&6+----------------+");
+        Message.send(sender, "&6+----------------+");
     }
 
 }

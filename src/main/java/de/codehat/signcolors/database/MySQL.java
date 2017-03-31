@@ -5,6 +5,7 @@
 
 package de.codehat.signcolors.database;
 
+import de.codehat.signcolors.SignColors;
 import org.bukkit.plugin.Plugin;
 
 import java.sql.Connection;
@@ -13,66 +14,68 @@ import java.sql.SQLException;
 
 public class MySQL extends Database {
 
-    private Connection connection_;
-    private String host_;
-    private String port_;
-    private String database_;
-    private String username_;
-    private String password_;
+    private Connection connection;
+    private String host;
+    private String port;
+    private String database;
+    private String username;
+    private String password;
 
     /**
-     * Creates a new Database
+     * Represents the connection to a MySQL database.
      *
-     * @param plugin Plugin instance
+     * @param plugin Plugin instance.
      */
     public MySQL(Plugin plugin, String host, String port, String database, String username, String password) {
-        super(plugin);
-        this.host_ = host;
-        this.port_ = port;
-        this.database_ = database;
-        this.username_ = username;
-        this.password_ = password;
+        super(plugin, DatabaseType.MYSQL);
+        this.host = host;
+        this.port = port;
+        this.database = database;
+        this.username = username;
+        this.password = password;
     }
 
     @Override
     public Connection openConnection() {
-        if (this.connection_ == null || !checkConnection()) {
+        if (this.connection == null || !checkConnection()) {
             try {
-                connection_ = DriverManager.getConnection("jdbc:mysql://" + this.host_ + ":" + this.port_ + "/"
-                        + this.database_, this.username_, this.password_);
-                this.plugin.getLogger().info("Successfully opened MySQL connection.");
-            } catch (SQLException e) {
-                this.plugin.getLogger().warning("Could not connect to MySQL server! Are your credentials correct?");
-                e.printStackTrace();
+                connection = DriverManager.getConnection("jdbc:mysql://" + this.host + ":" + this.port + "/"
+                        + this.database, this.username, this.password);
+                SignColors.info("Successfully opened MySQL connection.");
+            } catch (SQLException exception) {
+                SignColors.logError("Could not connect to MySQL server! Are your credentials correct?");
+                SignColors.logError("Disabling this plugin until problem has been fixed!");
+                exception.printStackTrace();
+                this.plugin.getServer().getPluginManager().disablePlugin(this.plugin);
             }
         }
-        return this.connection_;
+        return this.connection;
     }
 
     @Override
     public boolean checkConnection() {
         try {
-            return !(connection_.isClosed());
-        } catch (SQLException e) {
-            e.printStackTrace();
+            return !(connection.isClosed());
+        } catch (SQLException exception) {
+            exception.printStackTrace();
             return false;
         }
     }
 
     @Override
     public Connection getConnection() {
-        return connection_;
+        return connection;
     }
 
     @Override
     public void closeConnection() {
-        if (connection_ != null) {
+        if (connection != null) {
             try {
-                connection_.close();
-                connection_ = null;
-            } catch (SQLException e) {
-                plugin.getLogger().warning("Error closing the MySQL connection!");
-                e.printStackTrace();
+                connection.close();
+                connection = null;
+            } catch (SQLException exception) {
+                SignColors.logError("Error occured while closing the MySQL connection!");
+                exception.printStackTrace();
             }
         }
     }

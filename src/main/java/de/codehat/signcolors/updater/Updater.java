@@ -9,45 +9,43 @@ import de.codehat.signcolors.util.HttpRequest;
 
 public class Updater implements Runnable {
 
-    private static final String URL = "https://api.codehat.de/plugin/1";
-    private String plugin_version;
-    private UpdateCallback<UpdateResult, String> c;
+    private static final String UPDATE_URL = "https://api.codehat.de/plugin/1";
+    private String currentVersion;
+    private UpdateCallback<UpdateResult, String> callback;
 
     /**
-     * Constrcutor.
+     * The plugin's update checker.
      *
-     * @param current_version Current plugin version.
+     * @param currentVersion Current plugin version.
+     * @param callback       Callback, which is executed after checking for a newer version.
      */
-    public Updater(String current_version, UpdateCallback<UpdateResult, String> c) {
-        this.plugin_version = current_version;
-        this.c = c;
+    public Updater(String currentVersion, UpdateCallback<UpdateResult, String> callback) {
+        this.currentVersion = currentVersion;
+        this.callback = callback;
     }
 
-    /**
-     * Checks for updates.
-     *
-     */
     @Override
     public void run() {
-        String version = "";
+        String newVersion = "";
         try {
-            version = HttpRequest.sendGet(Updater.URL);
-        } catch (Exception e) {
-            c.call(UpdateResult.COULD_NOT_CHECK, version);
+            newVersion = HttpRequest.sendGet(Updater.UPDATE_URL);
+        } catch (Exception exception) {
+            this.callback.call(UpdateResult.COULD_NOT_CHECK, newVersion);
+            return;
         }
-        if (!plugin_version.equals(version)) {
-            c.call(UpdateResult.NEEDED, version);
+        if (!this.currentVersion.equals(newVersion)) {
+            this.callback.call(UpdateResult.AVAILABLE, newVersion);
         } else {
-            c.call(UpdateResult.UNNEEDED, version);
+            this.callback.call(UpdateResult.UNAVAILABLE, newVersion);
         }
     }
 
     /**
-     * Get the plugin download link.
+     * Get the plugin's spigot page url.
      *
-     * @return The plugin download link.
+     * @return The plugin's spigot url.
      */
-    public static String getDownloadUrl() {
+    public static String getSpigotUrl() {
         return "http://www.spigotmc.org/resources/signcolors.6135/";
     }
 

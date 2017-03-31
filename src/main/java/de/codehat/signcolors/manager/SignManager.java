@@ -19,13 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class SignManager {
-
-    /*
-     * ---------------------------------------------------------
-     *  Public Variables
-     * ---------------------------------------------------------
-     */
+public class SignManager extends Manager {
 
     // Old crafting sign recipe amount.
     public int oldSignAmount = 0;
@@ -33,20 +27,11 @@ public class SignManager {
     // ItemStack for colored signs.
     public ItemStack coloredSignStack;
 
-    /*
-     * ---------------------------------------------------------
-     *  Private Variables
-     * ---------------------------------------------------------
-     */
-
-    // Plugin instance.
-    private SignColors plugin_;
-
     // Item lores for colored signs.
     private List<String> signLores_ = new ArrayList<>();
 
-    public SignManager(SignColors signColors) {
-        this.plugin_ = signColors;
+    public SignManager(SignColors plugin) {
+        super(plugin);
     }
 
     /**
@@ -54,16 +39,16 @@ public class SignManager {
      */
     public void setupColoredSigns() {
         this.coloredSignStack = coloredSignStack();
-        if (this.plugin_.getConfig().getBoolean("signcrafting")) {
-            if (this.plugin_.getConfig().getString("recipetype").equals("shapeless")) {
+        if (this.getPlugin().getConfig().getBoolean("signcrafting")) {
+            if (this.getPlugin().getConfig().getString("recipetype").equals("shapeless")) {
                 @SuppressWarnings("unchecked")
-                List<String> ingredients = (List<String>) this.plugin_.getConfig().getList("recipes.shapeless.ingredients");
+                List<String> ingredients = (List<String>) this.getPlugin().getConfig().getList("recipes.shapeless.ingredients");
                 if (ingredients.size() > 9) {
-                    this.plugin_.getLogger().warning("You added more than nine crafting items to the config!");
-                    this.plugin_.getLogger().warning("Please change it or you will not be able to craft colored signs!");
+                    this.getPlugin().getLogger().warning("You added more than nine crafting items to the config!");
+                    this.getPlugin().getLogger().warning("Please change it or you will not be able to craft colored signs!");
                     return;
                 }
-                ShapelessRecipe sr = new ShapelessRecipe(coloredSignStack(this.plugin_.getConfig().getInt("signamount.crafting")));
+                ShapelessRecipe sr = new ShapelessRecipe(coloredSignStack(this.getPlugin().getConfig().getInt("signamount.crafting")));
                 for (String ingredient : ingredients) {
                     if (ingredient.contains(":")) {
                         String[] ingredientData = ingredient.split(":");
@@ -74,17 +59,17 @@ public class SignManager {
                         sr.addIngredient(m);
                     }
                 }
-                this.plugin_.getServer().addRecipe(sr);
-                this.plugin_.isSignCrafting = true;
-            } else if (this.plugin_.getConfig().getString("recipetype").equals("shaped")) {
+                this.getPlugin().getServer().addRecipe(sr);
+                this.getPlugin().isSignCrafting = true;
+            } else if (this.getPlugin().getConfig().getString("recipetype").equals("shaped")) {
                 @SuppressWarnings("unchecked")
-                List<String> shape = (List<String>) this.plugin_.getConfig().getList("recipes.shaped.craftingshape");
+                List<String> shape = (List<String>) this.getPlugin().getConfig().getList("recipes.shaped.craftingshape");
                 if (shape.size() > 3) {
-                    this.plugin_.getLogger().warning("You added more than three recipe shapes to the config!");
-                    this.plugin_.getLogger().warning("Please change it or you will not be able to craft colored signs!");
+                    this.getPlugin().getLogger().warning("You added more than three recipe shapes to the config!");
+                    this.getPlugin().getLogger().warning("Please change it or you will not be able to craft colored signs!");
                     return;
                 }
-                ShapedRecipe sr = new ShapedRecipe(coloredSignStack(this.plugin_.getConfig().getInt("signamount.crafting")));
+                ShapedRecipe sr = new ShapedRecipe(coloredSignStack(this.getPlugin().getConfig().getInt("signamount.crafting")));
                 switch (shape.size()) {
                     case 1:
                         sr.shape(shape.get(0));
@@ -96,11 +81,11 @@ public class SignManager {
                         sr.shape(shape.get(0), shape.get(1), shape.get(2));
                         break;
                     default:
-                        this.plugin_.getLogger().warning("You defined too many or no recipe shapes!");
-                        this.plugin_.getLogger().warning("Please change it or you will not be able to craft colored signs!");
+                        this.getPlugin().getLogger().warning("You defined too many or no recipe shapes!");
+                        this.getPlugin().getLogger().warning("Please change it or you will not be able to craft colored signs!");
                         return;
                 }
-                ConfigurationSection ingredients = this.plugin_.getConfig().getConfigurationSection("recipes.shaped.ingredients");
+                ConfigurationSection ingredients = this.getPlugin().getConfig().getConfigurationSection("recipes.shaped.ingredients");
                 for (String key : ingredients.getKeys(false)) {
                     if (ingredients.get(key).toString().contains(":")) {
                         String[] ingredient = ingredients.get(key).toString().split(":");
@@ -111,14 +96,14 @@ public class SignManager {
                         sr.setIngredient(key.charAt(0), m);
                     }
                 }
-                this.plugin_.getServer().addRecipe(sr);
-                this.plugin_.isSignCrafting = true;
+                this.getPlugin().getServer().addRecipe(sr);
+                this.getPlugin().isSignCrafting = true;
             } else {
-                this.plugin_.getLogger().warning("Unknown config value of 'recipetype'! Possible values are: 'shaped' and 'shapeless'.");
-                this.plugin_.getLogger().warning("Please change it or you will not be able to craft colored signs!");
+                this.getPlugin().getLogger().warning("Unknown config value of 'recipetype'! Possible values are: 'shaped' and 'shapeless'.");
+                this.getPlugin().getLogger().warning("Please change it or you will not be able to craft colored signs!");
             }
         } else {
-            this.plugin_.isSignCrafting = false;
+            this.getPlugin().isSignCrafting = false;
         }
     }
 
@@ -128,11 +113,11 @@ public class SignManager {
      * @return The ItemStack for colored signs.
      */
     private ItemStack coloredSignStack() {
-        ItemStack i = new ItemStack(Material.SIGN, this.plugin_.getConfig().getInt("signamount.sc_sign"));
+        ItemStack i = new ItemStack(Material.SIGN, this.getPlugin().getConfig().getInt("signamount.sc_sign"));
         ItemMeta im = i.getItemMeta();
         this.signLores_.clear();
-        this.signLores_.add(Message.replaceColors(this.plugin_.getLanguageLoader().getLang("signlore")));
-        im.setDisplayName(Message.replaceColors(this.plugin_.getLanguageLoader().getLang("signname")));
+        this.signLores_.add(Message.replaceColors(this.getPlugin().getLanguageLoader().getLang("signlore")));
+        im.setDisplayName(Message.replaceColors(this.getPlugin().getLanguageLoader().getLang("signname")));
         im.setLore(this.signLores_);
         i.setItemMeta(im);
         return i;
@@ -148,8 +133,8 @@ public class SignManager {
         ItemStack i = new ItemStack(Material.SIGN, amount);
         ItemMeta im = i.getItemMeta();
         this.signLores_.clear();
-        this.signLores_.add(Message.replaceColors(this.plugin_.getLanguageLoader().getLang("signlore")));
-        im.setDisplayName(Message.replaceColors(this.plugin_.getLanguageLoader().getLang("signname")));
+        this.signLores_.add(Message.replaceColors(this.getPlugin().getLanguageLoader().getLang("signlore")));
+        im.setDisplayName(Message.replaceColors(this.getPlugin().getLanguageLoader().getLang("signname")));
         im.setLore(this.signLores_);
         i.setItemMeta(im);
         return i;
@@ -166,8 +151,8 @@ public class SignManager {
         ItemMeta isim = is.getItemMeta();
         List<String> l = new ArrayList<>();
         l.clear();
-        l.add(Message.replaceColors(this.plugin_.getLanguageLoader().getLang("signlore")));
-        isim.setDisplayName(Message.replaceColors(this.plugin_.getLanguageLoader().getLang("signname")));
+        l.add(Message.replaceColors(this.getPlugin().getLanguageLoader().getLang("signlore")));
+        isim.setDisplayName(Message.replaceColors(this.getPlugin().getLanguageLoader().getLang("signname")));
         isim.setLore(l);
         is.setItemMeta(isim);
         return is;
@@ -177,7 +162,7 @@ public class SignManager {
      * Removes the created colored sign recipe.
      */
     public void removeRecipe() {
-        Iterator<Recipe> it = this.plugin_.getServer().recipeIterator();
+        Iterator<Recipe> it = this.getPlugin().getServer().recipeIterator();
         Recipe recipe;
         while (it.hasNext()) {
             recipe = it.next();

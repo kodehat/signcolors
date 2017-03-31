@@ -6,5 +6,5 @@
 package de.codehat.signcolors.updater;
 
 public enum UpdateResult {
-    NEEDED, UNNEEDED, COULD_NOT_CHECK
+    AVAILABLE, UNAVAILABLE, COULD_NOT_CHECK
 }
