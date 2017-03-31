@@ -22,7 +22,6 @@ permissions:
       signcolors.reload: true
       signcolors.sign.create: true
       signcolors.sign.use: true
-      signcolors.colorsymbol: true
       signcolors.updatemsg: true
       signcolors.craftsign.bypass: true
       signcolors.listcodes: true
@@ -43,8 +42,6 @@ permissions:
       signcolors.blockedfirstlines.bypass: true
   signcolors.sign.use:
     description: Allows you to use a [SC] sign.
-  signcolors.colorsymbol:
-    description: Allows you to change the color symbol ingame.
   signcolors.updatemsg:
     description: Shows you the update message, if an update is available.
   signcolors.craftsign.bypass:

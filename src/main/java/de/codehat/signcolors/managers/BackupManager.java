@@ -3,7 +3,7 @@
  * This file is part of 'SignColors' and is licensed under GPLv3.
  */
 
-package de.codehat.signcolors.manager;
+package de.codehat.signcolors.managers;
 
 import de.codehat.signcolors.SignColors;
 import de.codehat.signcolors.util.Utils;

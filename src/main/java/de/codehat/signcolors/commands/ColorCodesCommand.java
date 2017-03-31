@@ -6,12 +6,14 @@
 package de.codehat.signcolors.commands;
 
 import de.codehat.signcolors.SignColors;
-import de.codehat.signcolors.languages.LanguageLoader;
 import de.codehat.signcolors.util.Message;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+/**
+ * This class represents the '/sc colorcodes' command.
+ */
 public class ColorCodesCommand extends AbstractCommand {
 
     public ColorCodesCommand(SignColors plugin) {
@@ -21,10 +23,10 @@ public class ColorCodesCommand extends AbstractCommand {
     @Override
     public void onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!sender.hasPermission("signcolors.listcodes")) {
-            Message.sendWithLogo(sender, lang.getLang("nocmd"));
+            Message.sendWithLogo(sender, this.getPlugin().getStr("NOCMDACCESS"));
             return;
         }
-        Message.send(sender, "&6+----&6&o[&3&o" + lang.getLang("colorlist") + "&6&o]&6----+");
+        Message.send(sender, "&6+----&6&o[&3&o" + this.getPlugin().getStr("COLORLIST") + "&6&o]&6----+");
         sender.sendMessage(ChatColor.BLACK + "&0 " + ChatColor.DARK_BLUE + " &1 " + ChatColor.DARK_GREEN
                 + " &2 " + ChatColor.DARK_AQUA + " &3");
         sender.sendMessage(ChatColor.DARK_RED + "&4 " + ChatColor.DARK_PURPLE + " &5 " + ChatColor.GOLD
@@ -34,7 +36,7 @@ public class ColorCodesCommand extends AbstractCommand {
         sender.sendMessage(ChatColor.RED + "&c " + ChatColor.LIGHT_PURPLE + " &d " + ChatColor.YELLOW + " &e "
                 + ChatColor.WHITE + " &f");
 
-        Message.send(sender, "&6+---&6&o[&3&o" + lang.getLang("formatlist") + "&6&o]&6---+");
+        Message.send(sender, "&6+---&6&o[&3&o" + this.getPlugin().getStr("FORMATLIST") + "&6&o]&6---+");
         sender.sendMessage(ChatColor.RESET + "&k " + ChatColor.MAGIC + "Magic");
         sender.sendMessage("&r Reset");
         sender.sendMessage(ChatColor.BOLD + "&l " + ChatColor.RESET + ChatColor.STRIKETHROUGH + " &m"

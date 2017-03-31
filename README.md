@@ -16,7 +16,6 @@ For `/sc` you can alternatively use `/signcolors`
 - `/sc` - Shows information about SignColors.
 - `/sc help` - Shows a list of commands.
 - `/sc reload` - Reloads the config.yml.
-- `/sc colorsymbol [symbol]` - Changes the color symbol.
 - `/sc givesign [player] [amount]` - Give a player colored signs.
 - `/sc colorcodes` - Shows you a color/format codes list.
 - `/sc upgrade` - Upgrades the old database format from version 0.7.1 and earlier to the new database format of version 1.0.0 and later.
@@ -26,7 +25,6 @@ For `/sc` you can alternatively use `/signcolors`
 - `signcolors.*` - Access to all features.
 - `signcolors.color.[color/format]` - Allows you to write with `[color/format]` on signs. For example `singcolors.color.6` = *GOLD*
 - `signcolors.colors` - Allows you to write with **all** colors on signs.
-- `signcolors.colorsymbol` - Allows you to change the color symbol ingame.
 - `signcolors.sign.create` - Allows you to create a [SignColors] sign.
 - `signcolors.sign.use` - Allows you to use a [SignColors] sign.
 - `signcolors.info` - Allows you to see the SignColors info.
@@ -49,12 +47,11 @@ in the `config.yml` to your language file code. In the example above it would be
 
 Link: [http://www.spigotmc.org/resources/signcolors.6135/](http://www.spigotmc.org/resources/signcolors.6135/ "SignColors on SpigotMC")
 
-## Status for v1.1
+## Status for v1.2.0
 
  * Add a `/sc migrate` command, to migrate from MySQL to SQLite and vise versa.
- * Remove Logger or make it more useful.
- * More comments in code.
- * Make suggestions either here or at Spigot.
+  
+ Make suggestions either here or at Spigot.
 
 ## License
 

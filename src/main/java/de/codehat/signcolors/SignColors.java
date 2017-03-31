@@ -9,31 +9,30 @@ import de.codehat.signcolors.commands.*;
 import de.codehat.signcolors.database.Database;
 import de.codehat.signcolors.database.MySQL;
 import de.codehat.signcolors.database.SQLite;
-import de.codehat.signcolors.languages.LanguageLoader;
 import de.codehat.signcolors.listeners.BlockListener;
 import de.codehat.signcolors.listeners.PlayerListener;
 import de.codehat.signcolors.listeners.PluginListener;
 import de.codehat.signcolors.listeners.SignChangeListener;
-import de.codehat.signcolors.manager.BackupManager;
-import de.codehat.signcolors.manager.LanguageManager;
-import de.codehat.signcolors.manager.Manager;
-import de.codehat.signcolors.manager.SignManager;
+import de.codehat.signcolors.managers.BackupManager;
+import de.codehat.signcolors.managers.LanguageManager;
+import de.codehat.signcolors.managers.SignManager;
 import de.codehat.signcolors.updater.Updater;
 import net.milkbowl.vault.economy.Economy;
 import org.bstats.Metrics;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * This class is the main class of the 'SignColors' spigot plugin.
+ */
 public class SignColors extends JavaPlugin {
 
     // All available colorcodes
@@ -45,28 +44,28 @@ public class SignColors extends JavaPlugin {
     // Logger instance
     private static Logger logger;
 
-    // The language FileConfiguration.
-    public FileConfiguration langCfg;
-    // Player 'last sign' HashMap.
+    // Player 'last sign' HashMap
     public List<Player> signPlayers = new ArrayList<>();
+
     // Shows if a newer version of this plugin is available
     private boolean updateAvailable = false;
+
     // If a newer version is available, the version number is saved here
     private String newerVersion;
-    // The command manager
+
+    // The command managers
     private CommandManager commandManager = new CommandManager(this);
-    // Shows whether the 'signcrafting' option is enabled or disabled.
+
+    // Shows whether the 'signcrafting' option is enabled or disabled
     private boolean signcrafting;
-    // Database Connection.
+
+    // Database connection
     private Database database;
 
-    // The language module.
+    // Language manager
     private LanguageManager languageManager;
 
-    // Backup Manager.
-    private BackupManager backupManager;
-
-    // Sign Manager.
+    // Sign Manager
     private SignManager signManager;
 
     /**
@@ -115,7 +114,7 @@ public class SignColors extends JavaPlugin {
         // Save the default config, if it doesn't exist.
         this.saveDefaultConfig();
 
-        //TODO: Setup managers here.
+        // Setup all managers.
         this.loadManagers();
 
         // Setup Vault
@@ -129,8 +128,6 @@ public class SignColors extends JavaPlugin {
         // Register commands
         this.registerCommands();
 
-
-        //TODO: Other methods.
         // Load database
         this.loadDatabase();
 
@@ -144,12 +141,6 @@ public class SignColors extends JavaPlugin {
         PluginDescriptionFile pluginDescriptionFile = this.getDescription();
         logger.info(String.format("Version %s by %s enabled.", pluginDescriptionFile.getVersion(),
                 pluginDescriptionFile.getAuthors().get(0)));
-
-        this.backupManager.checkConfigVersion();
-        this.signManager.setupColoredSigns();
-
-        this.checkForUpdate();
-
     }
 
     /**
@@ -176,7 +167,6 @@ public class SignColors extends JavaPlugin {
         // Register all commands
         this.commandManager.registerCommand("", new InfoCommand(this));
         this.commandManager.registerCommand("colorcodes", new ColorCodesCommand(this));
-        this.commandManager.registerCommand("colorsymbol", new ColorSymbolCommand(this));
         this.commandManager.registerCommand("givesign", new GiveSignCommand(this));
         this.commandManager.registerCommand("help", new HelpCommand(this));
         this.commandManager.registerCommand("reload", new ReloadCommand(this));
@@ -192,11 +182,11 @@ public class SignColors extends JavaPlugin {
      * Load the plugin's managers.
      */
     private void loadManagers() {
-        this.backupManager = new BackupManager(this);
+        BackupManager backupManager = new BackupManager(this);
         this.languageManager = new LanguageManager(this);
         this.signManager = new SignManager(this);
 
-        this.backupManager.checkConfigVersion();
+        backupManager.checkConfigVersion();
         this.languageManager.setupLanguage();
         this.signManager.setupColoredSigns();
     }
@@ -363,14 +353,19 @@ public class SignColors extends JavaPlugin {
         }
     }
 
+    /**
+     * Returns the plugin's language manager.
+     *
+     * @return The language manager.
+     */
     public LanguageManager getLanguageManager() {
         return languageManager;
     }
 
     /**
-     * Return the plugin's sign manager.
+     * Return the plugin's sign managers.
      *
-     * @return The sign manager.
+     * @return The sign managers.
      */
     public SignManager getSignManager() {
         return this.signManager;

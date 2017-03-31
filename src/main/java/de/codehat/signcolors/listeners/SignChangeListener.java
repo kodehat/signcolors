@@ -19,6 +19,9 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
+/**
+ * This listener only listens for sign specific events.
+ */
 public class SignChangeListener extends PluginListener {
 
     public SignChangeListener(SignColors plugin) {
@@ -28,88 +31,90 @@ public class SignChangeListener extends PluginListener {
     /**
      * Creates a colored sign.
      *
-     * @param e SignChangeEvent.
+     * @param event SignChangeEvent.
      */
     @SuppressWarnings("unused")
-    @EventHandler(priority = EventPriority.NORMAL)
-    public void onSignChange(SignChangeEvent e) {
-        Player p = e.getPlayer();
-        ItemStack i = p.getInventory().getItemInMainHand();
-        if (this.getPlugin().isSignCrafting) {
-            if (!p.hasPermission("signcolors.craftsign.bypass")) {
-                if (i.getType() == Material.AIR) {
-                    if (this.getPlugin().signPlayers.contains(p)) {
-                        if (this.getPlugin().signPlayers.contains(p)) this.getPlugin().signPlayers.remove(p);
-                        setSignColors(e, p);
-                        Block b = e.getBlock();
-                        this.getPlugin().getPluginDatabase().addSign(b.getLocation());
+    @EventHandler
+    public void onSignChange(SignChangeEvent event) {
+        Player player = event.getPlayer();
+        ItemStack itemInMainHand = player.getInventory().getItemInMainHand();
+        if (this.getPlugin().isSigncrafting()) {
+            if (!player.hasPermission("signcolors.craftsign.bypass")) {
+                if (itemInMainHand.getType() == Material.AIR) {
+                    if (this.getPlugin().signPlayers.contains(player)) {
+                        if (this.getPlugin().signPlayers.contains(player)) this.getPlugin().signPlayers.remove(player);
+                        setSignColors(event, player);
+                        Block block = event.getBlock();
+                        this.getPlugin().getPluginDatabase().addSign(block.getLocation());
                     }
                 } else {
-                    if (i.getItemMeta().hasLore()) {
-                        if (this.getPlugin().signPlayers.contains(p)) this.getPlugin().signPlayers.remove(p);
-                        setSignColors(e, p);
-                        Block b = e.getBlock();
-                        this.getPlugin().getPluginDatabase().addSign(b.getLocation());
+                    if (itemInMainHand.getItemMeta().hasLore()) {
+                        if (this.getPlugin().signPlayers.contains(player)) this.getPlugin().signPlayers.remove(player);
+                        setSignColors(event, player);
+                        Block block = event.getBlock();
+                        this.getPlugin().getPluginDatabase().addSign(block.getLocation());
                     }
                 }
             } else {
-                setSignColors(e, p);
+                setSignColors(event, player);
             }
         } else {
-            setSignColors(e, p);
+            setSignColors(event, player);
         }
     }
 
     /**
      * SC sign creation event.
      *
-     * @param e SignChangeEvent.
+     * @param event SignChangeEvent.
      */
     @SuppressWarnings("unused")
-    @EventHandler(priority = EventPriority.NORMAL)
-    public void createSignColorsSign(SignChangeEvent e) {
-        Player p = e.getPlayer();
-        if ((e.getLine(0).equalsIgnoreCase("[SignColors]"))) {
-            if (p.hasPermission("signcolors.sign.create")) {
-                // Check if line is not empty and contains the sign amount and the price splitted by a ":".
-                if (!e.getLine(1).isEmpty() && e.getLine(1).contains(":")) {
-                    // [0] = sign amount; [1] sign price for the specified amount.
-                    String[] sign_data = e.getLine(1).split(":");
+    @EventHandler
+    public void createSignColorsSign(SignChangeEvent event) {
+        Player player = event.getPlayer();
+        if ((event.getLine(0).equalsIgnoreCase("[SignColors]"))) {
+            if (player.hasPermission("signcolors.sign.create")) {
+                // Check if line is not empty and contains the sign amount and the price splitted by a ":"
+                if (!event.getLine(1).isEmpty() && event.getLine(1).contains(":")) {
+                    // [0] = sign amount; [1] sign price for the specified amount
+                    String[] signData = event.getLine(1).split(":");
 
-                    // Check if entered types are valid for Integer and Double.
-                    if (!Utils.isInteger(sign_data[0].trim()) || !Utils.isDouble(sign_data[1].trim())) {
-                        Message.sendWithLogo(p, lang.getLang("incformatsign"));
-                        e.setCancelled(true);
+                    // Check if entered types are valid for Integer and Double
+                    if (!Utils.isInteger(signData[0].trim()) || !Utils.isDouble(signData[1].trim())) {
+                        Message.sendWithLogo(player, this.getPlugin().getStr("INCFORMATSIGN"));
+                        event.setCancelled(true);
                         return;
                     }
 
-                    // Get amount and price.
-                    int amount = Integer.valueOf(sign_data[0].trim());
-                    Double price = Double.valueOf(sign_data[1].trim());
+                    // Get amount and price
+                    int amount = Integer.valueOf(signData[0].trim());
+                    Double price = Double.valueOf(signData[1].trim());
 
                     // Return if amount or price 0 or lower
                     if (amount <= 0 || price <= 0) {
-                        Message.sendWithLogo(p, lang.getLang("priceamounttolow"));
-                        e.setCancelled(true);
+                        Message.sendWithLogo(player, this.getPlugin().getStr("PRICEAMOUNTTOLOW"));
+                        event.setCancelled(true);
                         return;
                     }
 
-                    // Set sign lines.
-                    this.setSignColorsSign(e, amount, price);
+                    // Set sign lines
+                    this.setSignColorsSign(event, amount, price);
 
-                    // Play success (anvil) sound.
-                    p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_USE, 0.75F, 1F);
+                    // Play success (anvil) sound
+                    //TODO: Set sound in config!!!
+                    player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 0.75F, 1F);
 
                 } else {
-                    // Set sign lines with default values.
-                    this.setSignColorsSign(e, this.getPlugin().getConfig().getInt("signamount.sc_sign"),
+                    // Set sign lines with default values
+                    this.setSignColorsSign(event, this.getPlugin().getConfig().getInt("signamount.sc_sign"),
                             this.getPlugin().getConfig().getDouble("price"));
 
-                    // Play success (anvil) sound.
-                    p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_USE, 0.75F, 1F);
+                    // Play success (anvil) sound
+                    //TODO: Set sound in config!!!
+                    player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 0.75F, 1F);
                 }
             } else {
-                Message.send(p, lang.getLang("noaction"));
+                Message.send(player, this.getPlugin().getStr("NOACTION"));
             }
         }
     }
@@ -122,29 +127,31 @@ public class SignChangeListener extends PluginListener {
      * @param price  Price of colored signs.
      */
     private void setSignColorsSign(SignChangeEvent event, int amount, Double price) {
-        // Set sign lines.
+        // Set sign lines
         event.setLine(0, Message.replaceColors("&6[&3SC&6]"));
-        event.setLine(1, Message.replaceColors(lang.getLang("sltwo")));
+        event.setLine(1, Message.replaceColors(this.getPlugin().getStr("SLTWO")));
         event.setLine(2, Message.replaceColors(String.format("&8%s : %s", String.valueOf(amount),
                 String.valueOf(price))));
-        event.setLine(3, Message.replaceColors(lang.getLang("slone")));
+        event.setLine(3, Message.replaceColors(this.getPlugin().getStr("SLONE")));
     }
 
     /**
-     * Checks the first line of the sign and prevents creation if needed.
+     * Checks the first line of the sign and prevents creation if necessary.
      *
-     * @param e SignChangeEvent.
+     * @param event SignChangeEvent.
      */
     @SuppressWarnings("unused")
-    @EventHandler(priority = EventPriority.HIGH)
-    public void checkFirstLine(SignChangeEvent e) {
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void checkFirstLine(SignChangeEvent event) {
         @SuppressWarnings("unchecked")
-        List<String> blocked_lines = (List<String>) this.getPlugin().getConfig().getList("blocked_firstlines");
-        for (String blocked_line : blocked_lines) {
-            if (e.getLine(0).trim().contains(Message.replaceColors(blocked_line))
-                    && !e.getPlayer().hasPermission("signcolors.blockedfirstlines.bypass")) {
-                Message.sendWithLogo(e.getPlayer(), lang.getLang("notallfl"));
-                e.setCancelled(true);
+        List<String> blockedLines = (List<String>) this.getPlugin().getConfig().getList("blocked_firstlines");
+        SignColors.info(event.getLine(0).trim());
+        for (String blocked_line : blockedLines) {
+            SignColors.info(Message.replaceColors(blocked_line));
+            if (event.getLine(0).trim().equals(Message.replaceColors(blocked_line))
+                    && !event.getPlayer().hasPermission("signcolors.blockedfirstlines.bypass")) {
+                Message.sendWithLogo(event.getPlayer(), this.getPlugin().getStr("NOTALLFL"));
+                event.setCancelled(true);
             }
         }
     }
@@ -152,14 +159,14 @@ public class SignChangeListener extends PluginListener {
     /**
      * Does the 'magic' to make a sign colored.
      *
-     * @param e SignChangeEvent.
-     * @param p Player writing on the sign.
+     * @param event SignChangeEvent.
+     * @param player Player writing on the sign.
      */
-    private void setSignColors(SignChangeEvent e, Player p) {
+    private void setSignColors(SignChangeEvent event, Player player) {
         String colorChar = this.getPlugin().getConfig().getString("colorsymbol");
         for (int line = 0; line < 4; line++) {
-            if (e.getLine(line).isEmpty() || !e.getLine(line).contains(colorChar)) continue;
-            String[] colorline = e.getLine(line).split(colorChar);
+            if (event.getLine(line).isEmpty() || !event.getLine(line).contains(colorChar)) continue;
+            String[] colorline = event.getLine(line).split(colorChar);
             String newline = "";
             if (colorline.length > 0) newline = colorline[0];
             for (String partline : colorline) {
@@ -171,27 +178,27 @@ public class SignChangeListener extends PluginListener {
                     continue;
                 }
                 if ((color = SignColors.ALL_COLOR_CODES.indexOf(partline.toLowerCase().charAt(0))) == -1
-                        || !checkColorPermissions(p, color)) {
+                        || !checkColorPermissions(player, color)) {
                     newline += colorChar + partline;
                 } else {
                     String newpartline = colorChar + partline;
                     newline += Message.replaceColors(colorChar.charAt(0), newpartline);
                 }
             }
-            e.setLine(line, newline);
+            event.setLine(line, newline);
         }
     }
 
     /**
      * Checks the player's permissions for creating a colored sign.
      *
-     * @param p     Player to check.
+     * @param player     Player to check.
      * @param color Color to check.
      * @return true if player has permissions, false if not.
      */
-    private static boolean checkColorPermissions(Player p, int color) {
+    private static boolean checkColorPermissions(Player player, int color) {
         char col = SignColors.ALL_COLOR_CODES.charAt(color);
-        return (color == 0) || p.hasPermission("signcolors.color." + col) || p.hasPermission("signcolors.*")
-                || p.hasPermission("signcolors.colors");
+        return (color == 0) || player.hasPermission("signcolors.color." + col)
+                || player.hasPermission("signcolors.*") || player.hasPermission("signcolors.colors");
     }
 }

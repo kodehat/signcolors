@@ -28,7 +28,7 @@ public class Updater implements Runnable {
     public void run() {
         String newVersion = "";
         try {
-            newVersion = HttpRequest.sendGet(Updater.UPDATE_URL);
+            newVersion = HttpRequest.getNewVersion(Updater.UPDATE_URL);
         } catch (Exception exception) {
             this.callback.call(UpdateResult.COULD_NOT_CHECK, newVersion);
             return;

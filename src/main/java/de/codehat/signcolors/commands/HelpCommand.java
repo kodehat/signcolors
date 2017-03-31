@@ -6,11 +6,13 @@
 package de.codehat.signcolors.commands;
 
 import de.codehat.signcolors.SignColors;
-import de.codehat.signcolors.languages.LanguageLoader;
 import de.codehat.signcolors.util.Message;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+/**
+ * This class represents the '/sc help' command.
+ */
 public class HelpCommand extends AbstractCommand {
 
     public HelpCommand(SignColors plugin) {
@@ -23,14 +25,19 @@ public class HelpCommand extends AbstractCommand {
             Message.sendWithLogo(sender, this.getPlugin().getStr("NOCMDACCESS"));
             return;
         }
-        Message.send(sender, "&6+--------------------[&3SignColors&6]--------------------+");
-        Message.send(sender, "&6/sc &a--- " + this.getPlugin().getStr("SC"));
-        Message.send(sender, "&6/sc help &a--- " + this.getPlugin().getStr("SCHELP"));
-        Message.send(sender, "&6/sc reload &a--- " + this.getPlugin().getStr("SCRE"));
-        Message.send(sender, "&6/sc colorsymbol [symbol] &a--- " + this.getPlugin().getStr("SCCS"));
-        Message.send(sender, "&6/sc givesign [player] [amount] &a--- "
-                + this.getPlugin().getStr("GSHELP"));
-        Message.send(sender, "&6/sc colorcodes &a--- " + this.getPlugin().getStr("COLORCODES"));
+        Message.send(sender, "&6+--------------------&r" + this.getPlugin().getStr("TAG").trim()
+                + "&r&6--------------------+");
+        if (sender.hasPermission("signcolors.info"))
+            Message.send(sender, "&6/sc &a--- " + this.getPlugin().getStr("SC"));
+        if (sender.hasPermission("signcolors.help"))
+            Message.send(sender, "&6/sc help &a--- " + this.getPlugin().getStr("SCHELP"));
+        if (sender.hasPermission("signcolors.reload"))
+            Message.send(sender, "&6/sc reload &a--- " + this.getPlugin().getStr("SCRE"));
+        if (sender.hasPermission("signcolors.givesign"))
+            Message.send(sender, "&6/sc givesign [player] [amount] &a--- "
+                    + this.getPlugin().getStr("GSHELP"));
+        if (sender.hasPermission("signcolors.listcodes"))
+            Message.send(sender, "&6/sc colorcodes &a--- " + this.getPlugin().getStr("COLORCODES"));
         Message.send(sender, "&6+--------------------------------------------------+");
     }
 

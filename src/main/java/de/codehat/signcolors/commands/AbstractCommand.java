@@ -6,7 +6,6 @@
 package de.codehat.signcolors.commands;
 
 import de.codehat.signcolors.SignColors;
-import de.codehat.signcolors.languages.LanguageLoader;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 

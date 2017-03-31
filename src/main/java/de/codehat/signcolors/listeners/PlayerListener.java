@@ -6,7 +6,7 @@
 package de.codehat.signcolors.listeners;
 
 import de.codehat.signcolors.SignColors;
-import de.codehat.signcolors.languages.LanguageLoader;
+import de.codehat.signcolors.updater.Updater;
 import de.codehat.signcolors.util.Message;
 import de.codehat.signcolors.util.Utils;
 import org.bukkit.ChatColor;
@@ -15,13 +15,15 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * This listener only listens for player specific events.
+ */
 public class PlayerListener extends PluginListener {
 
     public PlayerListener(SignColors plugin) {
@@ -29,94 +31,97 @@ public class PlayerListener extends PluginListener {
     }
 
     /**
-     * Sends the updatemessage on server join to players with permission.
+     * Sends the update message upon joining to players with permission.
      *
-     * @param e PlayerJoinEvent.
+     * @param event PlayerJoinEvent.
      */
     @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onPlayerJoin(PlayerJoinEvent e) {
-        Player p = e.getPlayer();
-        if (this.getPlugin().sendUpdateMsgToPlayer && p.hasPermission("signcolors.updatemsg")) {
-            Message.send(p, lang.getLang("updatemsg") + " (" + this.getPlugin().updateVersion + "):");
-            Message.send(p, "&2" + this.getPlugin().updateLink);
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        if (this.getPlugin().isUpdateAvailable() && player.hasPermission("signcolors.updatemsg")) {
+            Message.sendWithLogo(player, this.getPlugin().getStr("UPDATEMSG")
+                    + " (v" + this.getPlugin().getNewerVersion() + "):");
+            Message.send(player, "&2" + Updater.getSpigotUrl());
         }
     }
 
     /**
      * Remove the left player from the list.
-     * Actually the player cannot be in the Map,
+     * Actually the player can't be in the map,
      * but just to make sure he is really removed.
      *
-     * @param e PlayerQuitEvent.
+     * @param event PlayerQuitEvent.
      */
     @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onPlayerLeave(PlayerQuitEvent e) {
-        Player p = e.getPlayer();
-        if (this.getPlugin().signPlayers.contains(p)) {
-            this.getPlugin().signPlayers.remove(p);
+    public void onPlayerLeave(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        if (this.getPlugin().signPlayers.contains(player)) {
+            this.getPlugin().signPlayers.remove(player);
         }
     }
 
     /**
      * [SC] sign use event.
      *
-     * @param e PlayerInteractEvent.
+     * @param event PlayerInteractEvent.
      */
     @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onPlayerInteract(PlayerInteractEvent e) {
-        Player p = e.getPlayer();
-        if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if (e.getClickedBlock().getState() instanceof Sign) {
-                Sign s = (Sign) e.getClickedBlock().getState();
-                if (s.getLine(0).equalsIgnoreCase(Message.replaceColors("&6[&3SC&6]"))) {
-                    if (p.hasPermission("signcolors.sign.use")) {
-                        // [0] = sign amount; [1] sign price for the specified amount.
-                        String[] sign_data = ChatColor.stripColor(s.getLine(2)).split(":");
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            if (event.getClickedBlock().getState() instanceof Sign) {
+                Sign sign = (Sign) event.getClickedBlock().getState();
+                if (sign.getLine(0).equalsIgnoreCase(Message.replaceColors("&6[&3SC&6]"))) {
+                    if (player.hasPermission("signcolors.sign.use")) {
+                        // [0] = sign amount; [1] sign price for the specified amount
+                        String[] signData = ChatColor.stripColor(sign.getLine(2)).split(":");
 
-                        // Check if the amount and the price on the sign is valid.
-                        if (!Utils.isInteger(sign_data[0].trim()) || !Utils.isDouble(sign_data[1].trim())) {
-                            Message.sendWithLogo(p, lang.getLang("incorrectformat"));
+                        // Check if the amount and the price on the sign is valid
+                        if (!Utils.isInteger(signData[0].trim()) || !Utils.isDouble(signData[1].trim())) {
+                            Message.sendWithLogo(player, this.getPlugin().getStr("INCORRECTFORMAT"));
                             return;
                         }
 
-                        // Get amount and price.
-                        int amount = Integer.valueOf(sign_data[0].trim());
-                        Double price = Double.valueOf(sign_data[1].trim());
+                        // Get amount and price
+                        int amount = Integer.valueOf(signData[0].trim());
+                        Double price = Double.valueOf(signData[1].trim());
 
-                        // Check if the player has enough money to buy signs.
-                        if (SignColors.getEconomy().getBalance(p) < price) {
-                            Message.send(p, lang.getLang("notenmoney"));
+                        // Check if the player has enough money to buy signs
+                        if (SignColors.getEconomy().getBalance(player) < price) {
+                            Message.send(player, this.getPlugin().getStr("NOTENMONEY"));
                             return;
                         }
 
-                        // Check if the inventory of the player is not full.
-                        if (p.getInventory().firstEmpty() == -1) {
-                            Message.send(p, lang.getLang("notenspace"));
+                        // Check if the inventory of the player is not full
+                        if (player.getInventory().firstEmpty() == -1) {
+                            Message.send(player, this.getPlugin().getStr("NOTENSPACE"));
                             return;
                         }
 
-                        // Withdraw the costs for the signs.
-                        SignColors.getEconomy().withdrawPlayer(p, price);
+                        // Withdraw the costs for the signs
+                        SignColors.getEconomy().withdrawPlayer(player, price);
 
-                        // Copy the ItemStack and set the defined amount.
+                        // Copy the ItemStack and set the defined amount
                         ItemStack signs = new ItemStack(this.getPlugin().getSignManager().coloredSignStack);
                         signs.setAmount(amount);
 
-                        // Add the signs to the player's inventory and update it.
-                        p.getInventory().addItem(signs);
-                        p.updateInventory();
+                        // Add the signs to the player's inventory and update it
+                        player.getInventory().addItem(signs);
+                        player.updateInventory();
 
-                        // Play the success sound (anvil) and send a message to the player.
-                        p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.75F, 1F);
-                        Message.send(p, "&6-" + SignColors.getEconomy().format(price) + " &a--->>>&6 "
-                                + SignColors.getEconomy().format(SignColors.getEconomy().getBalance(p)));
-                        Message.send(p, lang.getLang("signmsg") + amount
-                                + lang.getLang("signmsgb"));
+                        // Play the success sound (anvil) and send a message to the player
+                        //TODO: Set sound in config!!!
+                        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.75F, 1F);
+                        Message.sendWithLogo(player, "&6-" + SignColors.getEconomy().format(price)
+                                + " &a--->>>&6 "
+                                + SignColors.getEconomy().format(SignColors.getEconomy().getBalance(player)));
+                        Message.sendWithLogo(player, this.getPlugin().getStr("SIGNMSG") + amount
+                                + this.getPlugin().getStr("SIGNMSGB"));
                     } else {
-                        Message.send(p, lang.getLang("noaction"));
+                        Message.send(player, this.getPlugin().getStr("NOACTION"));
                     }
                 }
             }

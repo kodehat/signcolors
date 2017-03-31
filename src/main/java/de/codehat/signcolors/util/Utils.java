@@ -10,17 +10,20 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+/**
+ * Contains some useful methods.
+ */
 public class Utils {
 
     /**
-     * Checks if a String is an Integer.
+     * Checks if a string is an integer.
      *
-     * @param s String to check.
-     * @return true if Integer, false if not.
+     * @param string String to check.
+     * @return       true if Integer, false if not.
      */
-    public static boolean isInteger(String s) {
+    public static boolean isInteger(String string) {
         try {
-            Integer.parseInt(s);
+            Integer.parseInt(string);
         } catch (NumberFormatException exception) {
             return false;
         }
@@ -28,14 +31,14 @@ public class Utils {
     }
 
     /**
-     * Checks wheather a String is a Double or not.
+     * Checks wheather a string is a double or not.
      *
-     * @param s String to check.
-     * @return true if Double, false if not.
+     * @param string String to check.
+     * @return       true if double, false if not.
      */
-    public static boolean isDouble(String s) {
+    public static boolean isDouble(String string) {
         try {
-            Double.parseDouble(s);
+            Double.parseDouble(string);
         } catch (NumberFormatException exception) {
             return false;
         }
@@ -43,7 +46,7 @@ public class Utils {
     }
 
     /**
-     * Helper to extract files from the SignColors.jar.
+     * Helper to extract files from the plugin's .jar file.
      *
      * @param in   Resource via getResource("file-in-jar.ending").
      * @param file Location where the file should be put to.
@@ -67,7 +70,7 @@ public class Utils {
      * Deletes a directory and all its contents.
      *
      * @param directory Directory to delete.
-     * @return true if directory was deleted.
+     * @return          true if directory was deleted.
      */
     public static boolean deleteDirectory(File directory) {
         if (directory.isDirectory() && directory.listFiles().length > 0) {

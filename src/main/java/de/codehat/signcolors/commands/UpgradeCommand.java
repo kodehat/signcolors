@@ -7,7 +7,6 @@ package de.codehat.signcolors.commands;
 
 import de.codehat.signcolors.SignColors;
 import de.codehat.signcolors.database.SQLite;
-import de.codehat.signcolors.languages.LanguageLoader;
 import de.codehat.signcolors.util.Message;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -21,6 +20,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * This class represents the '/sc upgrade' command.
+ */
 public class UpgradeCommand extends AbstractCommand {
 
     public UpgradeCommand(SignColors plugin) {
@@ -30,16 +32,16 @@ public class UpgradeCommand extends AbstractCommand {
     @Override
     public void onCommand(final CommandSender sender, Command cmd, String label, String[] args) {
         if (!sender.hasPermission("signcolors.upgrade")) {
-            Message.sendWithLogo(sender, lang.getLang("nocmd"));
+            Message.sendWithLogo(sender, this.getPlugin().getStr("NOCMDACCESS"));
             return;
         }
-        final File old_db = new File(this.getPlugin().getDataFolder().toPath().toString() + File.separator + "data"
-                + File.separator + "signs.db");
+        final File old_db = new File(this.getPlugin().getDataFolder().getAbsolutePath() + File.separator
+                + "data" + File.separator + "signs.db");
         if (!old_db.exists()) {
-            Message.sendWithLogo(sender, lang.getLang("olddbmiss"));
+            Message.sendWithLogo(sender, this.getPlugin().getStr("OLDDBMISS"));
             return;
         }
-        Message.sendWithLogo(sender, lang.getLang("importstart"));
+        Message.sendWithLogo(sender, this.getPlugin().getStr("IMPORTSTART"));
         this.getPlugin().getServer().getScheduler().runTaskAsynchronously(this.getPlugin(), () -> {
             SQLite sqlite = new SQLite(this.getPlugin(), "data" + File.separator + "signs.db");
             Connection connection = sqlite.openConnection();
@@ -52,8 +54,8 @@ public class UpgradeCommand extends AbstractCommand {
                 while (rs.next()) {
                     location = rs.getString("location");
                     String[] parts = location.split(",");
-                    Location l = new Location(this.getPlugin().getServer().getWorld(parts[0]), Double.parseDouble(parts[1]),
-                            Double.parseDouble(parts[2]), Double.parseDouble(parts[3]));
+                    Location l = new Location(this.getPlugin().getServer().getWorld(parts[0]),
+                            Double.parseDouble(parts[1]), Double.parseDouble(parts[2]), Double.parseDouble(parts[3]));
                     Block b = this.getPlugin().getServer().getWorld(parts[0]).getBlockAt(l);
                     if (b.getType().equals(Material.SIGN) || b.getType().equals(Material.SIGN_POST)
                             || b.getType().equals(Material.WALL_SIGN)) {
@@ -67,10 +69,11 @@ public class UpgradeCommand extends AbstractCommand {
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }
-            File rename_file = new File(this.getPlugin().getDataFolder().toPath().toString() + File.separator + "data"
-                    + File.separator + "signs.db.imported");
-            if (!old_db.renameTo(rename_file)) this.getPlugin().getLogger().warning("Could not rename old database file!");
-            Message.sendWithLogo(sender, String.format(lang.getLang("importfinish"),
+            File rename_file = new File(this.getPlugin().getDataFolder().toPath().toString() + File.separator
+                    + "data" + File.separator + "signs.db.imported");
+            if (!old_db.renameTo(rename_file))
+                this.getPlugin().getLogger().warning("Could not rename old database file!");
+            Message.sendWithLogo(sender, String.format(this.getPlugin().getStr("IMPORTFINISH"),
                     String.valueOf(fails), String.valueOf(locations)));
         });
     }

@@ -3,7 +3,7 @@
  * This file is part of 'SignColors' and is licensed under GPLv3.
  */
 
-package de.codehat.signcolors.manager;
+package de.codehat.signcolors.managers;
 
 import de.codehat.signcolors.SignColors;
 import de.codehat.signcolors.util.Message;
@@ -60,7 +60,7 @@ public class SignManager extends Manager {
                     }
                 }
                 this.getPlugin().getServer().addRecipe(sr);
-                this.getPlugin().isSignCrafting = true;
+                this.getPlugin().setSigncrafting(true);
             } else if (this.getPlugin().getConfig().getString("recipetype").equals("shaped")) {
                 @SuppressWarnings("unchecked")
                 List<String> shape = (List<String>) this.getPlugin().getConfig().getList("recipes.shaped.craftingshape");
@@ -97,13 +97,13 @@ public class SignManager extends Manager {
                     }
                 }
                 this.getPlugin().getServer().addRecipe(sr);
-                this.getPlugin().isSignCrafting = true;
+                this.getPlugin().setSigncrafting(true);
             } else {
                 this.getPlugin().getLogger().warning("Unknown config value of 'recipetype'! Possible values are: 'shaped' and 'shapeless'.");
                 this.getPlugin().getLogger().warning("Please change it or you will not be able to craft colored signs!");
             }
         } else {
-            this.getPlugin().isSignCrafting = false;
+            this.getPlugin().setSigncrafting(false);
         }
     }
 
@@ -116,8 +116,8 @@ public class SignManager extends Manager {
         ItemStack i = new ItemStack(Material.SIGN, this.getPlugin().getConfig().getInt("signamount.sc_sign"));
         ItemMeta im = i.getItemMeta();
         this.signLores_.clear();
-        this.signLores_.add(Message.replaceColors(this.getPlugin().getLanguageLoader().getLang("signlore")));
-        im.setDisplayName(Message.replaceColors(this.getPlugin().getLanguageLoader().getLang("signname")));
+        this.signLores_.add(Message.replaceColors(this.getPlugin().getStr("SIGNLORE")));
+        im.setDisplayName(Message.replaceColors(this.getPlugin().getStr("SIGNNAME")));
         im.setLore(this.signLores_);
         i.setItemMeta(im);
         return i;
@@ -133,8 +133,8 @@ public class SignManager extends Manager {
         ItemStack i = new ItemStack(Material.SIGN, amount);
         ItemMeta im = i.getItemMeta();
         this.signLores_.clear();
-        this.signLores_.add(Message.replaceColors(this.getPlugin().getLanguageLoader().getLang("signlore")));
-        im.setDisplayName(Message.replaceColors(this.getPlugin().getLanguageLoader().getLang("signname")));
+        this.signLores_.add(Message.replaceColors(this.getPlugin().getStr("SIGNLORE")));
+        im.setDisplayName(Message.replaceColors(this.getPlugin().getStr("SIGNNAME")));
         im.setLore(this.signLores_);
         i.setItemMeta(im);
         return i;
@@ -151,8 +151,8 @@ public class SignManager extends Manager {
         ItemMeta isim = is.getItemMeta();
         List<String> l = new ArrayList<>();
         l.clear();
-        l.add(Message.replaceColors(this.getPlugin().getLanguageLoader().getLang("signlore")));
-        isim.setDisplayName(Message.replaceColors(this.getPlugin().getLanguageLoader().getLang("signname")));
+        l.add(Message.replaceColors(this.getPlugin().getStr("SIGNLORE")));
+        isim.setDisplayName(Message.replaceColors(this.getPlugin().getStr("SIGNNAME")));
         isim.setLore(l);
         is.setItemMeta(isim);
         return is;

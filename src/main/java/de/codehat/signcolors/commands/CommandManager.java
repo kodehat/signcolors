@@ -43,8 +43,8 @@ public class CommandManager implements CommandExecutor {
             // Execute one of the other commands
             this.getExecutor(args[0]).onCommand(sender, cmd, label, args);
         } else {
-            Message.sendWithLogo(sender, lang.getLang("uncmd"));
-            Message.sendWithLogo(sender, lang.getLang("uncmdh"));
+            Message.sendWithLogo(sender, this.plugin.getStr("UNKNOWNCMD"));
+            Message.sendWithLogo(sender, this.plugin.getStr("UNKNOWNCMDH"));
         }
         return true;
     }

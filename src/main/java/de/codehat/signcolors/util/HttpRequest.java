@@ -20,21 +20,21 @@ public class HttpRequest {
     private final static String USER_AGENT = "Updater by CodeHat";
 
     /**
-     * Sends a GET request to the given URL.
+     * Sends a GET request to the api and returns the current version of the plugin.
      *
-     * @param url The URL to send the request.
-     * @return The result of the GET request.
-     * @throws Exception Something went wrong.
+     * @param url        The url for the http request.
+     * @return           The current version of the plugin.
+     * @throws Exception If something went wrong.
      */
-    public static String sendGet(String url) throws Exception {
-        URL obj = new URL(url);
-        HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
+    public static String getNewVersion(String url) throws Exception {
+        URL urlObj = new URL(url);
+        HttpsURLConnection connection = (HttpsURLConnection) urlObj.openConnection();
         SSLSocketFactory sslSocketFactory = createSslSocketFactory();
-        con.setSSLSocketFactory(sslSocketFactory);
-        con.setRequestMethod("GET");
-        con.setRequestProperty("User-Agent", USER_AGENT);
-        con.setReadTimeout(2000);
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        connection.setSSLSocketFactory(sslSocketFactory);
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("User-Agent", USER_AGENT);
+        connection.setReadTimeout(2000);
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String inputLine;
         StringBuilder response = new StringBuilder();
         while ((inputLine = in.readLine()) != null) {
@@ -48,6 +48,12 @@ public class HttpRequest {
         return (String) json.get("version");
     }
 
+    /**
+     * Helper method which bypasses SSL certificates like "Let's Encrypt".
+     *
+     * @return           A socket factory which isn't checking certificates.
+     * @throws Exception On failure.
+     */
     private static SSLSocketFactory createSslSocketFactory() throws Exception {
         TrustManager[] byPassTrustManagers = new TrustManager[]{new X509TrustManager() {
             public X509Certificate[] getAcceptedIssuers() {
