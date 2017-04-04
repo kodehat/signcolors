@@ -49,7 +49,7 @@ in the `config.yml` to your language file code. In the example above it would be
 
 ## Status for v1.2.0
 
- * Add a `/sc migrate` command, to migrate from MySQL to SQLite and vise versa.
+ * Add a `/sc migrate` command, to migrate from MySQL to SQLite and vice versa.
  * Add a `/sc dbstatus` command, which shows current database size.
   
  Make suggestions either here or at Spigot.
