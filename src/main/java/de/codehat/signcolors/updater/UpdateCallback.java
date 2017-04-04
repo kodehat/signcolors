@@ -6,7 +6,7 @@
 package de.codehat.signcolors.updater;
 
 @FunctionalInterface
-public interface UpdateCallback<T, S> {
+public interface UpdateCallback {
 
     /**
      * Callback to the plugin with result and new version.
@@ -14,5 +14,5 @@ public interface UpdateCallback<T, S> {
      * @param result  UpdateResult enum.
      * @param version New plugin version.
      */
-    void call(T result, S version);
+    void call(UpdateResult result, String version);
 }

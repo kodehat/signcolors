@@ -26,23 +26,26 @@ public class GiveSignCommand extends AbstractCommand {
     public void onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!sender.hasPermission("signcolors.givesign")) {
             Message.sendWithLogo(sender, this.getPlugin().getStr("NOCMDACCESS"));
+            return;
         }
         if (args.length == 1 || args.length > 3) {
             Message.sendWithLogo(sender, "&a/sc givesign &c[player] &c[amount]");
         } else {
-            Player p = Bukkit.getPlayerExact(args[1]);
-            if (p == null) {
+            Player player = Bukkit.getPlayerExact(args[1]);
+            if (player == null) {
                 Message.sendWithLogo(sender, this.getPlugin().getStr("PNOTON"));
             } else {
-                if (p.getInventory().firstEmpty() == -1) {
+                if (player.getInventory().firstEmpty() == -1) {
                     Message.send(sender, this.getPlugin().getStr("NOTENSPACE"));
                 } else {
                     if (!Utils.isInteger(args[2]) || Integer.valueOf(args[2]) < 1 || Integer.valueOf(args[2]) > 64) {
                         Message.sendWithLogo(sender, this.getPlugin().getStr("INVAMOUNT"));
                     } else {
-                        p.getInventory().addItem(this.getPlugin().getSignManager().getSign(Integer.valueOf(args[2])));
+                        player.getInventory().addItem(this.getPlugin().getSignManager().getSign(Integer.valueOf(args[2])));
                         Message.sendWithLogo(sender, String.format(this.getPlugin().getStr("GIVESIGN"),
-                                p.getName(), String.valueOf(Integer.valueOf(args[2]))));
+                                player.getName(), String.valueOf(Integer.valueOf(args[2]))));
+                        Message.sendWithLogo(player, String.format(this.getPlugin().getStr("GETSIGN"),
+                                String.valueOf(Integer.valueOf(args[2]))));
                     }
                 }
             }

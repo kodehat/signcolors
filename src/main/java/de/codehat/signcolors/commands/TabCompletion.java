@@ -36,9 +36,6 @@ public class TabCompletion implements TabCompleter {
             for (Player player : Bukkit.getServer().getOnlinePlayers()) {
                 if (player.getName().startsWith(args[1])) completions.add(player.getName());
             }
-        } else if (args.length == 3 && args[0].equalsIgnoreCase("givesign")) {
-            completions.addAll(Arrays.asList("1", "2", "3", "4", "5", "10", "16"));
-            sorting = false;
         }
         if (sorting) Collections.sort(completions);
         return completions;

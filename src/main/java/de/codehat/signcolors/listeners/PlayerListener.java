@@ -112,16 +112,18 @@ public class PlayerListener extends PluginListener {
                         player.getInventory().addItem(signs);
                         player.updateInventory();
 
-                        // Play the success sound (anvil) and send a message to the player
-                        //TODO: Set sound in config!!!
-                        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.75F, 1F);
-                        Message.sendWithLogo(player, "&6-" + SignColors.getEconomy().format(price)
+                        // Play the success sound and send a message to the player
+                        player.playSound(player.getLocation(),
+                                Sound.valueOf(this.getPlugin().getConfig().getString("sounds.getsigns_scsign.type")),
+                                (float) this.getPlugin().getConfig().getDouble("sounds.getsigns_scsign.volume"),
+                                (float) this.getPlugin().getConfig().getDouble("sounds.getsigns_scsign.pitch"));
+                        Message.sendWithLogo(player, "&c-&6" + SignColors.getEconomy().format(price)
                                 + " &a--->>>&6 "
                                 + SignColors.getEconomy().format(SignColors.getEconomy().getBalance(player)));
                         Message.sendWithLogo(player, this.getPlugin().getStr("SIGNMSG") + amount
                                 + this.getPlugin().getStr("SIGNMSGB"));
                     } else {
-                        Message.send(player, this.getPlugin().getStr("NOACTION"));
+                        Message.sendWithLogo(player, this.getPlugin().getStr("NOACTION"));
                     }
                 }
             }

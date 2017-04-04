@@ -8,6 +8,7 @@ package de.codehat.signcolors.listeners;
 import de.codehat.signcolors.SignColors;
 import de.codehat.signcolors.util.Message;
 import de.codehat.signcolors.util.Utils;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -99,22 +100,19 @@ public class SignChangeListener extends PluginListener {
 
                     // Set sign lines
                     this.setSignColorsSign(event, amount, price);
-
-                    // Play success (anvil) sound
-                    //TODO: Set sound in config!!!
-                    player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 0.75F, 1F);
-
                 } else {
                     // Set sign lines with default values
                     this.setSignColorsSign(event, this.getPlugin().getConfig().getInt("signamount.sc_sign"),
                             this.getPlugin().getConfig().getDouble("price"));
-
-                    // Play success (anvil) sound
-                    //TODO: Set sound in config!!!
-                    player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 0.75F, 1F);
                 }
+
+                // Play success sound
+                player.playSound(player.getLocation(),
+                        Sound.valueOf(this.getPlugin().getConfig().getString("sounds.create_scsign.type")),
+                        (float) this.getPlugin().getConfig().getDouble("sounds.create_scsign.volume"),
+                        (float) this.getPlugin().getConfig().getDouble("sounds.create_scsign.pitch"));
             } else {
-                Message.send(player, this.getPlugin().getStr("NOACTION"));
+                Message.sendWithLogo(player, this.getPlugin().getStr("NOACTION"));
             }
         }
     }
@@ -141,19 +139,34 @@ public class SignChangeListener extends PluginListener {
      * @param event SignChangeEvent.
      */
     @SuppressWarnings("unused")
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGH)
     public void checkFirstLine(SignChangeEvent event) {
+        // Event variables
+        Player player = event.getPlayer();
+        String firstLine = event.getLine(0).trim().replaceAll(String.valueOf(ChatColor.COLOR_CHAR), "&");
+
+        // If player has permission to create [SC] signs, let him create it
+        if (firstLine.equals("&6[&3SC&6]")
+                && player.hasPermission("signcolors.sign.create")) return;
+
+        // Contains all blocked lines defined in config
         @SuppressWarnings("unchecked")
         List<String> blockedLines = (List<String>) this.getPlugin().getConfig().getList("blocked_firstlines");
-        SignColors.info(event.getLine(0).trim());
-        for (String blocked_line : blockedLines) {
-            SignColors.info(Message.replaceColors(blocked_line));
-            if (event.getLine(0).trim().equals(Message.replaceColors(blocked_line))
+
+        // Check if the first line is a blocked line
+        if (blockedLines.contains(firstLine)
+                && !event.getPlayer().hasPermission("signcolors.blockedfirstlines.bypass")) {
+            // Line is blocked, so cancel event
+            Message.sendWithLogo(event.getPlayer(), this.getPlugin().getStr("NOTALLFL"));
+            event.setCancelled(true);
+        }
+        /*for (String blocked_line : blockedLines) {
+            if (firstLine.equals(Message.replaceColors(blocked_line))
                     && !event.getPlayer().hasPermission("signcolors.blockedfirstlines.bypass")) {
                 Message.sendWithLogo(event.getPlayer(), this.getPlugin().getStr("NOTALLFL"));
                 event.setCancelled(true);
             }
-        }
+        }*/
     }
 
     /**

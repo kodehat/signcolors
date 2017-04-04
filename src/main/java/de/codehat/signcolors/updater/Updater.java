@@ -11,7 +11,7 @@ public class Updater implements Runnable {
 
     private static final String UPDATE_URL = "https://api.codehat.de/plugin/1";
     private String currentVersion;
-    private UpdateCallback<UpdateResult, String> callback;
+    private UpdateCallback callback;
 
     /**
      * The plugin's update checker.
@@ -19,7 +19,7 @@ public class Updater implements Runnable {
      * @param currentVersion Current plugin version.
      * @param callback       Callback, which is executed after checking for a newer version.
      */
-    public Updater(String currentVersion, UpdateCallback<UpdateResult, String> callback) {
+    public Updater(String currentVersion, UpdateCallback callback) {
         this.currentVersion = currentVersion;
         this.callback = callback;
     }

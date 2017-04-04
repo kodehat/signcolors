@@ -1,12 +1,12 @@
-SignColors [![Build Status](https://ci.codehat.de/buildStatus/icon?job=SignColors)](https://ci.codehat.de/job/SignColors)
-========================================================================================================================================================
+SignColors [![Build Status](https://ci.codehat.de/buildStatus/icon?job=SignColors)](https://ci.codehat.de/job/SignColors) [![codebeat badge](https://codebeat.co/badges/d4b23321-b230-42b6-91d9-39dd7083817a)](https://codebeat.co/projects/github-com-pixelhash-signcolors-master)
+==========
 
 Repository of the SignColors plugin.
 
 ## Development Builds
 
 **NOTE!:**
-Development builds for SignColors can be found at the below server. These builds may be unstable and may cause errors. Use them at your own risk!
+Development builds for SignColors can be found at the server below. These builds may be unstable and may cause errors. Use them at your own risk!
 Link: [https://ci.codehat.de/job/SignColors/](https://ci.codehat.de/job/SignColors/ "SignColors Development Builds")
 
 ## Commands
@@ -43,13 +43,14 @@ To add your own language, you can copy the `EN.yml` in the `languages` folder an
 your language. For example `GB.yml` and change its content as you like. Then change the `language` key
 in the `config.yml` to your language file code. In the example above it would be `GB`.
 
-## SpigotMC
+## Plugin at SpigotMC
 
-Link: [http://www.spigotmc.org/resources/signcolors.6135/](http://www.spigotmc.org/resources/signcolors.6135/ "SignColors on SpigotMC")
+[http://www.spigotmc.org/resources/signcolors.6135/](http://www.spigotmc.org/resources/signcolors.6135/ "SignColors on SpigotMC")
 
 ## Status for v1.2.0
 
  * Add a `/sc migrate` command, to migrate from MySQL to SQLite and vise versa.
+ * Add a `/sc dbstatus` command, which shows current database size.
   
  Make suggestions either here or at Spigot.
 
