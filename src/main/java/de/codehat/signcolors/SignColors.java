@@ -228,7 +228,7 @@ public class SignColors extends JavaPlugin {
                 exception.printStackTrace();
                 this.getServer().getPluginManager().disablePlugin(this);
             }
-        } else if (!this.isSigncrafting() && this.database.getConnection() != null) {
+        } else if (!this.isSigncrafting() && (this.database != null || this.database.getConnection() != null)) {
             this.closeDatabase();
         }
     }

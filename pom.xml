@@ -6,7 +6,7 @@
 
     <groupId>de.codehat</groupId>
     <artifactId>signcolors</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <name>SignColors</name>
 
     <properties>
@@ -32,7 +32,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.11.2-R0.1-SNAPSHOT</version>
+            <version>1.12-pre6-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!--Vault API-->
