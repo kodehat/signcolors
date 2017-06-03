@@ -98,7 +98,7 @@ public class SignColors extends JavaPlugin {
     @Override
     public void onDisable() {
         // Close the database if necessary
-        if (this.database.getConnection() != null) {
+        if (this.database != null && this.database.getConnection() != null) {
             this.closeDatabase();
         }
         // Log "disable" message
@@ -228,7 +228,7 @@ public class SignColors extends JavaPlugin {
                 exception.printStackTrace();
                 this.getServer().getPluginManager().disablePlugin(this);
             }
-        } else if (!this.isSigncrafting() && (this.database != null || this.database.getConnection() != null)) {
+        } else if (!this.isSigncrafting() && this.database != null && this.database.getConnection() != null) {
             this.closeDatabase();
         }
     }
