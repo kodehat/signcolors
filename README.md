@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/96343c0dca664d868d7af78e7f0b64ee)](https://www.codacy.com/app/Pixelhash/SignColors?utm_source=github.com&utm_medium=referral&utm_content=Pixelhash/SignColors&utm_campaign=badger)
 SignColors [![Build Status](https://ci.codehat.de/buildStatus/icon?job=SignColors)](https://ci.codehat.de/job/SignColors) [![codebeat badge](https://codebeat.co/badges/d4b23321-b230-42b6-91d9-39dd7083817a)](https://codebeat.co/projects/github-com-pixelhash-signcolors-master)
 ==========
 
