@@ -1,4 +1,4 @@
-SignColors [![Build Status](https://ci.codehat.de/buildStatus/icon?job=SignColors)](https://ci.codehat.de/job/SignColors) [![codebeat badge](https://codebeat.co/badges/d4b23321-b230-42b6-91d9-39dd7083817a)](https://codebeat.co/projects/github-com-pixelhash-signcolors-master)
+SignColors [![Build Status](https://travis-ci.org/Pixelhash/SignColors.svg?branch=master)](https://travis-ci.org/Pixelhash/SignColors) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/442f22a3808944618356795f97c1810a)](https://www.codacy.com/app/Pixelhash/SignColors?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Pixelhash/SignColors&amp;utm_campaign=Badge_Grade)
 ==========
 
 Repository of the SignColors plugin.
@@ -51,7 +51,7 @@ in the `config.yml` to your language file code. In the example above it would be
 
  * Add a `/sc migrate` command, to migrate from MySQL to SQLite and vice versa.
  * Add a `/sc dbstatus` command, which shows current database size.
-  
+
  Make suggestions either here or at Spigot.
 
 ## License
