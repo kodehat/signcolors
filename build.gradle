@@ -23,6 +23,9 @@ final def BUKKIT_VERSION = '1.12.2-R0.1-SNAPSHOT'
 final def VAULT_VERSION = '1.6'
 final def BSTATS_VERSION = '1.2'
 final def UPDATER_VERSION = '1.0.0'
+final def ORMLITE_VERSION = '5.1'
+final def MYSQL_CONNECTOR_VERSION = '5.1.44'
+final def SQLITE_CONNECTOR_VERSION = '3.21.0.1'
 
 sourceCompatibility = 1.8
 
@@ -56,6 +59,10 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compileOnly "org.spigotmc:spigot-api:$BUKKIT_VERSION"
     compileOnly "net.milkbowl.vault:VaultAPI:$VAULT_VERSION"
+    compile "com.j256.ormlite:ormlite-core:$ORMLITE_VERSION"
+    compile "com.j256.ormlite:ormlite-jdbc:$ORMLITE_VERSION"
+    //compile "mysql:mysql-connector-java:$MYSQL_CONNECTOR_VERSION"
+    //compile "org.xerial:sqlite-jdbc:$SQLITE_CONNECTOR_VERSION"
     compile "org.bstats:bstats-bukkit:$BSTATS_VERSION"
     compile "de.codehat:plugin-update-checker:$UPDATER_VERSION"
 

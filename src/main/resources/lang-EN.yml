@@ -1,4 +1,12 @@
-TAG: '&6[&3SignColors&6] '
+TAG: '&6[&3SignColors&6]'
+NO_PERMISSION: "&cYou aren't allowed to do this!"
+UNKNOWN_CMD: '&cUnknown command!'
+COLORCODES_COLORS: 'Colors'
+COLORCODES_FORMATS: 'Formatting'
+INFO_AUTHOR: '&6Developed by:'
+INFO_VERSION: '&6Version:'
+INFO_CMD_HELP: '&aUse /sc help to get a list of commands.'
+
 NOCMDACCESS: '&cYou do not have access to this command!'
 NOACTION: '&cYou are not allowed to do this!'
 SCINFOAUTHOR: '&6Developed by:'

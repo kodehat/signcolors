@@ -103,12 +103,12 @@ sounds:
 # Can be either 'sqlite' or 'mysql'. If you choose 'mysql'
 # you have to enter your mysql data/credentials under the
 # 'mysql:' tree.
-database_type: 'sqlite'
-mysql:
-  host: '127.0.0.1'
-  port: '3306'
-  database: 'signcolors'
-  username: 'steve'
+database:
+  type: 'sqlite'
+  hostname: '127.0.0.1'
+  port: 3306
+  name: 'signcolors'
+  user: 'steve'
   password: 'ilovemc'
   table_prefix: 'sc_'
 
