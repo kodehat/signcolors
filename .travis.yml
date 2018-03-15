@@ -4,7 +4,8 @@ jdk:
 script: ./gradlew shadowJar
 addons:
   artifacts:
-    s3_region: "eu-central-1"
     paths:
     - build/libs
+    target_paths:
+    - signcolors/${TRAVIS_BUILD_NUMBER}
     debug: true
