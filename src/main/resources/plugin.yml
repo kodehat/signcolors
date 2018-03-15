@@ -23,7 +23,7 @@ permissions:
       signcolors.sign.create: true
       signcolors.sign.use: true
       signcolors.updatemsg: true
-      signcolors.craftsign.bypass: true
+      signcolors.craftsigns.bypass: true
       signcolors.listcodes: true
       signcolors.givesign: true
       signcolors.blockedfirstlines.bypass: true
@@ -42,7 +42,7 @@ permissions:
     description: Allows you to use a [SC] sign.
   signcolors.updatemsg:
     description: Shows you the update message, if an update is available.
-  signcolors.craftsign.bypass:
+  signcolors.craftsigns.bypass:
     description: Allows you to write colored on a normal sign, even if signcrafting is true.
   signcolors.listcodes:
     description: Allows you to use the /sc colorcodes command.

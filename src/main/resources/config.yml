@@ -2,46 +2,48 @@
 #  PLUGIN SETTINGS:
 #--------------------------------------------------------
 
-# Sets the plugin language (DE = german; EN = english;
-# ES = spanish). You can add your own language by adding
-# a YOURLANG.yml file to the languages folder.
+# Sets the plugin language.
+# English (EN) and German (DE) are implemented by default.
+# You can add your own language by adding a
+# lang-YOURLANGCODE.yml file to the plugin's folder.
+# If you want your language file to be included in the plugin
+# natively, open a pull request at the plugin's GitHub repository.
 language: 'EN'
 
-# The symbol in front of the hex code e.g. &6 (= GOLD).
-colorsymbol: '&'
+# The character in front of the hex code e.g. &6 (= GOLD).
+color_character: '&'
 
 # Should players be able to craft colored signs?
-# - If true, players can only use colors on crafted colored signs.
+# - If true, players can use colors ONLY on crafted colored signs.
 # - If false, players can use colors on ALL kind of signs.
-signcrafting: true
+sign_crafting: true
 
-# There are two different types of recipes:
-# "shaped":
-#   They have a certain pattern defining where you have
-#   to place your items/blocks on the workbench.
-#
-# "shapeless":
-#   They don't have a pattern and you can
-#   place the ingredients on your workbench where you want.
-recipetype: 'shaped'
-
-# Recipe settings.
+# Recipe settings section.
 recipes:
-  # ONLY enabled if "recipetype" is set to "shaped"!
+  # There are two different types of recipes:
+  # "shaped":
+  #   They have a certain pattern defining where you have
+  #   to place your items/blocks on the workbench.
+  #
+  # "shapeless":
+  #   They don't have a specific pattern and you can
+  #   place the ingredients on your workbench wherever you want.
+  type: 'shaped'
+  # ONLY enabled if "recipes.type" is set to "shaped"!
   # At first you define your items/blocks you want to use in
   # your recipe and give them a letter as a variable name.
   # E.g. S: 'SIGN'
   # You can use data values as well.
   # E.g. T: 'WOOL:9'
-  # This would represent Cyan Wool.
+  # This would represent cyan wool.
   # Generally the ingredients pattern is:
-  # VARIABLELETTER: "MATERIALNAME:DATAVALUE"
-  # The "craftingshape" represents the workbench. Each line
+  # VARIABLE_LETTER: "MATERIAL_NAME:DATA_VALUE"
+  # The "crafting_shape" represents the workbench. Each line
   # in the list equals a line at the workbench. Here you
   # can use your defined variables and place them where
   # you want. A whitespace represents air.
   # Remember that it is not possible to have more
-  # than three characters (whitespace included) in one line!
+  # than three characters (whitespaces included) in one line!
   shaped:
     ingredients:
       A: 'INK_SACK:1'
@@ -49,12 +51,12 @@ recipes:
       C: 'INK_SACK:4'
       D: 'INK_SACK:11'
       S: 'SIGN'
-    craftingshape:
+    crafting_shape:
     - 'A B'
     - ' S '
     - 'C D'
 
-  # ONLY enabled if "recipetype" is set to "shapeless"!
+  # ONLY enabled if "recipes.type" is set to "shapeless"!
   # Each line in the list equals an item/block on the workbench.
   # The order doesn't matter, because the recipe is shapeless.
   # You can add up to nine items/blocks.
@@ -68,55 +70,62 @@ recipes:
 
 # Prevents players to create clickable signs like the
 # plugin's [SC] sign or Essential's [Buy] sign. You
-# are free to add as many as you want. And don't worry, the
-# '&' character gets replaced by the color char.
+# are free to add as many as you want. The '&' character
+# is automatically replaced by the current color character.
 blocked_firstlines:
 - '&6[&3SC&6]'
 - '&1[Buy]'
 
 # => crafting
-# Amount of colored signs by using the crafting recipe.
-# => sc_sign
-# Default amounts of colored signs from a [SignColors] sign.
-signamount:
+# Amount of colored signs received by using the crafting recipe.
+# => sign
+# Default amount of colored signs received from a [SC] sign.
+sign_amount:
   crafting: 1
-  sc_sign: 10
+  sign: 10
 
-# Default price from [SC] signs.
+# Default price of [SC] signs.
 price: 100.0
 
-# Sound settings.
+# Sound settings section.
 sounds:
-  # Sound, which is played upon [SC] sign creation.
+  # The sound, which is played upon [SC] sign creation.
   create_scsign:
-    # List of possible values can be found here (https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html).
+    # A list of possible values is available here (https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html).
     type: 'BLOCK_ANVIL_USE'
     volume: 1.0
     pitch: 1.0
-  # Sound, which is played upon getting colored signs from a [SC] sign.
+  # The sound, which is played upon receiving colored signs from a [SC] sign.
   getsigns_scsign:
-    # List of possible values can be found here (https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html).
+    # A list of possible values is available here (https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html).
     type: 'ENTITY_PLAYER_LEVELUP'
     volume: 1.0
     pitch: 1.0
 
-# Can be either 'sqlite' or 'mysql'. If you choose 'mysql'
-# you have to enter your mysql data/credentials under the
-# 'mysql:' tree.
+# Database settings section.
 database:
+  # Can either be 'sqlite' or 'mysql'.
+  # If you choose 'mysql' you have to enter your mysql data/credentials
+  # below the "type" field.
+  #
+  # If you choose 'sqlite' additional changes aren't required.
   type: 'sqlite'
+  # The hostname of your MySQL server.
   hostname: '127.0.0.1'
+  # The port of your MySQL server.
   port: 3306
+  # The name of your MySQL database.
   name: 'signcolors'
+  # The user of your MySQL server.
   user: 'steve'
-  password: 'ilovemc'
-  table_prefix: 'sc_'
+  # The password of your MySQL user.
+  password: 'JustAnExamplePassword'
 
-# Send some statistics to bstats.org.
-metrics: true
-
-# Should the plugin check for updates.
-updatecheck: true
-
-# Current version of the config. DO NOT TOUCH IT!!!
-configversion: 5
+# Other settings section.
+other:
+  # Send some statistics to bstats.org.
+  metrics: true
+  # Should the plugin check if an update is available?
+  update_check: true
+  # Current version of the config. DON'T TOUCH IT!!!
+  config_version: 5

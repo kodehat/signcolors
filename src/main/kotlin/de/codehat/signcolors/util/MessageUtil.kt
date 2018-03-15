@@ -18,5 +18,5 @@ fun CommandSender.sendLogoMsg(message: String) {
 }
 
 fun CommandSender.sendLogoMsg(languageKey: LanguageKey) {
-    this.sendLogoMsg(languageKey.toString())
+    this.sendLogoMsg(de.codehat.signcolors.SignColors.languageConfig.get(languageKey))
 }

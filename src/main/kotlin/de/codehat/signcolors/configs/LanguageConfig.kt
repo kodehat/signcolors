@@ -9,7 +9,7 @@ class LanguageConfig(language: String = "en"): Config("lang-$language.yml") {
         this.setup(true)
     }
 
-    fun get(languageKey: LanguageKey): String? {
+    fun get(languageKey: LanguageKey): String {
         return cfg.getString(languageKey.toString())
     }
 

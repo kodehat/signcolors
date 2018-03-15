@@ -9,4 +9,7 @@ enum class LanguageKey {
     INFO_AUTHOR,
     INFO_VERSION,
     INFO_CMD_HELP,
+    SIGN_NAME,
+    SIGN_LORE,
+    CONFIG_RELOAD,
 }

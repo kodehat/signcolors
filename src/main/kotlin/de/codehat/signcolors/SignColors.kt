@@ -5,13 +5,18 @@ import de.codehat.signcolors.command.TabCompletion
 import de.codehat.signcolors.commands.ColorcodesCommand
 import de.codehat.signcolors.commands.HelpCommand
 import de.codehat.signcolors.commands.InfoCommand
+import de.codehat.signcolors.commands.ReloadCommand
 import de.codehat.signcolors.configs.LanguageConfig
 import de.codehat.signcolors.daos.SignLocationDao
 import de.codehat.signcolors.database.MysqlDatabase
 import de.codehat.signcolors.database.SqliteDatabase
 import de.codehat.signcolors.database.abstraction.Database
 import de.codehat.signcolors.dependencies.VaultDependency
+import de.codehat.signcolors.listener.BlockListener
+import de.codehat.signcolors.listener.SignListener
+import de.codehat.signcolors.managers.ColoredSignManager
 import net.milkbowl.vault.economy.Economy
+import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
 
@@ -20,10 +25,13 @@ class SignColors: JavaPlugin() {
 
     private val commandManager = CommandManager()
 
+    internal val fixSignPlayers = mutableListOf<Player>()
+
     lateinit var database: Database
         private set
     lateinit var signLocationDao: SignLocationDao
         private set
+    lateinit var coloredSignManager: ColoredSignManager
 
     companion object {
         internal lateinit var instance: SignColors
@@ -50,7 +58,7 @@ class SignColors: JavaPlugin() {
         loadDependencies()
         loadDatabase()
         signLocationDao = SignLocationDao(database.connectionSource)
-        signLocationDao.create("test", 10, -50, 265)
+        loadManagers()
         registerCommands()
         registerListener()
 
@@ -87,7 +95,7 @@ class SignColors: JavaPlugin() {
         }
     }
 
-    private fun loadDatabase() {
+    internal fun loadDatabase() {
         val databaseType = config.getString("database.type")
 
         if (databaseType.equals("sqlite", true)) {
@@ -109,11 +117,16 @@ class SignColors: JavaPlugin() {
         }
     }
 
+    private fun loadManagers() {
+        coloredSignManager = ColoredSignManager()
+    }
+
     private fun registerCommands() {
         with(commandManager) {
             registerCommand("", InfoCommand())
             registerCommand("help", HelpCommand())
             registerCommand("colorcodes", ColorcodesCommand())
+            registerCommand("reload", ReloadCommand())
         }
 
         with(getCommand("sc")) {
@@ -123,7 +136,10 @@ class SignColors: JavaPlugin() {
     }
 
     private fun registerListener() {
-
+        with(server.pluginManager) {
+            registerEvents(BlockListener(), this@SignColors)
+            registerEvents(SignListener(), this@SignColors)
+        }
     }
 
 }

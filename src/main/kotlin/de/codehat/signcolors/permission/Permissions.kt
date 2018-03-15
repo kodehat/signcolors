@@ -1,9 +1,14 @@
 package de.codehat.signcolors.permission
 
 enum class Permissions(private var permission: String) {
+    ALL("signcolors.*"),
     CMD_HELP("signcolors.help"),
     CMD_COLORCODES("signcolors.listcodes"),
     CMD_INFO("signcolors.info"),
+    CMD_RELOAD("signcolors.reload"),
+    BYPASS_SIGN_CRAFTING("signcolors.craftsigns.bypass"),
+    USE_SPECIFIC_COLOR("signcolors.color."),
+    USE_ALL_COLORS("signcolors.colors"),
 
     CTB_HELP("capturethebanner.help"),
     CTB_RELOAD("cpaturethebanner.reload"),
