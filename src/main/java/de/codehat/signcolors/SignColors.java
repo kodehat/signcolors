@@ -1,10 +1,6 @@
-/*
- * Copyright (c) 2017 CodeHat.
- * This file is part of 'SignColors' and is licensed under GPLv3.
- */
-
 package de.codehat.signcolors;
 
+import de.codehat.pluginupdatechecker.UpdateChecker;
 import de.codehat.signcolors.commands.*;
 import de.codehat.signcolors.database.Database;
 import de.codehat.signcolors.database.MySQL;
@@ -18,7 +14,7 @@ import de.codehat.signcolors.managers.LanguageManager;
 import de.codehat.signcolors.managers.SignManager;
 import de.codehat.signcolors.updater.Updater;
 import net.milkbowl.vault.economy.Economy;
-import org.bstats.Metrics;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -110,6 +106,16 @@ public class SignColors extends JavaPlugin {
     @Override
     public void onEnable() {
         logger = this.getLogger();
+
+        UpdateChecker checker = new UpdateChecker.Builder(this)
+                .setUrl("https://pluginapi.codehat.de/plugins")
+                .setPluginId("Syjzymgdz")
+                .setCurrentVersion("1.2.0")
+                .onError(e -> logger.info("Can't check for updates."))
+                .onLatestVersion(e -> logger.info("Already latest version!"))
+                .onNewVersion(e -> logger.info("A new version " + e + " is available."))
+                .build();
+        checker.check();
 
         // Save the default config, if it doesn't exist.
         this.saveDefaultConfig();
