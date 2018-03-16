@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack
 
 class BlockListener: Listener {
 
+    @Suppress("unused")
     @EventHandler
     fun onPlacingOneSign(event: BlockPlaceEvent) {
         val player = event.player
@@ -26,6 +27,7 @@ class BlockListener: Listener {
         }
     }
 
+    @Suppress("unused")
     @EventHandler
     fun onBreakColoredSign(event: BlockBreakEvent) {
         val player = event.player
@@ -40,6 +42,7 @@ class BlockListener: Listener {
                 droppedStack.amount = 1
                 block.world.dropItemNaturally(block.location, droppedStack)
             }
+            SignColors.instance.signLocationDao.delete(block)
             event.isCancelled = true
         }
     }

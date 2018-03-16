@@ -2,16 +2,4 @@ language: java
 jdk:
 - oraclejdk8
 script: "./gradlew shadowJar"
-before_deploy: "mv build/libs/*.jar build/libs/signcolors-${TRAVIS_BUILD_NUMBER}.jar"
-deploy:
-  provider: s3
-  access_key_id: AKIAJ4TTJ2GI6ICB4CTA
-  secret_access_key:
-    secure: QTBREgzZ16W8POn/JbM+XooWU8ZVjonZluVNmAQCV3QLVzcNOg/V2buQZv3DFnxlMD+ltrnLTj+/viubJGEt4Rhapvc6GE71ATHrt1dOYq116siPOMg+ox9URuGScOSdRplyV6fnDIyoAEwR1LoaRxld4fJQtGgnwIWq4ajg4bn6hnE7oq+6BZ4uPVmr891M+b61SwWRQGiKvga7JbhX97fVDFS1LE5DsFXU3+mnBqyYJiXISsl4Igvxwa1UDPpWcnVMdmJc+1YvtuH2KvWplgI9FMDnXJKmCq1oLrKNVKic4Bz/GENv0PqziQoaYe3Q0OWng7ejejvmR/CovegKELWqDasi95dvI9Rh2bRkmP9wytRs6/4OxI44nceWI0Ba71xpcOVmFkA0tEwJMG3sRjPerCrTEjpqwfJ6RK4PUAVdx5G0fb3sUXsKILTssDJSslsDy7vcq8ur76nOKdub5NsBqbv+09btDT4G9CNOXiaPSdsoi9YTBsiKQZ/iFA1Y8uPM0RuvHYDJDPDIvt4fXhKm8vJuU0443MzuZP+MfT4jyioo1bcnSJN6DvKO90tbu1ABwEgzfROsu1Zr+ATsT94ooAnIWBsAZq1L3BPtGAdZweokHzsbwPku6yoT7P91XYlqAjaXLqm3ELtlmH4aejsHXZ9+kyHHSK/RaTeEpNc=
-  bucket: ch-plugin-devbuilds
-  skip_cleanup: true
-  local-dir: build/libs
-  upload-dir: signcolors
-  acl: public_read
-  on:
-    repo: Pixelhash/SignColors
+#before_deploy: "mv build/libs/*.jar build/libs/signcolors-${TRAVIS_BUILD_NUMBER}.jar"

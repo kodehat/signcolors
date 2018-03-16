@@ -72,7 +72,7 @@ recipes:
 # plugin's [SC] sign or Essential's [Buy] sign. You
 # are free to add as many as you want. The '&' character
 # is automatically replaced by the current color character.
-blocked_firstlines:
+blocked_first_lines:
 - '&6[&3SC&6]'
 - '&1[Buy]'
 
@@ -90,16 +90,24 @@ price: 100.0
 # Sound settings section.
 sounds:
   # The sound, which is played upon [SC] sign creation.
-  create_scsign:
+  create_special_sign:
+    # Enable or disable the sound.
+    enabled: true
     # A list of possible values is available here (https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html).
     type: 'BLOCK_ANVIL_USE'
+    # The volume of the sound (range from 0.0 to 1.0)
     volume: 1.0
+    # The pitch of the sound (range from 0.5 to 2.0)
     pitch: 1.0
   # The sound, which is played upon receiving colored signs from a [SC] sign.
-  getsigns_scsign:
+  receive_signs_from_special_sign:
+    # Enable or disable the sound.
+    enabled: true
     # A list of possible values is available here (https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html).
     type: 'ENTITY_PLAYER_LEVELUP'
+    # The volume of the sound (range from 0.0 to 1.0)
     volume: 1.0
+    # The pitch of the sound (range from 0.5 to 2.0)
     pitch: 1.0
 
 # Database settings section.
@@ -127,5 +135,7 @@ other:
   metrics: true
   # Should the plugin check if an update is available?
   update_check: true
+  # Makes the plugin's log messages more verbose.
+  debug: false
   # Current version of the config. DON'T TOUCH IT!!!
   config_version: 5

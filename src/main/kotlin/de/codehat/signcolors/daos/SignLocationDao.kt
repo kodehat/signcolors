@@ -36,6 +36,10 @@ class SignLocationDao(connectionSource: JdbcConnectionSource): Dao<SignLocation,
         return dao.query(queryBuilder.prepare()).size >= 1
     }
 
+    fun create(block: Block) {
+        create(block.location)
+    }
+
     fun create(location: Location) {
         with(location) {
             create(this.world.name, this.blockX, this.blockY, this.blockZ)
@@ -48,6 +52,10 @@ class SignLocationDao(connectionSource: JdbcConnectionSource): Dao<SignLocation,
         }
     }
 
+    fun delete(block: Block) {
+        delete(block.location)
+    }
+
     fun delete(location: Location) {
         with(location) {
             delete(this.world.name, this.blockX, this.blockY, this.blockZ)
@@ -55,7 +63,21 @@ class SignLocationDao(connectionSource: JdbcConnectionSource): Dao<SignLocation,
     }
 
     fun delete(world: String, x: Int, y: Int, z: Int) {
+        if (exists(world, x, y, z)) {
+            val deleteBuilder = dao.deleteBuilder()
+            val where = deleteBuilder.where()
 
+            with(where) {
+                eq("world", world)
+                and()
+                eq("x", x)
+                and()
+                eq("y", y)
+                and()
+                eq("z", z)
+            }
+
+            deleteBuilder.delete()
+        }
     }
-
 }

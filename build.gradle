@@ -24,8 +24,8 @@ final def VAULT_VERSION = '1.6'
 final def BSTATS_VERSION = '1.2'
 final def UPDATER_VERSION = '1.0.0'
 final def ORMLITE_VERSION = '5.1'
-final def MYSQL_CONNECTOR_VERSION = '5.1.44'
-final def SQLITE_CONNECTOR_VERSION = '3.21.0.1'
+//final def MYSQL_CONNECTOR_VERSION = '5.1.44'
+//final def SQLITE_CONNECTOR_VERSION = '3.21.0.1'
 
 sourceCompatibility = 1.8
 

@@ -9,6 +9,15 @@ INFO_CMD_HELP: '&aUse /sc help to get a list of commands.'
 SIGN_NAME: '&aS&3i&6g&cn'
 SIGN_LORE: '&7Sign with colors'
 CONFIG_RELOAD: '&aConfig has been reloaded successfully!'
+SPECIAL_SIGN_INCORRECT_DATA_FORMAT: '&cIncorrect format of sign amount and/or price!'
+SPECIAL_SIGN_INCORRECT_DATA_FORMAT_PLAYER: '&cThis sign is incorrectly formatted! Contact your admin.'
+SPECIAL_SIGN_AMOUNT_OR_PRICE_TOO_LOW: "&cPrice and amount can't be zero or less!"
+SPECIAL_SIGN_LINE_TWO: 'Amount : Price'
+SPECIAL_SIGN_LINE_FOUR: '&4*Click Me*'
+SPECIAL_SIGN_RECEIVED_SIGNS: "&aYou payed &6$%s &afor &6%s &acolored sign(s)."
+BLOCKED_FIRST_LINE_WRITTEN: "&cYou aren't allowed to write this specific first line!"
+NOT_ENOUGH_MONEY: "&cYou don't have enough money to buy signs!"
+NOT_ENOUGH_SPACE: "&cThere isn't enough space for signs in your inventory!"
 
 NOCMDACCESS: '&cYou do not have access to this command!'
 NOACTION: '&cYou are not allowed to do this!'

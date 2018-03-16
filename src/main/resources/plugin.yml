@@ -3,7 +3,7 @@ main: de.codehat.signcolors.SignColors
 author: CodeHat
 website: https://www.spigotmc.org/resources/signcolors.6135/
 softdepend: [Vault]
-description: Create colored signs.
+description: Be able to apply colors on signs.
 version: 1.2.0
 
 commands:
@@ -20,8 +20,8 @@ permissions:
       signcolors.info: true
       signcolors.help: true
       signcolors.reload: true
-      signcolors.sign.create: true
-      signcolors.sign.use: true
+      signcolors.specialsign.create: true
+      signcolors.specialsign.use: true
       signcolors.updatemsg: true
       signcolors.craftsigns.bypass: true
       signcolors.listcodes: true
@@ -29,26 +29,24 @@ permissions:
       signcolors.blockedfirstlines.bypass: true
       signcolors.upgrade: true
   signcolors.colors:
-    description: Allows you to write colored signs.
+    description: Allows you to apply all colors on signs.
   signcolors.info:
-    description: Allows you to see the SignColors info.
+    description: Allows you to view the plugin's info.
   signcolors.help:
-    description: Allows you to see the /sc help page.
+    description: Allows you to view the help page.
   signcolors.reload:
     description: Allows you to reload the config.yml.
-  signcolors.sign.create:
-    description: Allows you to create a [SignColors] sign.
-  signcolors.sign.use:
+  signcolors.specialsign.create:
+    description: Allows you to create a [SC] sign.
+  signcolors.specialsign.use:
     description: Allows you to use a [SC] sign.
   signcolors.updatemsg:
-    description: Shows you the update message, if an update is available.
+    description: Shows an update message to you upon joining the server, if an update is available.
   signcolors.craftsigns.bypass:
-    description: Allows you to write colored on a normal sign, even if signcrafting is true.
+    description: Allows you to apply colors on a normal sign, even if 'sign_crafting' is true.
   signcolors.listcodes:
-    description: Allows you to use the /sc colorcodes command.
+    description: Allows you to use the color codes command.
   signcolors.givesign:
-    description: Allows you to use the /sc givesign command.
+    description: Allows you to use the give sign command.
   signcolors.blockedfirstlines.bypass:
     description: Allows you to bypass the blocked first lines.
-  signcolors.upgrade:
-    description: Allows you to upgrade the database to the new format.

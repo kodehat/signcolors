@@ -13,6 +13,7 @@ import de.codehat.signcolors.database.SqliteDatabase
 import de.codehat.signcolors.database.abstraction.Database
 import de.codehat.signcolors.dependencies.VaultDependency
 import de.codehat.signcolors.listener.BlockListener
+import de.codehat.signcolors.listener.PlayerListener
 import de.codehat.signcolors.listener.SignListener
 import de.codehat.signcolors.managers.ColoredSignManager
 import net.milkbowl.vault.economy.Economy
@@ -36,6 +37,8 @@ class SignColors: JavaPlugin() {
     companion object {
         internal lateinit var instance: SignColors
         internal lateinit var languageConfig: LanguageConfig
+        internal var debug = false
+            private set
 
         private var vaultDependency: VaultDependency? = null
 
@@ -139,6 +142,7 @@ class SignColors: JavaPlugin() {
         with(server.pluginManager) {
             registerEvents(BlockListener(), this@SignColors)
             registerEvents(SignListener(), this@SignColors)
+            registerEvents(PlayerListener(), this@SignColors)
         }
     }
 
