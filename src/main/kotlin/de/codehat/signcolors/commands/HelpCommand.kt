@@ -19,10 +19,11 @@ class HelpCommand: Command() {
         sender.sendColoredMsg("""
             |${SignColors.languageConfig.get(LanguageKey.TAG)} &aHelp page
             | &c[] &arequired, &7<> &aoptional
-            | &7&l- &r&6/sc &ehelp
-            | &7&l- &r&6/sc &ereload
-            | &7&l- &r&6/sc &egivesign [player] [amount]
-            | &7&l- &r&6/sc &ecolorcodes
+            ${ if (sender.hasPermission(Permissions.CMD_INFO.value())) "| &7&l- &r&6/sc" else ""}
+            ${ if (sender.hasPermission(Permissions.CMD_HELP.value())) "| &7&l- &r&6/sc &ehelp" else ""}
+            ${ if (sender.hasPermission(Permissions.CMD_RELOAD.value())) "| &7&l- &r&6/sc &ereload" else ""}
+            ${ if (sender.hasPermission(Permissions.CMD_GIVE_SIGN.value())) "| &7&l- &r&6/sc &egivesign &c[&eplayer&c] &c[&eamount&c]" else ""}
+            ${ if (sender.hasPermission(Permissions.CMD_COLOR_CODES.value())) "| &7&l- &r&6/sc &ecolorcodes" else ""}
             """.trimMargin())
     }
 

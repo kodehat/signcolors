@@ -3,7 +3,8 @@ package de.codehat.signcolors.permission
 enum class Permissions(private var permission: String) {
     ALL("signcolors.*"),
     CMD_HELP("signcolors.help"),
-    CMD_COLORCODES("signcolors.listcodes"),
+    CMD_GIVE_SIGN("signcolors.givesign"),
+    CMD_COLOR_CODES("signcolors.listcodes"),
     CMD_INFO("signcolors.info"),
     CMD_RELOAD("signcolors.reload"),
     BYPASS_SIGN_CRAFTING("signcolors.craftsigns.bypass"),

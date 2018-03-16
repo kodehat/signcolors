@@ -15,9 +15,11 @@ abstract class Database(connectionString: String) {
         createRequiredTablesIfNotExist()
     }
 
-    fun close() = connectionSource.close()
+    fun close() {
+        connectionSource.closeQuietly() // Or just '#close()'?
+    }
 
-    protected fun createRequiredTablesIfNotExist() {
+    private fun createRequiredTablesIfNotExist() {
         TableUtils.createTableIfNotExists(connectionSource, SignLocation::class.java)
     }
 }

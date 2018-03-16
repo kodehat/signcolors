@@ -5,7 +5,7 @@ import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
 import java.io.File
 
-abstract class Config(protected val fileName: String) {
+abstract class Config(private val fileName: String) {
 
     private val file = File(SignColors.instance.dataFolder, this.fileName)
     protected lateinit var cfg: FileConfiguration
@@ -13,7 +13,7 @@ abstract class Config(protected val fileName: String) {
 
     protected fun setup(extract: Boolean) {
         if (!file.exists()) {
-            if (extract) SignColors.instance.saveResource(this.fileName, false)
+            if (extract) SignColors.instance.saveResource(this.fileName, false) // May throw an exception if resource is not found
             else this.file.createNewFile()
         }
 

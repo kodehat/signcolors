@@ -45,6 +45,15 @@ class PlayerListener: Listener {
 
                 if (indicatorLine == SignListener.SPECIAL_SIGN_INDICATOR.color()) {
                     if (player.hasPermission(Permissions.SPECIAL_SIGN_USE.value())) {
+
+                        // Check if Vault is installed
+                        if (!SignColors.isVaultAvailable().first) {
+                            player.sendLogoMsg(LanguageKey.VAULT_MISSING)
+                            event.isCancelled = true
+                            return
+                        }
+
+
                         // [0] = sign amount, [1] = sign price for the specified amount
                         val signData = ChatColor.stripColor(dataLine).split(":")
 
@@ -58,8 +67,6 @@ class PlayerListener: Listener {
                         // Retrieve sign amount and price
                         val signAmount = signData[0].trim().toInt()
                         val signPrice = signData[1].trim().toDouble()
-
-                        //TODO: Check if Vault/Economy is available!
 
                         // Check if the player has enough money to buy signs
                         if (SignColors.isVaultAvailable().second!!.getBalance(player) < signPrice) {

@@ -144,9 +144,7 @@ class SignListener: Listener {
     @EventHandler(priority = EventPriority.HIGH)
     fun checkFirstLineOnSpecialSignCreation(event: SignChangeEvent) {
         val player = event.player
-        SignColors.instance.logger.info("First line is: ${event.getLine(0)}")
         val firstLine = event.getLine(0).trim().replace(ChatColor.COLOR_CHAR.toString(), "&", true)
-        SignColors.instance.logger.info("Replaced line is: $firstLine")
 
         // If player has permission to create a special sign, let him create it
         if (firstLine == SPECIAL_SIGN_INDICATOR && player.hasPermission(Permissions.SPECIAL_SIGN_CREATE.value())) return

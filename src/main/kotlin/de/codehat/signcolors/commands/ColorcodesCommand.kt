@@ -12,7 +12,7 @@ import org.bukkit.command.CommandSender
 class ColorcodesCommand: Command() {
 
     override fun onCommand(sender: CommandSender, command: org.bukkit.command.Command, label: String, args: Array<out String>) {
-        if (!sender.hasPermission(Permissions.CMD_COLORCODES.value())) {
+        if (!sender.hasPermission(Permissions.CMD_COLOR_CODES.value())) {
             sender.sendLogoMsg(LanguageKey.NO_PERMISSION)
             return
         }

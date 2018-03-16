@@ -2,10 +2,7 @@ package de.codehat.signcolors
 
 import de.codehat.signcolors.command.CommandManager
 import de.codehat.signcolors.command.TabCompletion
-import de.codehat.signcolors.commands.ColorcodesCommand
-import de.codehat.signcolors.commands.HelpCommand
-import de.codehat.signcolors.commands.InfoCommand
-import de.codehat.signcolors.commands.ReloadCommand
+import de.codehat.signcolors.commands.*
 import de.codehat.signcolors.configs.LanguageConfig
 import de.codehat.signcolors.daos.SignLocationDao
 import de.codehat.signcolors.database.MysqlDatabase
@@ -15,6 +12,7 @@ import de.codehat.signcolors.dependencies.VaultDependency
 import de.codehat.signcolors.listener.BlockListener
 import de.codehat.signcolors.listener.PlayerListener
 import de.codehat.signcolors.listener.SignListener
+import de.codehat.signcolors.managers.BackupOldFilesManager
 import de.codehat.signcolors.managers.ColoredSignManager
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.entity.Player
@@ -56,6 +54,7 @@ class SignColors: JavaPlugin() {
     override fun onEnable() {
         instance = this
 
+        checkAndDoBackup()
         saveDefaultConfig()
         loadLanguage()
         loadDependencies()
@@ -72,6 +71,10 @@ class SignColors: JavaPlugin() {
         database.close()
 
         logger.info("v${description.version} has been disabled.")
+    }
+
+    private fun checkAndDoBackup() {
+        BackupOldFilesManager()
     }
 
     private fun loadLanguage() {
@@ -128,6 +131,7 @@ class SignColors: JavaPlugin() {
         with(commandManager) {
             registerCommand("", InfoCommand())
             registerCommand("help", HelpCommand())
+            registerCommand("givesign", GiveSignCommand())
             registerCommand("colorcodes", ColorcodesCommand())
             registerCommand("reload", ReloadCommand())
         }

@@ -15,10 +15,9 @@ class TabCompletion: TabCompleter {
         if (args.size == 1) {
             val commands = ArrayList<String>()
             if (sender.hasPermission(Permissions.CMD_HELP.value())) commands.add("help")
-            if (sender.hasPermission("signcolors.reload")) commands.add("reload")
+            if (sender.hasPermission(Permissions.CMD_RELOAD.value())) commands.add("reload")
             if (sender.hasPermission("signcolors.givesign")) commands.add("givesign")
-            if (sender.hasPermission(Permissions.CMD_COLORCODES.value())) commands.add("colorcodes")
-            if (sender.hasPermission("signcolors.upgrade")) commands.add("upgrade")
+            if (sender.hasPermission(Permissions.CMD_COLOR_CODES.value())) commands.add("colorcodes")
 
             StringUtil.copyPartialMatches(args[0], commands, completions)
         } else if (args.size == 2 && !args[1].isEmpty() && args[0].equals("givesign", true)) {
