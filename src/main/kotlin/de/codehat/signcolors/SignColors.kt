@@ -1,5 +1,6 @@
 package de.codehat.signcolors
 
+import de.codehat.pluginupdatechecker.UpdateChecker
 import de.codehat.signcolors.command.CommandManager
 import de.codehat.signcolors.command.TabCompletion
 import de.codehat.signcolors.commands.*
@@ -15,6 +16,7 @@ import de.codehat.signcolors.listener.SignListener
 import de.codehat.signcolors.managers.BackupOldFilesManager
 import de.codehat.signcolors.managers.ColoredSignManager
 import net.milkbowl.vault.economy.Economy
+import org.bstats.bukkit.Metrics
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
@@ -25,6 +27,7 @@ class SignColors: JavaPlugin() {
     private val commandManager = CommandManager()
 
     internal val fixSignPlayers = mutableListOf<Player>()
+    internal var updateAvailablePair: Pair<Boolean, String> = Pair(false, "")
 
     lateinit var database: Database
         private set
@@ -63,6 +66,8 @@ class SignColors: JavaPlugin() {
         loadManagers()
         registerCommands()
         registerListener()
+        startMetricsIfEnabled()
+        startUpdateCheckerIfEnabled()
 
         logger.info("v${description.version} has been enabled.")
     }
@@ -147,6 +152,41 @@ class SignColors: JavaPlugin() {
             registerEvents(BlockListener(), this@SignColors)
             registerEvents(SignListener(), this@SignColors)
             registerEvents(PlayerListener(), this@SignColors)
+        }
+    }
+
+    private fun startMetricsIfEnabled() {
+        if (config.getBoolean("other.metrics")) {
+            logger.info("Metrics are enabled :)")
+            Metrics(this).apply {
+                addCustomChart(Metrics.SimplePie("sign_crafting", {
+                    if (coloredSignManager.signCrafting) "yes" else "no"
+                }))
+            }
+        } else {
+            logger.info("Metrics are disabled :(")
+        }
+    }
+
+    private fun startUpdateCheckerIfEnabled() {
+        if (config.getBoolean("other.update_check")) {
+            logger.info("Checking for an update...")
+            val updateChecker = UpdateChecker.Builder(this)
+                    .setUrl("https://pluginapi.codehat.de/plugins")
+                    .setPluginId("Syjzymgdz")
+                    .setCurrentVersion(description.version)
+                    .onNewVersion {
+                        logger.info("New version (v$it) is available!")
+                        updateAvailablePair = Pair(true, it)
+                    }
+                    .onLatestVersion {
+                        logger.info("No new version available.")
+                    }
+                    .onError {
+                        logger.warning("Unable to check for an update!")
+                    }
+                    .build()
+            updateChecker.check()
         }
     }
 

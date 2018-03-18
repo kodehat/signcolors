@@ -22,7 +22,7 @@ permissions:
       signcolors.reload: true
       signcolors.specialsign.create: true
       signcolors.specialsign.use: true
-      signcolors.updatemsg: true
+      signcolors.updatemessage: true
       signcolors.craftsigns.bypass: true
       signcolors.listcodes: true
       signcolors.givesign: true
@@ -40,7 +40,7 @@ permissions:
     description: Allows you to create a [SC] sign.
   signcolors.specialsign.use:
     description: Allows you to use a [SC] sign.
-  signcolors.updatemsg:
+  signcolors.updatemessage:
     description: Shows an update message to you upon joining the server, if an update is available.
   signcolors.craftsigns.bypass:
     description: Allows you to apply colors on a normal sign, even if 'sign_crafting' is true.

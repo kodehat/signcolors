@@ -21,7 +21,14 @@ class PlayerListener: Listener {
     @Suppress("unused")
     @EventHandler
     fun onPlayerJoinShowUpdateMessage(event: PlayerJoinEvent) {
+        val player = event.player
 
+        if (SignColors.instance.updateAvailablePair.first
+                && player.hasPermission(Permissions.SHOW_UPDATE_MESSAGE.value())) {
+            val version = SignColors.instance.updateAvailablePair.second
+            val playerMessage = SignColors.languageConfig.get(LanguageKey.NEW_VERSION_AVAILABLE)
+            player.sendLogoMsg(String.format(playerMessage, version))
+        }
     }
 
     @Suppress("unused")
