@@ -10,6 +10,16 @@ class CommandManager: CommandExecutor {
 
     private val commands: MutableMap<String, Command> = mutableMapOf()
 
+    companion object {
+        const val CMD_PREFIX = "sc"
+        const val CMD_INFO = ""
+        const val CMD_HELP = "help"
+        const val CMD_RELOAD = "reload"
+        const val CMD_COLOR_CODES = "colorcodes"
+        const val CMD_GIVE_SIGN = "givesign"
+        const val CMD_MIGRATE_DATABASE = "migratedb"
+    }
+
     override fun onCommand(sender: CommandSender, command: org.bukkit.command.Command, label: String, args: Array<out String>): Boolean {
         when {
             args.isEmpty() -> commands[""]?.onCommand(sender, command, label, args)

@@ -72,6 +72,7 @@ dependencies {
 shadowJar {
     classifier = null
 
+    relocate 'de.codehat.pluginupdatechecker', 'de.codehat.signcolors.update'
     relocate 'org.bstats.bukkit', 'de.codehat.signcolors.metrics'
 }
 

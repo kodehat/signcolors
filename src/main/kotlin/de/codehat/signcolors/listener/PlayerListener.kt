@@ -5,6 +5,7 @@ import de.codehat.signcolors.language.LanguageKey
 import de.codehat.signcolors.permission.Permissions
 import de.codehat.signcolors.util.SoundUtil
 import de.codehat.signcolors.util.color
+import de.codehat.signcolors.util.hasPermission
 import de.codehat.signcolors.util.sendLogoMsg
 import org.bukkit.ChatColor
 import org.bukkit.block.Sign
@@ -24,7 +25,7 @@ class PlayerListener: Listener {
         val player = event.player
 
         if (SignColors.instance.updateAvailablePair.first
-                && player.hasPermission(Permissions.SHOW_UPDATE_MESSAGE.value())) {
+                && player.hasPermission(Permissions.SHOW_UPDATE_MESSAGE)) {
             val version = SignColors.instance.updateAvailablePair.second
             val playerMessage = SignColors.languageConfig.get(LanguageKey.NEW_VERSION_AVAILABLE)
             player.sendLogoMsg(String.format(playerMessage, version))
@@ -51,7 +52,7 @@ class PlayerListener: Listener {
                 val dataLine = clickedSign.getLine(2)
 
                 if (indicatorLine == SignListener.SPECIAL_SIGN_INDICATOR.color()) {
-                    if (player.hasPermission(Permissions.SPECIAL_SIGN_USE.value())) {
+                    if (player.hasPermission(Permissions.SPECIAL_SIGN_USE)) {
 
                         // Check if Vault is installed
                         if (!SignColors.isVaultAvailable().first) {

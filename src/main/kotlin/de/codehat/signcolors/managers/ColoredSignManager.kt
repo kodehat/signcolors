@@ -1,6 +1,7 @@
 package de.codehat.signcolors.managers
 
 import de.codehat.signcolors.SignColors
+import de.codehat.signcolors.config.abstraction.ConfigKey
 import de.codehat.signcolors.language.LanguageKey
 import de.codehat.signcolors.manager.abstraction.Manager
 import de.codehat.signcolors.util.color
@@ -15,7 +16,7 @@ class ColoredSignManager: Manager {
     private val namespacedKey = NamespacedKey(SignColors.instance, SignColors.instance.description.name)
 
     internal var oldSignAmount = 0
-    internal var signCrafting = SignColors.instance.config.getBoolean("sign_crafting")
+    internal var signCrafting = SignColors.instance.config.getBoolean(ConfigKey.SIGN_CRAFTING.toString())
     internal var coloredSignStack = getColoredSignStack()
         private set
 
@@ -33,7 +34,7 @@ class ColoredSignManager: Manager {
         if (signCrafting) {
 
             // Check if recipe type is set to 'shapeless'
-            val recipeType = SignColors.instance.config.getString("recipes.type")
+            val recipeType = SignColors.instance.config.getString(ConfigKey.RECIPES_TYPE.toString())
             when (recipeType) {
                 "shapeless" -> addShapelessRecipe()
                 "shaped" -> addShapedRecipe()
@@ -46,7 +47,7 @@ class ColoredSignManager: Manager {
     }
 
     private fun addShapelessRecipe() {
-        val ingredients = SignColors.instance.config.getList("recipes.shapeless.ingredients").filterIsInstance<String>()
+        val ingredients = SignColors.instance.config.getList(ConfigKey.RECIPES_SHAPELESS_INGREDIENTS.toString()).filterIsInstance<String>()
         if (ingredients.size > MAX_INGREDIENTS) {
             with(SignColors.instance.logger) {
                 warning("You have added more than nine crafting items to the config.")
@@ -55,13 +56,14 @@ class ColoredSignManager: Manager {
             }
         }
         val recipeStack = ItemStack(coloredSignStack)
-        recipeStack.amount = SignColors.instance.config.getInt("sign_amount.crafting")
+        recipeStack.amount = SignColors.instance.config.getInt(ConfigKey.SIGN_AMOUNT_CRAFTING.toString())
         val shapelessRecipe = ShapelessRecipe(namespacedKey, coloredSignStack)
 
         ingredients.forEach {
             if (it.contains(":")) {
                 val ingredientData = it.split(":")
                 val material = Material.getMaterial(ingredientData[0])
+                @Suppress("DEPRECATION")
                 shapelessRecipe.addIngredient(material, ingredientData[1].toInt())
             } else {
                 Material.getMaterial(it).apply {
@@ -73,7 +75,7 @@ class ColoredSignManager: Manager {
     }
 
     private fun addShapedRecipe() {
-        val shapes = SignColors.instance.config.getList("recipes.shaped.crafting_shape").filterIsInstance<String>()
+        val shapes = SignColors.instance.config.getList(ConfigKey.RECIPES_SHAPED_CRAFTING_SHAPE.toString()).filterIsInstance<String>()
         if (shapes.size > MAX_SHAPES) {
             with(SignColors.instance.logger) {
                 warning("You have added more than three recipe shapes to the config.")
@@ -82,7 +84,7 @@ class ColoredSignManager: Manager {
             }
         }
         val recipeStack = ItemStack(coloredSignStack)
-        recipeStack.amount = SignColors.instance.config.getInt("sign_amount.crafting")
+        recipeStack.amount = SignColors.instance.config.getInt(ConfigKey.SIGN_AMOUNT_CRAFTING.toString())
         val shapedRecipe = ShapedRecipe(namespacedKey, recipeStack)
 
         when(shapes.size) {
@@ -97,13 +99,14 @@ class ColoredSignManager: Manager {
                 }
             }
         }
-        val ingredientsSection = SignColors.instance.config.getConfigurationSection("recipes.shaped.ingredients")
+        val ingredientsSection = SignColors.instance.config.getConfigurationSection(ConfigKey.RECIPES_SHAPED_INGREDIENTS.toString())
 
         ingredientsSection.getKeys(false).forEach {
             val value = ingredientsSection[it].toString()
             if (value.contains(":")) {
                 val ingredientData = value.split(":")
                 val material = Material.getMaterial(ingredientData[0])
+                @Suppress("DEPRECATION")
                 shapedRecipe.setIngredient(it.toString()[0], material, ingredientData[1].toInt())
             } else {
                 Material.getMaterial(value).apply {

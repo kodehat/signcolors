@@ -4,6 +4,7 @@ import de.codehat.pluginupdatechecker.UpdateChecker
 import de.codehat.signcolors.command.CommandManager
 import de.codehat.signcolors.command.TabCompletion
 import de.codehat.signcolors.commands.*
+import de.codehat.signcolors.config.abstraction.ConfigKey
 import de.codehat.signcolors.configs.LanguageConfig
 import de.codehat.signcolors.daos.SignLocationDao
 import de.codehat.signcolors.database.MysqlDatabase
@@ -36,6 +37,9 @@ class SignColors: JavaPlugin() {
     lateinit var coloredSignManager: ColoredSignManager
 
     companion object {
+        const val UPDATE_CHECKER_URL = "https://pluginapi.codehat.de/plugins"
+        const val UPDATE_CHECKER_PLUGIN_ID = "Syjzymgdz"
+
         internal lateinit var instance: SignColors
         internal lateinit var languageConfig: LanguageConfig
         internal var debug = false
@@ -83,7 +87,7 @@ class SignColors: JavaPlugin() {
     }
 
     private fun loadLanguage() {
-        val language = config.getString("language")
+        val language = config.getString(ConfigKey.LANGUAGE.toString())
         languageConfig = LanguageConfig(language)
 
         logger.info("Loaded language '$language'.")
@@ -107,7 +111,7 @@ class SignColors: JavaPlugin() {
     }
 
     internal fun loadDatabase() {
-        val databaseType = config.getString("database.type")
+        val databaseType = config.getString(ConfigKey.DATABASE_TYPE.toString())
 
         if (databaseType.equals("sqlite", true)) {
             val sqliteDatabasePath = dataFolder.absolutePath + File.separator + "sign_locations.db"
@@ -117,11 +121,11 @@ class SignColors: JavaPlugin() {
             logger.info("Using SQLite to save sign locations (path to DB is '$sqliteDatabasePath').")
         } else if (databaseType.equals("mysql", true)) {
             database = MysqlDatabase(MysqlDatabase.createConnectionString(
-                    config.getString("database.host"),
-                    config.getInt("database.port"),
-                    config.getString("database.name"),
-                    config.getString("database.user"),
-                    config.getString("database.password")
+                    config.getString(ConfigKey.DATABASE_HOST.toString()),
+                    config.getInt(ConfigKey.DATABASE_PORT.toString()),
+                    config.getString(ConfigKey.DATABASE_NAME.toString()),
+                    config.getString(ConfigKey.DATABASE_USER.toString()),
+                    config.getString(ConfigKey.DATABASE_PASSWORD.toString())
             ))
 
             logger.info("Using MySQL to save sign locations.")
@@ -134,14 +138,15 @@ class SignColors: JavaPlugin() {
 
     private fun registerCommands() {
         with(commandManager) {
-            registerCommand("", InfoCommand())
-            registerCommand("help", HelpCommand())
-            registerCommand("givesign", GiveSignCommand())
-            registerCommand("colorcodes", ColorcodesCommand())
-            registerCommand("reload", ReloadCommand())
+            registerCommand(CommandManager.CMD_INFO, InfoCommand())
+            registerCommand(CommandManager.CMD_HELP, HelpCommand())
+            registerCommand(CommandManager.CMD_GIVE_SIGN, GiveSignCommand())
+            registerCommand(CommandManager.CMD_COLOR_CODES, ColorcodesCommand())
+            registerCommand(CommandManager.CMD_RELOAD, ReloadCommand())
+            registerCommand(CommandManager.CMD_MIGRATE_DATABASE, MigrateDatabaseCommand())
         }
 
-        with(getCommand("sc")) {
+        with(getCommand(CommandManager.CMD_PREFIX)) {
             executor = commandManager
             tabCompleter = TabCompletion()
         }
@@ -156,7 +161,7 @@ class SignColors: JavaPlugin() {
     }
 
     private fun startMetricsIfEnabled() {
-        if (config.getBoolean("other.metrics")) {
+        if (config.getBoolean(ConfigKey.OTHER_METRICS.toString())) {
             logger.info("Metrics are enabled :)")
             Metrics(this).apply {
                 addCustomChart(Metrics.SimplePie("sign_crafting", {
@@ -169,11 +174,11 @@ class SignColors: JavaPlugin() {
     }
 
     private fun startUpdateCheckerIfEnabled() {
-        if (config.getBoolean("other.update_check")) {
+        if (config.getBoolean(ConfigKey.OTHER_UPDATE_CHECK.toString())) {
             logger.info("Checking for an update...")
             val updateChecker = UpdateChecker.Builder(this)
-                    .setUrl("https://pluginapi.codehat.de/plugins")
-                    .setPluginId("Syjzymgdz")
+                    .setUrl(UPDATE_CHECKER_URL)
+                    .setPluginId(UPDATE_CHECKER_PLUGIN_ID)
                     .setCurrentVersion(description.version)
                     .onNewVersion {
                         logger.info("New version (v$it) is available!")

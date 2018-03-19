@@ -1,11 +1,11 @@
 #--------------------------------------------------------
-#  PLUGIN SETTINGS:
+#  SIGNCOLORS PLUGIN SETTINGS:
 #--------------------------------------------------------
 
 # Sets the plugin language.
 # English (EN) and German (DE) are implemented by default.
 # You can add your own language by adding a
-# lang-YOURLANGCODE.yml file to the plugin's folder.
+# lang-YOUR_LANG_CODE.yml file to the plugin's folder.
 # If you want your language file to be included in the plugin
 # natively, open a pull request at the plugin's GitHub repository.
 language: 'EN'
@@ -114,9 +114,8 @@ sounds:
 database:
   # Can either be 'sqlite' or 'mysql'.
   # If you choose 'mysql' you have to enter your mysql data/credentials
-  # below the "type" field.
-  #
-  # If you choose 'sqlite' additional changes aren't required.
+  # below the 'type' field.
+  # If you choose 'sqlite' no additional changes are required.
   type: 'sqlite'
   # The hostname of your MySQL server.
   host: '127.0.0.1'

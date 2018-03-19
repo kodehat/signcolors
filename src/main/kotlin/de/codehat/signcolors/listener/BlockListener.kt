@@ -2,6 +2,7 @@ package de.codehat.signcolors.listener
 
 import de.codehat.signcolors.SignColors
 import de.codehat.signcolors.permission.Permissions
+import de.codehat.signcolors.util.hasPermission
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
@@ -19,7 +20,7 @@ class BlockListener: Listener {
         val itemInMainHand = player.inventory.itemInMainHand
 
         if (itemInMainHand != null && SignColors.instance.coloredSignManager.signCrafting
-            && !player.hasPermission(Permissions.BYPASS_SIGN_CRAFTING.value())) {
+            && !player.hasPermission(Permissions.BYPASS_SIGN_CRAFTING)) {
             if (itemInMainHand.amount == 1 && itemInMainHand.type == Material.SIGN
                 && itemInMainHand.itemMeta.hasLore()) {
                 SignColors.instance.fixSignPlayers.add(player)

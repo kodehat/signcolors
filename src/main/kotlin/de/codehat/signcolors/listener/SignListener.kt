@@ -1,10 +1,12 @@
 package de.codehat.signcolors.listener
 
 import de.codehat.signcolors.SignColors
+import de.codehat.signcolors.config.abstraction.ConfigKey
 import de.codehat.signcolors.language.LanguageKey
 import de.codehat.signcolors.permission.Permissions
 import de.codehat.signcolors.util.SoundUtil
 import de.codehat.signcolors.util.color
+import de.codehat.signcolors.util.hasPermission
 import de.codehat.signcolors.util.sendLogoMsg
 import org.bukkit.ChatColor
 import org.bukkit.Material
@@ -22,7 +24,7 @@ class SignListener: Listener {
         const val SPECIAL_SIGN_INDICATOR = "&6[&3SC&6]"
 
         private fun applyColorsOnSign(event: SignChangeEvent, player: Player) {
-            val colorCharacter = SignColors.instance.config.getString("color_character")
+            val colorCharacter = SignColors.instance.config.getString(ConfigKey.COLOR_CHARACTER.toString())
 
             for (line in 0..3) {
                 if (event.getLine(line).isEmpty() || !event.getLine(line).contains(colorCharacter)) continue
@@ -31,13 +33,12 @@ class SignListener: Listener {
                 var newLine = ""
                 if (colorLine.isNotEmpty()) newLine = colorLine[0]
                 colorLine.forEach {
-                    var color = 0
                     if (it == colorLine[0]) return@forEach
                     if (it.isEmpty() || ALL_COLOR_CODES.indexOf(it.toLowerCase()[0]) == -1) {
                         newLine += colorCharacter + it
                         return@forEach
                     }
-                    color = ALL_COLOR_CODES.indexOf(it.toLowerCase()[0])
+                    val color = ALL_COLOR_CODES.indexOf(it.toLowerCase()[0])
                     if (color == -1 || !checkColorPermissions(player, color)) {
                         newLine += colorCharacter + it
                     } else {
@@ -51,8 +52,8 @@ class SignListener: Listener {
 
         private fun checkColorPermissions(player: Player, color: Int): Boolean {
             val colorChar = ALL_COLOR_CODES[color]
-            return (color == 0) || player.hasPermission(Permissions.USE_SPECIFIC_COLOR.value() + colorChar)
-                || player.hasPermission(Permissions.ALL.value()) || player.hasPermission(Permissions.USE_ALL_COLORS.value())
+            return (color == 0) || player.hasPermission(Permissions.USE_SPECIFIC_COLOR.toString() + colorChar)
+                    || player.hasPermission(Permissions.USE_SPECIFIC_FORMAT.toString() + colorChar)
         }
 
         private fun applyLinesOnSpecialSign(event: SignChangeEvent, amount: Int, price: Double) {
@@ -73,7 +74,7 @@ class SignListener: Listener {
         val itemInMainHand = player.inventory.itemInMainHand
 
         if (SignColors.instance.coloredSignManager.signCrafting) {
-            if (!player.hasPermission(Permissions.BYPASS_SIGN_CRAFTING.value())) {
+            if (!player.hasPermission(Permissions.BYPASS_SIGN_CRAFTING)) {
                 if (itemInMainHand.type == Material.AIR) {
                     if (SignColors.instance.fixSignPlayers.contains(player)) {
                         SignColors.instance.fixSignPlayers.remove(player)
@@ -101,7 +102,7 @@ class SignListener: Listener {
         val player = event.player
 
         if (event.getLine(0).equals(SPECIAL_SIGN_LINE, true)) {
-            if (player.hasPermission(Permissions.SPECIAL_SIGN_CREATE.value())) {
+            if (player.hasPermission(Permissions.SPECIAL_SIGN_CREATE)) {
                 val dataLine = event.getLine(1)
                 // Check if line 1 isn't empty and contains the sign amount and the price split with ":"
                 if (dataLine.isNotEmpty() && dataLine.contains(":")) {
@@ -130,7 +131,8 @@ class SignListener: Listener {
                     applyLinesOnSpecialSign(event, signAmount, signPrice)
                 } else { // Apply lines on special sign with default values
                     with(SignColors.instance.config) {
-                        applyLinesOnSpecialSign(event, getInt("sign_amount.sign"), getDouble("price"))
+                        applyLinesOnSpecialSign(event, getInt(ConfigKey.SIGN_AMOUNT_SPECIAL_SIGN.toString()),
+                                getDouble(ConfigKey.PRICE.toString()))
                     }
                 }
 
@@ -147,13 +149,13 @@ class SignListener: Listener {
         val firstLine = event.getLine(0).trim().replace(ChatColor.COLOR_CHAR.toString(), "&", true)
 
         // If player has permission to create a special sign, let him create it
-        if (firstLine == SPECIAL_SIGN_INDICATOR && player.hasPermission(Permissions.SPECIAL_SIGN_CREATE.value())) return
+        if (firstLine == SPECIAL_SIGN_INDICATOR && player.hasPermission(Permissions.SPECIAL_SIGN_CREATE.toString())) return
 
         // Contains all blocked first lines defined in config
         val blockedLines = SignColors.instance.config.getList("blocked_first_lines").filterIsInstance<String>()
 
         // Check if the first line is a blocked line
-        if (blockedLines.contains(firstLine) && !player.hasPermission(Permissions.BYPASS_BLOCKED_FIRST_LINES.value())) {
+        if (blockedLines.contains(firstLine) && !player.hasPermission(Permissions.BYPASS_BLOCKED_FIRST_LINES.toString())) {
             // Line is blocked, let's cancel the event
             player.sendLogoMsg(LanguageKey.BLOCKED_FIRST_LINE_WRITTEN)
             event.isCancelled = true

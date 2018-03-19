@@ -11,7 +11,7 @@ class SoundUtil {
 
             if (!config.getBoolean("$configPath.enabled")) return
 
-            var sound: Sound? = null
+            val sound: Sound?
             try {
                 sound = Sound.valueOf(config.getString("$configPath.type"))
             } catch (e: IllegalArgumentException) {
