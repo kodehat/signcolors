@@ -6,7 +6,7 @@ Repository of the SignColors plugin.
 ## Development Builds
 
 **NOTE!:**
-Development builds for SignColors can be found at the server below. These builds may be unstable and may cause errors. Use them at your own risk!
+Development builds for SignColors can be found at the Jenkins server below. These builds may be unstable and may cause errors. Use them at your own risk!
 Link: [https://ci.codehat.de/job/SignColors/](https://ci.codehat.de/job/SignColors/ "SignColors Development Builds")
 
 ## Commands
