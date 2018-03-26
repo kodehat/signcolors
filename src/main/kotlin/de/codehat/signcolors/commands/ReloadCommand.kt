@@ -19,10 +19,10 @@ class ReloadCommand: Command() {
         with(SignColors) {
             instance.coloredSignManager.oldSignAmount = instance.config.getInt("sign_amount.crafting")
             instance.reloadConfig()
-            languageConfig.reload() //TODO: Reload language config accordingly!
-            instance.coloredSignManager.removeRecipe() //TODO: Remove recipe accordingly!
-            instance.coloredSignManager.setup() //TODO: Reload colored sign recipe accordingly!
-            //instance.loadDatabase() //TODO: Reload database accordingly!
+            instance.loadLanguage()
+            //languageConfig.reload()
+            //instance.coloredSignManager.removeRecipe()
+            //instance.coloredSignManager.setup()
         }
 
         sender.sendLogoMsg(LanguageKey.CONFIG_RELOAD)

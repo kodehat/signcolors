@@ -22,7 +22,7 @@ class InfoCommand: Command() {
             sendColoredMsg(" ${SignColors.languageConfig.get(LanguageKey.INFO_AUTHOR)} &a${SignColors.instance.description.authors.joinToString(",")}")
             sendColoredMsg(" ${SignColors.languageConfig.get(LanguageKey.INFO_VERSION)} &a${SignColors.instance.description.version}")
             sendColoredMsg(" ${SignColors.languageConfig.get(LanguageKey.INFO_CMD_HELP)}")
-            sendColoredMsg("&6+----------------------------------------------------+")
+            sendColoredMsg("&6+---------------------------------------------------+")
         }
     }
 }

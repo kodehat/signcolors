@@ -86,7 +86,7 @@ class SignColors: JavaPlugin() {
         BackupOldFilesManager()
     }
 
-    private fun loadLanguage() {
+    internal fun loadLanguage() {
         val language = config.getString(ConfigKey.LANGUAGE.toString())
         languageConfig = LanguageConfig(language)
 

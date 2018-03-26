@@ -19,6 +19,7 @@ color_character: '&'
 sign_crafting: true
 
 # Recipe settings section.
+# You'll have to restart the server, if you make changes here!
 recipes:
   # There are two different types of recipes:
   # "shaped":
@@ -111,6 +112,7 @@ sounds:
     pitch: 1.0
 
 # Database settings section.
+# You'll have to restart the server, if you make changes here!
 database:
   # Can either be 'sqlite' or 'mysql'.
   # If you choose 'mysql' you have to enter your mysql data/credentials
@@ -129,6 +131,7 @@ database:
   password: 'JustAnExamplePassword'
 
 # Other settings section.
+# You'll have to restart the server, if you make changes here!
 other:
   # Send some statistics to bstats.org.
   metrics: true

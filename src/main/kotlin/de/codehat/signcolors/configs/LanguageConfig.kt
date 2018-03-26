@@ -12,5 +12,4 @@ class LanguageConfig(language: String = "en"): Config("lang-$language.yml") {
     fun get(languageKey: LanguageKey): String {
         return cfg.getString(languageKey.toString())
     }
-
 }

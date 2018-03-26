@@ -18,12 +18,12 @@ class HelpCommand: Command() {
         }
 
         sender.sendColoredMsg("""
-            |${SignColors.languageConfig.get(LanguageKey.TAG)} &aHelp page
-            | &c[] &arequired, &7<> &aoptional
+            |${SignColors.languageConfig.get(LanguageKey.TAG)} ${SignColors.languageConfig.get(LanguageKey.HELP_PAGE)}
+            | &c[] ${SignColors.languageConfig.get(LanguageKey.PARAMETER_REQUIRED)}, &7<> ${SignColors.languageConfig.get(LanguageKey.PARAMETER_OPTIONAL)}
             ${ if (sender.hasPermission(Permissions.CMD_INFO)) "| &7&l- &r&6/sc" else ""}
             ${ if (sender.hasPermission(Permissions.CMD_HELP)) "| &7&l- &r&6/sc &ehelp" else ""}
             ${ if (sender.hasPermission(Permissions.CMD_RELOAD)) "| &7&l- &r&6/sc &ereload" else ""}
-            ${ if (sender.hasPermission(Permissions.CMD_GIVE_SIGN)) "| &7&l- &r&6/sc &egivesign &c[&eplayer&c] &c[&eamount&c]" else ""}
+            ${ if (sender.hasPermission(Permissions.CMD_GIVE_SIGN)) "| &7&l- &r&6/sc &egivesign &c[&e${SignColors.languageConfig.get(LanguageKey.PARAMETER_PLAYER)}&c] &c[&e${SignColors.languageConfig.get(LanguageKey.PARAMETER_AMOUNT)}&c]" else ""}
             ${ if (sender.hasPermission(Permissions.CMD_COLOR_CODES)) "| &7&l- &r&6/sc &ecolorcodes" else ""}
             """.trimMargin())
     }

@@ -5,6 +5,7 @@ import de.codehat.signcolors.config.abstraction.ConfigKey
 import de.codehat.signcolors.language.LanguageKey
 import de.codehat.signcolors.manager.abstraction.Manager
 import de.codehat.signcolors.util.color
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
@@ -118,15 +119,16 @@ class ColoredSignManager: Manager {
     }
 
     internal fun removeRecipe() {
-        val recipeIterator = SignColors.instance.server.recipeIterator()
+        //TODO: Not working anymore since MC 1.12, because the recipe iterator is immutable now!
+        /*val recipeIterator = SignColors.instance.server.recipeIterator()
         while (recipeIterator.hasNext()) {
             val recipe = recipeIterator.next()
 
-            //TODO: Check if only the correct recipe is removed!?
-            if (recipe != null && recipe.result.type == Material.SIGN && recipe.result.amount == oldSignAmount) {
+            if (recipe != null && recipe.result.type == Material.SIGN && recipe.result.amount == oldSignAmount
+                    && recipe.result.hasItemMeta() && recipe.result.itemMeta.hasLore()) {
                 recipeIterator.remove()
             }
-        }
+        }*/
     }
 
     private fun getColoredSignStack(amount: Int = 1): ItemStack {

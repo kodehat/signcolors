@@ -17,7 +17,7 @@ class GiveSignCommand: Command() {
             return
         }
 
-        if (args.size == 1 || args.size > 3) {
+        if (args.size == 1 || args.size < 3) {
             sender.sendLogoMsg("&6/sc &egivesign &c[&eplayer&c] &c[&eamount&c]")
             return
         }

@@ -13,7 +13,16 @@ abstract class Config(private val fileName: String) {
 
     protected fun setup(extract: Boolean) {
         if (!file.exists()) {
-            if (extract) SignColors.instance.saveResource(this.fileName, false) // May throw an exception if resource is not found
+            if (extract) {
+                try {
+                    SignColors.instance.saveResource(this.fileName, false)
+                } catch (e: IllegalArgumentException) {
+                    with(SignColors.instance.logger) {
+                        warning("Unable to load file '$fileName'.")
+                    }
+                    return
+                }
+            } // May throw an exception if resource is not found
             else this.file.createNewFile()
         }
 
