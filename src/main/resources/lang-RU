@@ -1,0 +1,31 @@
+TAG: '&6[&3SignColors&6]'
+NO_PERMISSION: "&cВам не разрешено делать это!"
+UNKNOWN_CMD: '&cНеизвестная команда!'
+PARAMETER_REQUIRED: '&aОбязателен'
+PARAMETER_OPTIONAL: '&aНе обязателен'
+PARAMETER_PLAYER: 'player'
+PARAMETER_AMOUNT:  'amount'
+COLOR_CODES_COLORS: 'Цвета'
+COLOR_CODES_FORMATS: 'Форматирование'
+INFO_AUTHOR: '&6Разработано:'
+INFO_VERSION: '&6Версия:'
+INFO_CMD_HELP: '&aИспользуйте &6/sc help &aЧтобы увидеть список команд.'
+HELP_PAGE: '&aСтраница помощи'
+SIGN_NAME: '&aS&3i&6g&cn'
+SIGN_LORE: '&7Табличка с цветами'
+CONFIG_RELOAD: '&aКонфигурация была успешно перезагружена!'
+SPECIAL_SIGN_INCORRECT_DATA_FORMAT: '&cНеправильный формат!'
+SPECIAL_SIGN_INCORRECT_DATA_FORMAT_PLAYER: '&cЭта табличка была неправильно отформатирована! Скажите администратору'
+SPECIAL_SIGN_AMOUNT_OR_PRICE_TOO_LOW: "&cЦена и количество не могут быть нулем или меньше!"
+SPECIAL_SIGN_LINE_TWO: 'Количество : Цена'
+SPECIAL_SIGN_LINE_FOUR: '&4*Нажми на меня*'
+SPECIAL_SIGN_RECEIVED_SIGNS: "&aВы купили &6$%s &afor &6%s &aцветных табличек."
+BLOCKED_FIRST_LINE_WRITTEN: "&cВам не разрешено делать специальную первую строчку!"
+NOT_ENOUGH_MONEY: "&cУ вас нет денег чтобы купить таблички!"
+NOT_ENOUGH_SPACE: "&cУ вас в инвентаре не достаточно места для табличек!"
+VAULT_MISSING: "&cПлагин 'Vault' отсутствует. Скажите администратору!"
+PLAYER_NOT_AVAILABLE: '&cИгрок не найден или офлайн!'
+GIVE_SIGN_INVALID_AMOUNT: '&cКоличество неправильное!'
+GIVE_SIGN_DONATOR_SUCCESS: '&aВы дали &6%s &aцветнах табличек &6%s&a.'
+GIVE_SIGN_TARGET_SUCCESS: '&aВы получили &6%s &aцветных табличек от &6%s&a.'
+NEW_VERSION_AVAILABLE: '&aВышла новая версия (v%s)!'
