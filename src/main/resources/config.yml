@@ -133,8 +133,6 @@ database:
 # Other settings section.
 # You'll have to restart the server, if you make changes here!
 other:
-  # Send some statistics to bstats.org.
-  metrics: true
   # Should the plugin check if an update is available?
   update_check: true
   # Makes the plugin's log messages more verbose.
