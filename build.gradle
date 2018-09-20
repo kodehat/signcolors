@@ -1,14 +1,16 @@
 buildscript {
-    ext.kotlin_version = '1.2.31'
+    ext.kotlin_version = '1.2.51'
     ext.shadow_version = '2.0.2'
 
     repositories {
         mavenCentral()
         jcenter()
+        maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.github.jengelman.gradle.plugins:shadow:$shadow_version"
+        classpath "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.0.0.RC6-4"
     }
 }
 
@@ -16,10 +18,11 @@ group 'de.codehat'
 version '1.2.0'
 
 apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: "io.gitlab.arturbosch.detekt"
 apply plugin: 'java'
 apply plugin: 'kotlin'
 
-final def BUKKIT_VERSION = '1.12.2-R0.1-SNAPSHOT'
+final def BUKKIT_VERSION = '1.13-pre7-R0.1-SNAPSHOT'
 final def VAULT_VERSION = '1.6'
 final def BSTATS_VERSION = '1.2'
 final def UPDATER_VERSION = '1.0.0'
@@ -74,6 +77,15 @@ shadowJar {
 
     relocate 'de.codehat.pluginupdatechecker', 'de.codehat.signcolors.update'
     relocate 'org.bstats.bukkit', 'de.codehat.signcolors.metrics'
+}
+
+detekt {
+    version = "1.0.0.RC6-4"
+    profile("main") {
+        input = "$projectDir/src/main/kotlin"
+        config = "$projectDir/detekt.yml"
+        filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
+    }
 }
 
 compileKotlin {

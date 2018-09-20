@@ -18,7 +18,7 @@ class GiveSignCommand: Command() {
         }
 
         if (args.size == 1 || args.size < 3) {
-            sender.sendLogoMsg("&6/sc &egivesign &c[&eplayer&c] &c[&eamount&c]")
+            sender.sendLogoMsg("&6/sc &egivesign &c[&e${SignColors.languageConfig.get(LanguageKey.PARAMETER_PLAYER)}&c] &c[&e${SignColors.languageConfig.get(LanguageKey.PARAMETER_AMOUNT)}&c]")
             return
         }
 
