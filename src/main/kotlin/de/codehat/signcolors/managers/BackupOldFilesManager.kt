@@ -43,7 +43,7 @@ class BackupOldFilesManager: Manager {
         val zos = ZipOutputStream(fos)
 
         // Add all .yml files to the .zip file
-        dataFolder.listFiles({ _, name -> name.endsWith(".yml")}).forEach {
+        dataFolder.listFiles { _, name -> name.endsWith(".yml")}.forEach {
             SignColors.instance.logger.info("Backing up '${it.name}'")
             addToZipFile(it, zos)
         }
@@ -52,7 +52,7 @@ class BackupOldFilesManager: Manager {
         fos.close()
 
         // Now delete all old files
-        dataFolder.listFiles({ _, name -> name.endsWith(".yml")}).forEach {
+        dataFolder.listFiles { _, name -> name.endsWith(".yml")}.forEach {
             SignColors.instance.logger.info("Deleting old '${it.name}'")
             it.delete()
         }

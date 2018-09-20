@@ -5,6 +5,7 @@ website: https://www.spigotmc.org/resources/signcolors.6135/
 softdepend: [Vault]
 description: Be able to apply colors on signs.
 version: 1.2.0
+api-version: 1.13
 
 commands:
   sc:

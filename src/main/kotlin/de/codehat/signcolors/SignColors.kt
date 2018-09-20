@@ -17,7 +17,6 @@ import de.codehat.signcolors.listener.SignListener
 import de.codehat.signcolors.managers.BackupOldFilesManager
 import de.codehat.signcolors.managers.ColoredSignManager
 import net.milkbowl.vault.economy.Economy
-import org.bstats.bukkit.Metrics
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
@@ -70,7 +69,6 @@ class SignColors: JavaPlugin() {
         loadManagers()
         registerCommands()
         registerListener()
-        startMetricsIfEnabled()
         startUpdateCheckerIfEnabled()
 
         logger.info("v${description.version} has been enabled.")
@@ -157,19 +155,6 @@ class SignColors: JavaPlugin() {
             registerEvents(BlockListener(), this@SignColors)
             registerEvents(SignListener(), this@SignColors)
             registerEvents(PlayerListener(), this@SignColors)
-        }
-    }
-
-    private fun startMetricsIfEnabled() {
-        if (config.getBoolean(ConfigKey.OTHER_METRICS.toString())) {
-            logger.info("Metrics are enabled :)")
-            Metrics(this).apply {
-                addCustomChart(Metrics.SimplePie("sign_crafting", {
-                    if (coloredSignManager.signCrafting) "yes" else "no"
-                }))
-            }
-        } else {
-            logger.info("Metrics are disabled :(")
         }
     }
 
