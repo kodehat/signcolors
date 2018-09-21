@@ -1,6 +1,6 @@
 buildscript {
-    ext.kotlin_version = '1.2.51'
-    ext.shadow_version = '2.0.2'
+    ext.kotlin_version = '1.2.70'
+    ext.shadow_version = '2.0.4'
 
     repositories {
         mavenCentral()
@@ -22,9 +22,8 @@ apply plugin: "io.gitlab.arturbosch.detekt"
 apply plugin: 'java'
 apply plugin: 'kotlin'
 
-final def BUKKIT_VERSION = '1.13-R0.1-SNAPSHOT'
-final def VAULT_VERSION = '1.6'
-final def BSTATS_VERSION = '1.2'
+final def BUKKIT_VERSION = '1.13.1-R0.1-SNAPSHOT'
+final def VAULT_VERSION = '1.7'
 final def UPDATER_VERSION = '1.0.0'
 final def ORMLITE_VERSION = '5.1'
 
@@ -46,10 +45,6 @@ repositories {
         url 'http://nexus.hc.to/content/repositories/pub_releases'
     }
     maven {
-        name 'bstats'
-        url "http://repo.bstats.org/content/repositories/releases"
-    }
-    maven {
         name 'CodeHat Bintray'
         url  "https://dl.bintray.com/codehat/maven-repo"
     }
@@ -57,9 +52,10 @@ repositories {
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compileOnly "org.spigotmc:spigot-api:$BUKKIT_VERSION"
     compileOnly "net.milkbowl.vault:VaultAPI:$VAULT_VERSION"
+
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile "com.j256.ormlite:ormlite-core:$ORMLITE_VERSION"
     compile "com.j256.ormlite:ormlite-jdbc:$ORMLITE_VERSION"
     compile "de.codehat:plugin-update-checker:$UPDATER_VERSION"
@@ -91,6 +87,6 @@ compileTestKotlin {
 
 task deploy(dependsOn: shadowJar, type: Copy) {
     from "build/libs"
-    into "D:\\Minecraft\\PluginTest-Server\\plugins"
+    into "D:\\Minecraft\\Plugin-Testserver\\plugins"
     include "*.jar"
 }

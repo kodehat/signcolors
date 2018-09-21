@@ -2,7 +2,7 @@ package de.codehat.signcolors.daos
 
 import com.j256.ormlite.jdbc.JdbcConnectionSource
 import de.codehat.signcolors.SignColors
-import de.codehat.signcolors.dao.abstraction.Dao
+import de.codehat.signcolors.dao.Dao
 import de.codehat.signcolors.database.model.SignLocation
 import org.bukkit.Location
 import org.bukkit.block.Block

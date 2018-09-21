@@ -1,6 +1,6 @@
 package de.codehat.signcolors.commands
 
-import de.codehat.signcolors.command.abstraction.Command
+import de.codehat.signcolors.command.Command
 import de.codehat.signcolors.language.LanguageKey
 import de.codehat.signcolors.permission.Permissions
 import de.codehat.signcolors.util.hasPermission

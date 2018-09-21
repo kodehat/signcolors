@@ -1,6 +1,5 @@
 package de.codehat.signcolors.command
 
-import de.codehat.signcolors.command.abstraction.Command
 import de.codehat.signcolors.language.LanguageKey
 import de.codehat.signcolors.util.sendLogoMsg
 import org.bukkit.command.CommandExecutor

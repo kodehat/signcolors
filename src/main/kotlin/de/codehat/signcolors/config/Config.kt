@@ -1,4 +1,4 @@
-package de.codehat.signcolors.config.abstraction
+package de.codehat.signcolors.config
 
 import de.codehat.signcolors.SignColors
 import org.bukkit.configuration.file.FileConfiguration

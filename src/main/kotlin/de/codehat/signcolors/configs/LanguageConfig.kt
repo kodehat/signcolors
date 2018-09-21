@@ -1,6 +1,6 @@
 package de.codehat.signcolors.configs
 
-import de.codehat.signcolors.config.abstraction.Config
+import de.codehat.signcolors.config.Config
 import de.codehat.signcolors.language.LanguageKey
 
 class LanguageConfig(language: String = "en"): Config("lang-$language.yml") {

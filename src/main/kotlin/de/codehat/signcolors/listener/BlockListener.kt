@@ -34,8 +34,8 @@ class BlockListener: Listener {
         val player = event.player
         val block = event.block
 
-        if (SignColors.instance.coloredSignManager.signCrafting && (block.type == Material.LEGACY_SIGN_POST
-                        || block.type == Material.WALL_SIGN || block.type == Material.SIGN)
+        if (SignColors.instance.coloredSignManager.signCrafting
+                && (block.type == Material.WALL_SIGN || block.type == Material.SIGN)
                 && SignColors.instance.signLocationDao.exists(block)) {
             block.type = Material.AIR
             if (player.gameMode == GameMode.SURVIVAL) {

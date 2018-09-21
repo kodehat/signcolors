@@ -1,6 +1,6 @@
 package de.codehat.signcolors.dependencies
 
-import de.codehat.signcolors.dependency.abstraction.Dependency
+import de.codehat.signcolors.dependency.Dependency
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.plugin.RegisteredServiceProvider
 import org.bukkit.plugin.java.JavaPlugin

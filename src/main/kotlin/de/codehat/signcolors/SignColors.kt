@@ -4,7 +4,7 @@ import de.codehat.pluginupdatechecker.UpdateChecker
 import de.codehat.signcolors.command.CommandManager
 import de.codehat.signcolors.command.TabCompletion
 import de.codehat.signcolors.commands.*
-import de.codehat.signcolors.config.abstraction.ConfigKey
+import de.codehat.signcolors.config.ConfigKey
 import de.codehat.signcolors.configs.LanguageConfig
 import de.codehat.signcolors.daos.SignLocationDao
 import de.codehat.signcolors.database.MysqlDatabase

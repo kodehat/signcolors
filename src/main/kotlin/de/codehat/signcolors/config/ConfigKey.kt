@@ -1,4 +1,4 @@
-package de.codehat.signcolors.config.abstraction
+package de.codehat.signcolors.config
 
 enum class ConfigKey(private val configKey: String) {
     LANGUAGE("language"),

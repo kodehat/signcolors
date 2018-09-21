@@ -1,4 +1,4 @@
-package de.codehat.signcolors.dependency.abstraction
+package de.codehat.signcolors.dependency
 
 import org.bukkit.plugin.java.JavaPlugin
 

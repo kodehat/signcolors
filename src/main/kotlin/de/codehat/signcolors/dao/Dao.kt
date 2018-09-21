@@ -1,4 +1,4 @@
-package de.codehat.signcolors.dao.abstraction
+package de.codehat.signcolors.dao
 
 import com.j256.ormlite.dao.DaoManager
 import com.j256.ormlite.jdbc.JdbcConnectionSource

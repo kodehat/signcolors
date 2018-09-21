@@ -1,7 +1,7 @@
 package de.codehat.signcolors.listener
 
 import de.codehat.signcolors.SignColors
-import de.codehat.signcolors.config.abstraction.ConfigKey
+import de.codehat.signcolors.config.ConfigKey
 import de.codehat.signcolors.language.LanguageKey
 import de.codehat.signcolors.permission.Permissions
 import de.codehat.signcolors.util.SoundUtil

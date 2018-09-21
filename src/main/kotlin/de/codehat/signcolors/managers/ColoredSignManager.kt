@@ -1,11 +1,10 @@
 package de.codehat.signcolors.managers
 
 import de.codehat.signcolors.SignColors
-import de.codehat.signcolors.config.abstraction.ConfigKey
+import de.codehat.signcolors.config.ConfigKey
 import de.codehat.signcolors.language.LanguageKey
-import de.codehat.signcolors.manager.abstraction.Manager
+import de.codehat.signcolors.manager.Manager
 import de.codehat.signcolors.util.color
-import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
@@ -50,15 +49,13 @@ class ColoredSignManager: Manager {
     private fun addShapelessRecipe() {
         val ingredients = SignColors.instance.config.getList(ConfigKey.RECIPES_SHAPELESS_INGREDIENTS.toString()).filterIsInstance<String>()
         if (ingredients.size > MAX_INGREDIENTS) {
-            with(SignColors.instance.logger) {
-                warning("You have added more than nine crafting items to the config.")
-                warning("Please change it or you won't be able to craft colored signs!")
-                return
-            }
+            SignColors.instance.logger.warning("You have added more than nine crafting items to the config.")
+            SignColors.instance.logger.warning("Please change it or you won't be able to craft colored signs!")
+            return
         }
         val recipeStack = ItemStack(coloredSignStack)
         recipeStack.amount = SignColors.instance.config.getInt(ConfigKey.SIGN_AMOUNT_CRAFTING.toString())
-        val shapelessRecipe = ShapelessRecipe(namespacedKey, coloredSignStack)
+        val shapelessRecipe = ShapelessRecipe(namespacedKey, recipeStack)
 
         ingredients.forEach {
             if (it.contains(":")) {

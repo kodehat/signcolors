@@ -1,7 +1,8 @@
 package de.codehat.signcolors.managers
 
 import de.codehat.signcolors.SignColors
-import de.codehat.signcolors.manager.abstraction.Manager
+import de.codehat.signcolors.config.ConfigKey
+import de.codehat.signcolors.manager.Manager
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileInputStream
@@ -13,6 +14,7 @@ class BackupOldFilesManager: Manager {
 
     companion object {
         const val CONFIG_VERSION = 6
+        private const val BUFFER_SIZE = 1024
 
         private fun addToZipFile(file: File, zos: ZipOutputStream) {
             val bis = BufferedInputStream(FileInputStream(file))
@@ -20,7 +22,7 @@ class BackupOldFilesManager: Manager {
 
             zos.putNextEntry(zipEntry)
 
-            bis.copyTo(zos, 1024)
+            bis.copyTo(zos, BUFFER_SIZE)
 
             zos.closeEntry()
             bis.close()
@@ -28,11 +30,16 @@ class BackupOldFilesManager: Manager {
     }
 
     init {
-        if (CONFIG_VERSION > SignColors.instance.config.getInt("other.config_version")) {
-            SignColors.instance.logger.info("Old config found! Making a backup of the old config now.")
-            setup()
-        } else {
-            SignColors.instance.logger.info("Config is up to date.")
+        when {
+            SignColors.instance.config.getInt(ConfigKey.OTHER_CONFIG_VERSION.toString()) == 0 -> {
+                SignColors.instance.logger.info("No config version code found! Making a backup of all old files now.")
+                setup()
+            }
+            CONFIG_VERSION > SignColors.instance.config.getInt(ConfigKey.OTHER_CONFIG_VERSION.toString()) -> {
+                SignColors.instance.logger.info("Old config version found! Making a backup of the old config now.")
+                setup()
+            }
+            else -> SignColors.instance.logger.info("Config is up to date.")
         }
     }
 

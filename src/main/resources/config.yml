@@ -47,10 +47,10 @@ recipes:
   # than three characters (whitespaces included) in one line!
   shaped:
     ingredients:
-      A: 'INK_SACK:1'
-      B: 'INK_SACK:2'
-      C: 'INK_SACK:4'
-      D: 'INK_SACK:11'
+      A: 'INK_SAC:1'
+      B: 'INK_SAC:2'
+      C: 'INK_SAC:4'
+      D: 'INK_SAC:11'
       S: 'SIGN'
     crafting_shape:
     - 'A B'
@@ -63,10 +63,10 @@ recipes:
   # You can add up to nine items/blocks.
   shapeless:
     ingredients:
-    - 'INK_SACK:1'
-    - 'INK_SACK:2'
-    - 'INK_SACK:4'
-    - 'INK_SACK:11'
+    - 'INK_SAC:1'
+    - 'INK_SAC:2'
+    - 'INK_SAC:4'
+    - 'INK_SAC:11'
     - 'SIGN'
 
 # Prevents players to create clickable signs like the

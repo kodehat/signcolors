@@ -1,4 +1,4 @@
-package de.codehat.signcolors.command.abstraction
+package de.codehat.signcolors.command
 
 import org.bukkit.command.CommandSender
 
