@@ -14,17 +14,18 @@ commands:
     aliases: [signcolors]
     
 permissions:
-  signcolors.*:
+  signcolors.all:
     description: Access to all features.
+    default: op
     children:
-      signcolors.command.*: true
-      signcolors.specialsign.*: true
+      signcolors.command.all: true
+      signcolors.specialsign.all: true
       signcolors.color.all: true
-      signcolors.format.all: true
+      signcolors.formatting.all: true
       signcolors.signcrafting.bypass: true
       signcolors.blockedfirstlines.bypass: true
       signcolors.updatemessage: true
-  signcolors.command.*:
+  signcolors.command.all:
     description: Access to all the plugin'a commands.
     children:
       signcolors.command.info: true
@@ -33,7 +34,7 @@ permissions:
       signcolors.command.colorcodes: true
       signcolors.command.givesign: true
       signcolors.command.migratedatabase: true
-  signcolors.specialsign.*:
+  signcolors.specialsign.all:
     description: Allows you to create and use [SC] signs.
     children:
       signcolors.specialsign.create: true
@@ -57,15 +58,15 @@ permissions:
       signcolors.color.d: true
       signcolors.color.e: true
       signcolors.color.f: true
-  signcolors.format.all:
-    description: Allows you to apply all formats on signs.
+  signcolors.formatting.all:
+    description: Allows you to apply all formatting options on signs.
     children:
-      signcolors.color.k: true
-      signcolors.color.l: true
-      signcolors.color.m: true
-      signcolors.color.n: true
-      signcolors.color.o: true
-      signcolors.color.r: true
+      signcolors.formatting.k: true
+      signcolors.formatting.l: true
+      signcolors.formatting.m: true
+      signcolors.formatting.n: true
+      signcolors.formatting.o: true
+      signcolors.formatting.r: true
   signcolors.command.info:
     description: Allows you to view the plugin's info.
   signcolors.command.help:
@@ -76,14 +77,10 @@ permissions:
     description: Allows you to use the color codes command.
   signcolors.command.givesign:
     description: Allows you to use the give sign command.
-  signcolors.command.migratedatabase:
-    description: Allows you to migrate the database.
   signcolors.specialsign.create:
     description: Allows you to create [SC] signs.
   signcolors.specialsign.use:
     description: Allows you to use [SC] signs.
-  signcolors.color.all:
-    description: Allows you to apply all colors/formats on signs.
   signcolors.signcrafting.bypass:
     description: Allows you to apply colors on a normal sign, even if 'sign_crafting' is true.
   signcolors.blockedfirstlines.bypass:
@@ -122,15 +119,15 @@ permissions:
     description: Access to YELLOW color.
   signcolors.color.f:
     description: Access to WHITE color.
-  signcolors.format.k:
-    description: Access to MAGIC format.
-  signcolors.format.l:
-    description: Access to BOLD format.
-  signcolors.format.m:
-    description: Access to STRIKETHROUGH format.
-  signcolors.format.n:
-    description: Access to UNDERLINE format.
-  signcolors.format.o:
-    description: Access to ITALIC format.
-  signcolors.format.r:
-    description: Access to RESET format.
+  signcolors.formatting.k:
+    description: Access to MAGIC formatting.
+  signcolors.formatting.l:
+    description: Access to BOLD formatting.
+  signcolors.formatting.m:
+    description: Access to STRIKETHROUGH formatting.
+  signcolors.formatting.n:
+    description: Access to UNDERLINE formatting.
+  signcolors.formatting.o:
+    description: Access to ITALIC formatting.
+  signcolors.formatting.r:
+    description: Access to RESET formatting.
