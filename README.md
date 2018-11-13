@@ -1,13 +1,59 @@
-SignColors [![Build Status](https://travis-ci.org/Pixelhash/SignColors.svg?branch=master)](https://travis-ci.org/Pixelhash/SignColors) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/442f22a3808944618356795f97c1810a)](https://www.codacy.com/app/Pixelhash/SignColors?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Pixelhash/SignColors&amp;utm_campaign=Badge_Grade)
-==========
+<h1 align="center">SignColors</h1>
 
-Repository of the SignColors plugin.
+<div align="center">
+  :clipboard::black_nib::pencil2:
+</div>
+<div align="center">
+  <strong>Repository of the SignColors plugin</strong>
+</div>
+<div align="center">
+  A Spigot plugin to let your players use colors on signs
+</div>
 
-## Development Builds
+<br />
 
-**NOTE!:**
-Development builds for SignColors can be found at the Jenkins server below. These builds may be unstable and may cause errors. Use them at your own risk!
-Link: [https://ci.codehat.de/job/SignColors/](https://ci.codehat.de/job/SignColors/ "SignColors Development Builds")
+<div align="center">
+  <!-- Spigot version -->
+  <a href="https://www.spigotmc.org/resources/signcolors.6135">
+    <img src="https://img.shields.io/badge/spigot-v1.2.0-orange.svg?style=flat-square"
+      alt="Spigot version" />
+  </a>
+  <!-- Build Status -->
+  <a href="https://travis-ci.org/choojs/choo">
+    <img src="https://img.shields.io/travis/kodehat/SignColors/master.svg?style=flat-square"
+      alt="Build Status" />
+  </a>
+</div>
+
+<div align="center">
+  <h3>
+    <a href="https://signcolors.codehat.de">
+      Website
+    </a>
+    <span> | </span>
+    <a href="https://github.com/choojs/choo/blob/master/.github/CONTRIBUTING.md">
+      Contributing
+    </a>
+  </h3>
+</div>
+
+<div align="center">
+  <sub>Small plugin made with Kotlin. Built with ❤︎ by
+  <a href="https://twitter.com/codehat">CodeHat</a> and
+  <a href="https://github.com/kodehat/SignColors/graphs/contributors">
+    contributors
+  </a>
+</div>
+
+
+## Table of Contents
+- [Features](#features)
+- [Example](#example)
+- [Installation](#installation)
+- [Commands](#commands)
+- [Permissions](#permissions)
+- [See Also](#see-also)
+- [Support](#support)
 
 ## Commands
 
@@ -37,23 +83,16 @@ For `/sc` you can alternatively use `/signcolors`
 - `signcolors.blockedfirstlines.bypass` - Allows you to bypass the blocked first lines.
 - `signcolors.upgrade` - Allows you to execute the `/sc upgrade` command.
 
-## Add your own language
+## Languages
 
-To add your own language, you can copy the `EN.yml` in the `languages` folder and name it like
+The plugins comes with built-in *English*, *German* and *Russian* support.
+
+### Adding a language
+
+To add a language, you can copy the `EN.yml` in the `languages` folder and name it like
 your language. For example `GB.yml` and change its content as you like. Then change the `language` key
 in the `config.yml` to your language file code. In the example above it would be `GB`.
 
-## Plugin at SpigotMC
-
-[http://www.spigotmc.org/resources/signcolors.6135/](http://www.spigotmc.org/resources/signcolors.6135/ "SignColors on SpigotMC")
-
-## Status for v1.2.0
-
- * Add a `/sc migrate` command, to migrate from MySQL to SQLite and vice versa.
- * Add a `/sc dbstatus` command, which shows current database size.
-
- Make suggestions either here or at Spigot.
-
 ## License
 
-This project is licensed under GPLv3.
+[GPLv3](https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3))
