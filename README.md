@@ -48,12 +48,11 @@
 
 ## Table of Contents
 - [Features](#features)
-- [Screenshots](#example)
+- [Screenshots](#screenshots)
 - [Installation](#installation)
 - [Commands](#commands)
 - [Permissions](#permissions)
 - [See Also](#see-also)
-- [Support](#support)
 
 ## Features
 
@@ -62,6 +61,13 @@
 - **restrict features:** high diversity of permissions.
 - **storage:** full MySQL and SQLite support out of the box
 
+## Installation
+
+1. Download the `signcolors-x.x.x.jar` file.
+2. Put it into the server's `plugins` folder.
+3. Start the server and stop it right after finish loading.
+4. Change the settings in `plugins/SignColors/config.yml` to your likings.
+5. Start the server again and have fun!
 
 ## Screenshots
 
@@ -101,7 +107,7 @@ You can also use `/signcolors` instead of `/sc`.
 | `signcolors.command.all` | Access to **all** commands |
 | `signcolors.specialsign.all` | Use and create special `[SC]` signs |
 | `signcolors.color.all` | Apply **all** colors on signs |
-| `signcolors.format.all` | Apply **all** formatting options on signs |
+| `signcolors.formatting.all` | Apply **all** formatting options on signs |
 | `signcolors.command.info` | Access to `/sc` |
 | `signcolors.command.help` | Access to `/sc help` |
 | `signcolors.command.reload` | Access to `/sc reload` |
@@ -128,12 +134,12 @@ You can also use `/signcolors` instead of `/sc`.
 | `signcolors.color.d` | Access to *LIGHT PURPLE* color: `&d` |
 | `signcolors.color.e` | Access to *YELLOW* color: `&e` |
 | `signcolors.color.f` | Access to *WHITE* color: `&f` |
-| `signcolors.format.k` | Access to *MAGIC* formatting: `&k` |
-| `signcolors.format.l` | Access to *BOLD* formatting: `&l` |
-| `signcolors.format.m` | Access to *STRIKETHROUGH* formatting: `&m` |
-| `signcolors.format.n` | Access to *UNDERLINE* formatting: `&n` |
-| `signcolors.format.o` | Access to *ITALIC* formatting: `&o` |
-| `signcolors.format.r` | Access to *RESET* formatting: `&r` |
+| `signcolors.formatting.k` | Access to *MAGIC* formatting: `&k` |
+| `signcolors.formatting.l` | Access to *BOLD* formatting: `&l` |
+| `signcolors.formatting.m` | Access to *STRIKETHROUGH* formatting: `&m` |
+| `signcolors.formatting.n` | Access to *UNDERLINE* formatting: `&n` |
+| `signcolors.formatting.o` | Access to *ITALIC* formatting: `&o` |
+| `signcolors.formatting.r` | Access to *RESET* formatting: `&r` |
 
 ## Languages
 
