@@ -1,18 +1,30 @@
 name: SignColors
 main: de.codehat.signcolors.SignColors
 author: CodeHat
-website: https://www.spigotmc.org/resources/signcolors.6135/
+website: https://signcolors.codehat.de
 softdepend: [Vault]
-description: Be able to apply colors on signs.
+description: Apply colors and formatting on signs.
 version: 1.2.0
 api-version: 1.13
 
 commands:
   sc:
-    description: Shows information about SignColors.
-    usage: /<command>
+    usage: /<command> <name>
+    description: Get some information about the plugin like the plugin's version
     aliases: [signcolors]
-    
+  help:
+    usage: /sc help
+    description: List all available commands
+  reload:
+    usage: /sc reload
+    description: Reload the plugin's configuration file
+  givesign:
+    usage: /sc givesign <player> <amount>
+    description: Give a player a specific amount of colored signs
+  colorcodes:
+    usage: /sc colorcodes
+    description: List all color and formatting codes
+
 permissions:
   signcolors.all:
     description: Access to all features.
@@ -26,7 +38,7 @@ permissions:
       signcolors.blockedfirstlines.bypass: true
       signcolors.updatemessage: true
   signcolors.command.all:
-    description: Access to all the plugin'a commands.
+    description: Access to all the plugin's commands.
     children:
       signcolors.command.info: true
       signcolors.command.help: true

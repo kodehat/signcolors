@@ -115,7 +115,7 @@ You can also use `/signcolors` instead of `/sc`.
 | `signcolors.command.colorcodes` | Access to `/sc colorcodes` |
 | `signcolors.specialsign.create` | Create `[SC]` special signs |
 | `signcolors.specialsign.use` | Use `[SC]` special signs |
-| `signcolors.signcrafting.bypass` | Apply colors and formatting on normal signs, even though `sign_crafting` is activated |
+| `signcolors.signcrafting.bypass` | Apply colors and formatting on normal signs, although `sign_crafting` is activated |
 | `signcolors.blockedfirstlines.bypass` | Bypass blocked sign lines |
 | `signcolors.updatemessage` | Get a notification when joining, as soon as an update is available |
 | `signcolors.color.0` | Access to *BLACK* color: `&0` |
