@@ -58,7 +58,7 @@
 
 - **shiny:** apply colors and formatting on signs
 - **"no" java:** completely written in Kotlin
-- **restrict features:** high diversity of permissions.
+- **restrict features:** high diversity of permissions
 - **storage:** full MySQL and SQLite support out of the box
 
 ## Installation
@@ -74,8 +74,8 @@
 <details>
   <summary>Click to view screenshots</summary>
 
-  #### Colors and formats
-  ![ColorsAndFormats](https://static.codehat.de/pictures/signcolors/color_preview.png "Colors and Formats")
+  #### Color and formatting codes 
+  ![ColorAndFormattingCodes](https://static.codehat.de/pictures/signcolors/color_preview.png "Color and formatting codes")
   
   #### How to create a special sign
   ![HowToSpecialSign](https://static.codehat.de/pictures/signcolors/sign_howto.png "Creation of a special sign")
@@ -145,18 +145,18 @@ You can also use `/signcolors` instead of `/sc`.
 
 The plugins comes with built-in *English*, *German* and *Russian* language support.
 
-### Adding a language
+### Adding a custom language
 
-To add a language, you can copy the `EN.yml` in the `languages` folder and name it like your language.
-For example `GB.yml` and change its content as you like.
-Then change the `language` key in the `config.yml` to your language file code. In the example above it would be `GB`.
+1. Copy the `EN.yml` in the `languages` folder and name it like your language (e.g. `FR.yml`).
+2. Change the values in the file to your liking.
+3. Set the `language` key in the `config.yml` to your language file code (e.g. `FR` from the example above).
 
 ## See Also
 
 For more information about color/formatting codes, take a look [here](https://minecraft.gamepedia.com/Formatting_codes).
 
-## License
-
 The style of this README was inspired by [choojs/choo](https://github.com/choojs/choo).
+
+## License
 
 [GPLv3](https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3))
