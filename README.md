@@ -31,7 +31,7 @@
       Website
     </a>
     <span> | </span>
-    <a href="https://github.com/choojs/choo/blob/master/.github/CONTRIBUTING.md">
+    <a href="https://github.com/kodehat/SignColors/blob/master/.github/CONTRIBUTING.md">
       Contributing
     </a>
   </h3>
