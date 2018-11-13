@@ -57,14 +57,15 @@
 
 ## Commands
 
-For `/sc` you can alternatively use `/signcolors`
+You can also use `/signcolors` instead of `/sc`.
 
-- `/sc` - Shows information about SignColors.
-- `/sc help` - Shows a list of commands.
-- `/sc reload` - Reloads the config.yml.
-- `/sc givesign [player] [amount]` - Give a player colored signs.
-- `/sc colorcodes` - Shows you a color/format codes list.
-- `/sc upgrade` - Upgrades the old database format from version 0.7.1 and earlier to the new database format of version 1.0.0 and later.
+| Command | Description |
+| --- | --- |
+| `/sc` | Get some information about the plugin like the plugin's version |
+| `/sc help` | List all available commands |
+| `/sc reload` | Reload the plugin's configuration file |
+| `/sc givesign [player] [amount]` | Give a *player* a specific *amount* of colored signs |
+| `/sc colorcodes` | List all color and format codes |
 
 ## Permissions
 
@@ -85,13 +86,13 @@ For `/sc` you can alternatively use `/signcolors`
 
 ## Languages
 
-The plugins comes with built-in *English*, *German* and *Russian* support.
+The plugins comes with built-in *English*, *German* and *Russian* language support.
 
 ### Adding a language
 
-To add a language, you can copy the `EN.yml` in the `languages` folder and name it like
-your language. For example `GB.yml` and change its content as you like. Then change the `language` key
-in the `config.yml` to your language file code. In the example above it would be `GB`.
+To add a language, you can copy the `EN.yml` in the `languages` folder and name it like your language.
+For example `GB.yml` and change its content as you like.
+Then change the `language` key in the `config.yml` to your language file code. In the example above it would be `GB`.
 
 ## License
 
