@@ -15,6 +15,7 @@ class SoundUtil {
             try {
                 sound = Sound.valueOf(config.getString("$configPath.type"))
             } catch (e: IllegalArgumentException) {
+				ErrorUtil.report(e)
                 with(SignColors.instance.logger) {
                     warning("The value for the sound at '$configPath.type' doesn't exist.")
                     warning("Please set it to a valid type or no sound is played!")

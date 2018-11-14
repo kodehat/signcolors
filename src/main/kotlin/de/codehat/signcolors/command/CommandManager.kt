@@ -19,7 +19,10 @@ class CommandManager: CommandExecutor {
         const val CMD_MIGRATE_DATABASE = "migratedb"
     }
 
-    override fun onCommand(sender: CommandSender, command: org.bukkit.command.Command, label: String, args: Array<out String>): Boolean {
+    override fun onCommand(sender: CommandSender,
+						   command: org.bukkit.command.Command,
+						   label: String,
+						   args: Array<out String>): Boolean {
         when {
             args.isEmpty() -> commands[""]?.onCommand(sender, command, label, args)
             commands.containsKey(args[0]) -> commands[args[0]]?.onCommand(sender, command, label, args)

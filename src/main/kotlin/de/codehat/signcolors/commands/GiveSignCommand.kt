@@ -11,14 +11,26 @@ import org.bukkit.command.CommandSender
 
 class GiveSignCommand: Command() {
 
-    override fun onCommand(sender: CommandSender, command: org.bukkit.command.Command, label: String, args: Array<out String>) {
+	companion object {
+	    private const val MIN_ARGS = 1
+	    private const val MAX_ARGS = 3
+	    private const val MIN_SIGN_AMOUNT = 1
+	    private const val MAX_SIGN_AMOUNT = 16
+	}
+
+    override fun onCommand(sender: CommandSender,
+						   command: org.bukkit.command.Command,
+						   label: String,
+						   args: Array<out String>) {
         if (!sender.hasPermission(Permissions.CMD_GIVE_SIGN)) {
             sender.sendLogoMsg(LanguageKey.NO_PERMISSION)
             return
         }
 
-        if (args.size == 1 || args.size < 3) {
-            sender.sendLogoMsg("&6/sc &egivesign &c[&e${SignColors.languageConfig.get(LanguageKey.PARAMETER_PLAYER)}&c] &c[&e${SignColors.languageConfig.get(LanguageKey.PARAMETER_AMOUNT)}&c]")
+        if (args.size == MIN_ARGS || args.size < MAX_ARGS) {
+            sender.sendLogoMsg("&6/sc &egivesign &c[&e${SignColors.languageConfig
+					.get(LanguageKey.PARAMETER_PLAYER)}&c] &c[&e${SignColors.languageConfig
+					.get(LanguageKey.PARAMETER_AMOUNT)}&c]")
             return
         }
 
@@ -35,7 +47,8 @@ class GiveSignCommand: Command() {
         }
 
         val signAmountString = args[2]
-        if (signAmountString.toIntOrNull() == null || signAmountString.toInt() < 1 || signAmountString.toInt() > 16) {
+        if (signAmountString.toIntOrNull() == null || signAmountString.toInt() < MIN_SIGN_AMOUNT
+				|| signAmountString.toInt() > MAX_SIGN_AMOUNT) {
             sender.sendLogoMsg(LanguageKey.GIVE_SIGN_INVALID_AMOUNT)
             return
         }

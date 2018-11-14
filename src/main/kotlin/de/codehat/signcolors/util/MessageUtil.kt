@@ -14,7 +14,8 @@ fun CommandSender.sendColoredMsg(message: String) {
 
 fun CommandSender.sendLogoMsg(message: String) {
     this.sendMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&',
-            de.codehat.signcolors.SignColors.languageConfig.get(de.codehat.signcolors.language.LanguageKey.TAG) + " " + message))
+            de.codehat.signcolors.SignColors.languageConfig
+					.get(de.codehat.signcolors.language.LanguageKey.TAG) + " " + message))
 }
 
 fun CommandSender.sendLogoMsg(languageKey: LanguageKey) {

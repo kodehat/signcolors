@@ -21,8 +21,12 @@ class ColoredSignManager: Manager {
         private set
 
     companion object {
-        const val MAX_INGREDIENTS = 9
-        const val MAX_SHAPES = 3
+        private const val MAX_INGREDIENTS = 9
+        private const val MAX_SHAPES = 3
+
+		private const val SHAPE_SIZE_ONE = 1
+		private const val SHAPE_SIZE_TWO = 2
+		private const val SHAPE_SIZE_THREE = 3
     }
 
     init {
@@ -47,7 +51,8 @@ class ColoredSignManager: Manager {
     }
 
     private fun addShapelessRecipe() {
-        val ingredients = SignColors.instance.config.getList(ConfigKey.RECIPES_SHAPELESS_INGREDIENTS.toString()).filterIsInstance<String>()
+        val ingredients = SignColors.instance.config.getList(ConfigKey.RECIPES_SHAPELESS_INGREDIENTS.toString())
+				.filterIsInstance<String>()
         if (ingredients.size > MAX_INGREDIENTS) {
             SignColors.instance.logger.warning("You have added more than nine crafting items to the config.")
             SignColors.instance.logger.warning("Please change it or you won't be able to craft colored signs!")
@@ -73,7 +78,8 @@ class ColoredSignManager: Manager {
     }
 
     private fun addShapedRecipe() {
-        val shapes = SignColors.instance.config.getList(ConfigKey.RECIPES_SHAPED_CRAFTING_SHAPE.toString()).filterIsInstance<String>()
+        val shapes = SignColors.instance.config.getList(ConfigKey.RECIPES_SHAPED_CRAFTING_SHAPE.toString())
+				.filterIsInstance<String>()
         if (shapes.size > MAX_SHAPES) {
             with(SignColors.instance.logger) {
                 warning("You have added more than three recipe shapes to the config.")
@@ -86,9 +92,9 @@ class ColoredSignManager: Manager {
         val shapedRecipe = ShapedRecipe(namespacedKey, recipeStack)
 
         when(shapes.size) {
-            1 -> shapedRecipe.shape(shapes[0])
-            2 -> shapedRecipe.shape(shapes[0], shapes[1])
-            3 -> shapedRecipe.shape(shapes[0], shapes[1], shapes[2])
+            SHAPE_SIZE_ONE -> shapedRecipe.shape(shapes[0])
+            SHAPE_SIZE_TWO -> shapedRecipe.shape(shapes[0], shapes[1])
+            SHAPE_SIZE_THREE -> shapedRecipe.shape(shapes[0], shapes[1], shapes[2])
             else -> {
                 with(SignColors.instance.logger) {
                     warning("You defined too many or not enough recipe shapes.")
@@ -97,7 +103,8 @@ class ColoredSignManager: Manager {
                 }
             }
         }
-        val ingredientsSection = SignColors.instance.config.getConfigurationSection(ConfigKey.RECIPES_SHAPED_INGREDIENTS.toString())
+        val ingredientsSection = SignColors.instance.config
+				.getConfigurationSection(ConfigKey.RECIPES_SHAPED_INGREDIENTS.toString())
 
         ingredientsSection.getKeys(false).forEach {
             val value = ingredientsSection[it].toString()
@@ -116,7 +123,7 @@ class ColoredSignManager: Manager {
     }
 
     internal fun removeRecipe() {
-        //TODO: Not working anymore since MC 1.12, because the recipe iterator is immutable now!
+        // Not working anymore since MC 1.12, because the recipe iterator is immutable now!
         /*val recipeIterator = SignColors.instance.server.recipeIterator()
         while (recipeIterator.hasNext()) {
             val recipe = recipeIterator.next()

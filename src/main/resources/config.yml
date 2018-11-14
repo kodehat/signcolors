@@ -135,6 +135,8 @@ database:
 other:
   # Should the plugin check if an update is available?
   update_check: true
+  # Enable this to automatically report errors.
+  error_reporting: false
   # Makes the plugin's log messages more verbose.
   debug: false
   # Current version of the config. DON'T TOUCH IT!!!

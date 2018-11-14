@@ -3,7 +3,11 @@ package de.codehat.signcolors
 import de.codehat.pluginupdatechecker.UpdateChecker
 import de.codehat.signcolors.command.CommandManager
 import de.codehat.signcolors.command.TabCompletion
-import de.codehat.signcolors.commands.*
+import de.codehat.signcolors.commands.HelpCommand
+import de.codehat.signcolors.commands.ReloadCommand
+import de.codehat.signcolors.commands.GiveSignCommand
+import de.codehat.signcolors.commands.ColorcodesCommand
+import de.codehat.signcolors.commands.InfoCommand
 import de.codehat.signcolors.config.ConfigKey
 import de.codehat.signcolors.configs.LanguageConfig
 import de.codehat.signcolors.daos.SignLocationDao
@@ -16,6 +20,7 @@ import de.codehat.signcolors.listener.PlayerListener
 import de.codehat.signcolors.listener.SignListener
 import de.codehat.signcolors.managers.BackupOldFilesManager
 import de.codehat.signcolors.managers.ColoredSignManager
+import io.sentry.Sentry
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
@@ -36,8 +41,9 @@ class SignColors: JavaPlugin() {
     lateinit var coloredSignManager: ColoredSignManager
 
     companion object {
-        const val UPDATE_CHECKER_URL = "https://pluginapi.codehat.de/plugins"
-        const val UPDATE_CHECKER_PLUGIN_ID = "Syjzymgdz"
+        private const val UPDATE_CHECKER_URL = "https://pluginapi.codehat.de/plugins"
+		private const val UPDATE_CHECKER_PLUGIN_ID = "Syjzymgdz"
+		private const val SENTRY_DSN = "https://e811618a183e43558b27567e9e79e8b2@sentry.io/1322662"
 
         internal lateinit var instance: SignColors
         internal lateinit var languageConfig: LanguageConfig
@@ -141,7 +147,7 @@ class SignColors: JavaPlugin() {
             registerCommand(CommandManager.CMD_GIVE_SIGN, GiveSignCommand())
             registerCommand(CommandManager.CMD_COLOR_CODES, ColorcodesCommand())
             registerCommand(CommandManager.CMD_RELOAD, ReloadCommand())
-            registerCommand(CommandManager.CMD_MIGRATE_DATABASE, MigrateDatabaseCommand())
+            //registerCommand(CommandManager.CMD_MIGRATE_DATABASE, MigrateDatabaseCommand())
         }
 
         with(getCommand(CommandManager.CMD_PREFIX)) {
@@ -179,5 +185,12 @@ class SignColors: JavaPlugin() {
             updateChecker.check()
         }
     }
+
+	private fun enableErrorReporting() {
+		if (config.getBoolean(ConfigKey.OTHER_ERROR_REPORTING.toString())) {
+			Sentry.init(SENTRY_DSN)
+			logger.info("Error reporting has been enabled.")
+		}
+	}
 
 }

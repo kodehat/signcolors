@@ -10,7 +10,10 @@ import org.bukkit.command.CommandSender
 
 class ReloadCommand: Command() {
 
-    override fun onCommand(sender: CommandSender, command: org.bukkit.command.Command, label: String, args: Array<out String>) {
+    override fun onCommand(sender: CommandSender,
+						   command: org.bukkit.command.Command,
+						   label: String,
+						   args: Array<out String>) {
         if (!sender.hasPermission(Permissions.CMD_RELOAD)) {
             sender.sendLogoMsg(LanguageKey.NO_PERMISSION)
             return

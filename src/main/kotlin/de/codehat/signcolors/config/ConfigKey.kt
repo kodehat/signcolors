@@ -27,6 +27,7 @@ enum class ConfigKey(private val configKey: String) {
     DATABASE_USER("database.user"),
     DATABASE_PASSWORD("database.password"),
     OTHER_UPDATE_CHECK("other.update_check"),
+	OTHER_ERROR_REPORTING("other.error_reporting"),
     OTHER_DEBUG("other.debug"),
     OTHER_CONFIG_VERSION("other.config_version");
 

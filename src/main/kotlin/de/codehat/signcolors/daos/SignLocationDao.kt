@@ -7,7 +7,8 @@ import de.codehat.signcolors.database.model.SignLocation
 import org.bukkit.Location
 import org.bukkit.block.Block
 
-class SignLocationDao(connectionSource: JdbcConnectionSource): Dao<SignLocation, Void>(connectionSource, SignLocation::class.java) {
+class SignLocationDao(connectionSource: JdbcConnectionSource):
+		Dao<SignLocation, Void>(connectionSource, SignLocation::class.java) {
 
     fun exists(block: Block): Boolean {
         return exists(block.location)
