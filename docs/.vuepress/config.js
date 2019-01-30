@@ -7,7 +7,7 @@ module.exports = {
       { text: 'Guide', link: '/guide/' },
       { text: 'Commands & Permissions', link: '/cmdandperms/' },
       { text: 'Spigot', link: 'https://www.spigotmc.org/resources/signcolors.6135/' },
-      { text: 'GitHub', link: 'https://github.com/Pixelhash/SignColors' }
+      { text: 'GitHub', link: 'https://github.com/kodehat/SignColors' }
     ],
     locales: {
       '/': {
@@ -20,7 +20,7 @@ module.exports = {
           { text: 'Guide', link: '/guide/' },
           { text: 'Befehle & Rechte', link: '/cmdandperms/' },
           { text: 'Spigot', link: 'https://www.spigotmc.org/resources/signcolors.6135/' },
-          { text: 'GitHub', link: 'https://github.com/Pixelhash/SignColors' }
+          { text: 'GitHub', link: 'https://github.com/kodehat/SignColors' }
         ]
       }
     }

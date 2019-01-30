@@ -10,19 +10,7 @@ Estimated time: 10-20 Minutes
 
 ## Installation
 
-### Server Setup
-
-If you haven't already, head over to [SpigotMC](https://www.spigotmc.org/) and download Spigot's BuildTools.
-Put them into a folder of your choice and compile the JAR for your future server.
-
-Visit the [Spigot Wiki](https://www.spigotmc.org/wiki/buildtools/) for more information or help.
-
-### Server Start
-
-Start the server at least once, so the `plugins` directory is created.
-Stop the server after it has finished loading/generating.
-
-### Download SignColors
+### Download
 
 ::: warning
 Make sure to download the correct version of the plugin, fitting the version of the server!
@@ -31,9 +19,9 @@ Make sure to download the correct version of the plugin, fitting the version of 
 Download the plugin's JAR file [here](https://www.spigotmc.org/resources/signcolors.6135/history).
 Put it into the `plugins` directory of the server.
 
-### Server Start #2
+### Server Start
 
-Start the server again and - after finishing loading - you should find a `SignColors` folder in the `plugins` directory.
+Start the server. After it has finishing loading, you should find a `SignColors` folder in the `plugins` directory.
 
 ### Configure
 
