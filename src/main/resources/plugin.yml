@@ -1,0 +1,145 @@
+name: SignColors
+main: de.codehat.signcolors.SignColorsPlugin
+author: CodeHat
+website: https://signcolors.codehat.de
+softdepend: [Vault]
+description: Apply colors and formatting on signs.
+version: 2.0.0
+api-version: 1.15.1
+
+commands:
+  sc:
+    usage: /<command> <name>
+    description: Get some information about the plugin like the plugin's version
+    aliases: [signcolors]
+  help:
+    usage: /sc help
+    description: List all available commands
+  reload:
+    usage: /sc reload
+    description: Reload the plugin's configuration file
+  givesign:
+    usage: /sc givesign <player> <amount>
+    description: Give a player a specific amount of colored signs
+  colorcodes:
+    usage: /sc colorcodes
+    description: List all color and formatting codes
+
+permissions:
+  signcolors.all:
+    description: Access to all features.
+    default: op
+    children:
+      signcolors.command.all: true
+      signcolors.specialsign.all: true
+      signcolors.color.all: true
+      signcolors.formatting.all: true
+      signcolors.signcrafting.bypass: true
+      signcolors.blockedfirstlines.bypass: true
+      signcolors.updatemessage: true
+  signcolors.command.all:
+    description: Access to all the plugin's commands.
+    children:
+      signcolors.command.info: true
+      signcolors.command.help: true
+      signcolors.command.reload: true
+      signcolors.command.colorcodes: true
+      signcolors.command.givesign: true
+      signcolors.command.migratedatabase: true
+  signcolors.specialsign.all:
+    description: Allows you to create and use [SC] signs.
+    children:
+      signcolors.specialsign.create: true
+      signcolors.specialsign.use: true
+  signcolors.color.all:
+    description: Allows you to apply all colors on signs.
+    children:
+      signcolors.color.0: true
+      signcolors.color.1: true
+      signcolors.color.2: true
+      signcolors.color.3: true
+      signcolors.color.4: true
+      signcolors.color.5: true
+      signcolors.color.6: true
+      signcolors.color.7: true
+      signcolors.color.8: true
+      signcolors.color.9: true
+      signcolors.color.a: true
+      signcolors.color.b: true
+      signcolors.color.c: true
+      signcolors.color.d: true
+      signcolors.color.e: true
+      signcolors.color.f: true
+  signcolors.formatting.all:
+    description: Allows you to apply all formatting options on signs.
+    children:
+      signcolors.formatting.k: true
+      signcolors.formatting.l: true
+      signcolors.formatting.m: true
+      signcolors.formatting.n: true
+      signcolors.formatting.o: true
+      signcolors.formatting.r: true
+  signcolors.command.info:
+    description: Allows you to view the plugin's info.
+  signcolors.command.help:
+    description: Allows you to view the help page.
+  signcolors.command.reload:
+    description: Allows you to reload the config.yml.
+  signcolors.command.colorcodes:
+    description: Allows you to use the color codes command.
+  signcolors.command.givesign:
+    description: Allows you to use the give sign command.
+  signcolors.specialsign.create:
+    description: Allows you to create [SC] signs.
+  signcolors.specialsign.use:
+    description: Allows you to use [SC] signs.
+  signcolors.signcrafting.bypass:
+    description: Allows you to apply colors on a normal sign, even if 'sign_crafting' is true.
+  signcolors.blockedfirstlines.bypass:
+    description: Allows you to bypass the blocked first lines.
+  signcolors.updatemessage:
+    description: Shows an update message to you upon joining the server, if an update is available.
+  signcolors.color.0:
+    description: Access to BLACK color.
+  signcolors.color.1:
+    description: Access to DARK_BLUE color.
+  signcolors.color.2:
+    description: Access to DARK_GREEN color.
+  signcolors.color.3:
+    description: Access to DARK_AQUA color.
+  signcolors.color.4:
+    description: Access to DARK_RED color.
+  signcolors.color.5:
+    description: Access to DARK_PURPLE color.
+  signcolors.color.6:
+    description: Access to GOLD color.
+  signcolors.color.7:
+    description: Access to GRAY color.
+  signcolors.color.8:
+    description: Access to DARK_GRAY color.
+  signcolors.color.9:
+    description: Access to BLUE color.
+  signcolors.color.a:
+    description: Access to GREEN color.
+  signcolors.color.b:
+    description: Access to AQUA color.
+  signcolors.color.c:
+    description: Access to RED color.
+  signcolors.color.d:
+    description: Access to LIGHT_PURPLE color.
+  signcolors.color.e:
+    description: Access to YELLOW color.
+  signcolors.color.f:
+    description: Access to WHITE color.
+  signcolors.formatting.k:
+    description: Access to MAGIC formatting.
+  signcolors.formatting.l:
+    description: Access to BOLD formatting.
+  signcolors.formatting.m:
+    description: Access to STRIKETHROUGH formatting.
+  signcolors.formatting.n:
+    description: Access to UNDERLINE formatting.
+  signcolors.formatting.o:
+    description: Access to ITALIC formatting.
+  signcolors.formatting.r:
+    description: Access to RESET formatting.
