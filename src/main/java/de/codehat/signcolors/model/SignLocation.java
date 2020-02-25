@@ -17,31 +17,33 @@
  */
 package de.codehat.signcolors.model;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import lombok.AccessLevel;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+import de.codehat.signcolors.dao.impl.SignLocationDaoImpl;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Builder(toBuilder = true)
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
-@Setter(value = AccessLevel.PACKAGE)
-@Table(name = SignLocation.TABLE_NAME)
+@Data
+@DatabaseTable(tableName = SignLocation.TABLE_NAME, daoClass = SignLocationDaoImpl.class)
+@NoArgsConstructor
+@AllArgsConstructor
 public class SignLocation {
 
-  public static final String TABLE_NAME = "sign_locations";
+  public static final String TABLE_NAME = "sc_sign_locations";
 
-  @Id @GeneratedValue private Long id;
+  @DatabaseField(generatedId = true, canBeNull = false)
+  private Long id;
 
+  @DatabaseField(canBeNull = false)
   private String world;
 
-  private int x;
-  private int y;
-  private int z;
+  @DatabaseField(canBeNull = false)
+  private Integer x;
+
+  @DatabaseField(canBeNull = false)
+  private Integer y;
+
+  @DatabaseField(canBeNull = false)
+  private Integer z;
 }

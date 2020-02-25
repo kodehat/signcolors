@@ -15,21 +15,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.signcolors.component.database;
+package de.codehat.signcolors;
 
-import com.dieselpoint.norm.Database;
-import java.io.IOException;
-import java.nio.file.Files;
-import org.junit.jupiter.api.Test;
+import de.codehat.signcolors.di.DaggerSignColorsBukkitComponent;
+import de.codehat.signcolors.di.SignColorsBukkitComponent;
+import org.bukkit.plugin.java.JavaPlugin;
 
-public class DatabaseTest {
+public class SignColors extends JavaPlugin {
 
-  @Test
-  public void testSQLiteDatabaseConnection() throws IOException {
-    final String tempFile = Files.createTempFile(null, null).toAbsolutePath().toString();
-    final String url = "jdbc:sqlite:" + tempFile + ".db";
-    Database db = new Database();
-    db.setJdbcUrl(url);
-    System.out.println(url);
+  @Override
+  public void onEnable() {
+    SignColorsBukkitComponent component =
+        DaggerSignColorsBukkitComponent.builder().signColors(this).build();
+
+    getServer().getPluginManager().registerEvents(component.playerListener(), this);
+  }
+
+  @Override
+  public void onDisable() {
+    // HINT: Clean-up.
   }
 }

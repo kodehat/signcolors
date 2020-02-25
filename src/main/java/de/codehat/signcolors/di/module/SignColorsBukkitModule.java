@@ -15,9 +15,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.signcolors.component;
+package de.codehat.signcolors.di.module;
 
-import dagger.Component;
+import dagger.Module;
+import dagger.Provides;
+import de.codehat.signcolors.SignColors;
+import java.util.logging.Logger;
+import javax.inject.Singleton;
 
-@Component
-public interface PluginComponent {}
+@Module
+public interface SignColorsBukkitModule {
+  @Provides
+  @Singleton
+  static Logger provideLogger(SignColors plugin) {
+    return plugin.getLogger();
+  }
+}

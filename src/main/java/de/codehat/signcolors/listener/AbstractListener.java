@@ -15,25 +15,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.signcolors;
+package de.codehat.signcolors.listener;
 
-import de.codehat.signcolors.component.DaggerPluginComponent;
-import de.codehat.signcolors.component.PluginComponent;
-import lombok.extern.java.Log;
-import org.bukkit.plugin.java.JavaPlugin;
+import de.codehat.signcolors.SignColors;
+import java.util.logging.Logger;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.bukkit.event.Listener;
 
-@Log
-public class SignColorsPlugin extends JavaPlugin {
+@Getter(value = AccessLevel.PROTECTED)
+@RequiredArgsConstructor
+public class AbstractListener implements Listener {
 
-  @Override
-  public void onEnable() {
-    log.info("Enabling plug-in...");
-
-    final PluginComponent pluginComponent = DaggerPluginComponent.create();
-  }
-
-  @Override
-  public void onDisable() {
-    log.info("Disabling plug-in...");
-  }
+  private final SignColors plugin;
+  private final Logger logger;
 }

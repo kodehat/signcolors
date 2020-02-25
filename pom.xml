@@ -23,9 +23,13 @@
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
 
-    <spigot.version>1.15.1-R0.1-SNAPSHOT</spigot.version>
+    <spigot.version>1.15.2-R0.1-SNAPSHOT</spigot.version>
     <vault.version>1.7</vault.version>
     <lombok.version>1.18.10</lombok.version>
+    <dagger.version>2.26</dagger.version>
+    <ormlite.version>5.1</ormlite.version>
+
+    <skipTests>false</skipTests>
   </properties>
 
   <dependencies>
@@ -51,17 +55,17 @@
     <dependency>
       <groupId>com.google.dagger</groupId>
       <artifactId>dagger</artifactId>
-      <version>2.25.4</version>
+      <version>${dagger.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.dieselpoint</groupId>
-      <artifactId>norm</artifactId>
-      <version>0.8.6</version>
+      <groupId>com.j256.ormlite</groupId>
+      <artifactId>ormlite-core</artifactId>
+      <version>${ormlite.version}</version>
     </dependency>
     <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <version>8.0.19</version>
+      <groupId>com.j256.ormlite</groupId>
+      <artifactId>ormlite-jdbc</artifactId>
+      <version>${ormlite.version}</version>
     </dependency>
     <!-- Test dependencies -->
     <dependency>
@@ -76,6 +80,18 @@
       <version>1.6.0</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest</artifactId>
+      <version>2.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>1.4.200</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -87,9 +103,14 @@
         <configuration>
           <annotationProcessorPaths>
             <path>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+              <version>${lombok.version}</version>
+            </path>
+            <path>
               <groupId>com.google.dagger</groupId>
               <artifactId>dagger-compiler</artifactId>
-              <version>2.25.4</version>
+              <version>${dagger.version}</version>
             </path>
           </annotationProcessorPaths>
         </configuration>
@@ -172,7 +193,7 @@
               <goal>test</goal>
             </goals>
             <configuration>
-              <skipTests>false</skipTests>
+              <skipTests>${skipTests}</skipTests>
               <includes>
                 <include>**/*Test.java</include>
               </includes>
@@ -185,7 +206,7 @@
               <goal>test</goal>
             </goals>
             <configuration>
-              <skipTests>false</skipTests>
+              <skipTests>${skipTests}</skipTests>
               <includes>
                 <include>**/*IT.*</include>
                 <include>**/*Tests.*</include>
