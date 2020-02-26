@@ -18,8 +18,9 @@
 package de.codehat.signcolors.dao.impl;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
-import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import de.codehat.signcolors.dao.SignLocationDao;
+import de.codehat.signcolors.database.Database;
 import de.codehat.signcolors.model.SignLocation;
 import java.sql.SQLException;
 import org.bukkit.Location;
@@ -28,8 +29,13 @@ import org.bukkit.block.Block;
 public class SignLocationDaoImpl extends BaseDaoImpl<SignLocation, Long>
     implements SignLocationDao {
 
-  public SignLocationDaoImpl(ConnectionSource connectionSource) throws SQLException {
-    super(connectionSource, SignLocation.class);
+  public SignLocationDaoImpl(JdbcConnectionSource connectionSource, Class<SignLocation> dataClass)
+      throws SQLException {
+    super(connectionSource, dataClass);
+  }
+
+  public SignLocationDaoImpl(Database database) throws SQLException {
+    this(database.getConnectionSource(), SignLocation.class);
   }
 
   @Override
@@ -78,7 +84,7 @@ public class SignLocationDaoImpl extends BaseDaoImpl<SignLocation, Long>
 
   @Override
   public void create(String world, int x, int y, int z) throws SQLException {
-    create(new SignLocation(null, world, x, y, z));
+    create(new SignLocation(world, x, y, z));
   }
 
   @Override

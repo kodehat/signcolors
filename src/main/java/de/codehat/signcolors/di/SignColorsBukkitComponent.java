@@ -20,8 +20,11 @@ package de.codehat.signcolors.di;
 import dagger.BindsInstance;
 import dagger.Component;
 import de.codehat.signcolors.SignColors;
+import de.codehat.signcolors.config.Config;
+import de.codehat.signcolors.database.impl.SqliteDatabase;
 import de.codehat.signcolors.di.module.SignColorsBukkitModule;
-import de.codehat.signcolors.listener.PlayerListener;
+import de.codehat.signcolors.listener.impl.PlayerListener;
+import de.codehat.signcolors.util.SimpleLogger;
 import javax.inject.Singleton;
 
 @Singleton
@@ -29,6 +32,12 @@ import javax.inject.Singleton;
 public interface SignColorsBukkitComponent {
 
   PlayerListener playerListener();
+
+  SimpleLogger logger();
+
+  Config config();
+
+  SqliteDatabase sqliteDatabase();
 
   @Component.Builder
   interface Builder {

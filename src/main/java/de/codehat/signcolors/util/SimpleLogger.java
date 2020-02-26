@@ -15,27 +15,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.signcolors.listener;
+package de.codehat.signcolors.util;
 
-import de.codehat.signcolors.SignColors;
-import de.codehat.signcolors.util.SimpleLogger;
-import org.bukkit.event.Listener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
-public class AbstractListener implements Listener {
+@Singleton
+public final class SimpleLogger {
 
-  private final SignColors plugin;
-  private final SimpleLogger logger;
+  private final Logger logger;
 
-  public AbstractListener(SignColors plugin, SimpleLogger logger) {
-    this.plugin = plugin;
+  @Inject
+  public SimpleLogger(Logger logger) {
     this.logger = logger;
   }
 
-  protected SignColors getPlugin() {
-    return plugin;
+  public void info(String msg, Object... params) {
+    logger.log(Level.INFO, msg, params);
   }
 
-  protected SimpleLogger getLogger() {
-    return logger;
+  public void warn(String msg, Object... params) {
+    logger.log(Level.WARNING, msg, params);
+  }
+
+  public void error(String msg, Throwable thrown) {
+    logger.log(Level.SEVERE, msg, thrown);
   }
 }

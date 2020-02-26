@@ -20,30 +20,95 @@ package de.codehat.signcolors.model;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import de.codehat.signcolors.dao.impl.SignLocationDaoImpl;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.util.Objects;
 
-@Data
 @DatabaseTable(tableName = SignLocation.TABLE_NAME, daoClass = SignLocationDaoImpl.class)
-@NoArgsConstructor
-@AllArgsConstructor
 public class SignLocation {
 
   public static final String TABLE_NAME = "sc_sign_locations";
 
-  @DatabaseField(generatedId = true, canBeNull = false)
+  @DatabaseField(useGetSet = true, generatedId = true, canBeNull = false)
   private Long id;
 
-  @DatabaseField(canBeNull = false)
+  @DatabaseField(useGetSet = true, canBeNull = false)
   private String world;
 
-  @DatabaseField(canBeNull = false)
+  @DatabaseField(useGetSet = true, canBeNull = false)
   private Integer x;
 
-  @DatabaseField(canBeNull = false)
+  @DatabaseField(useGetSet = true, canBeNull = false)
   private Integer y;
 
-  @DatabaseField(canBeNull = false)
+  @DatabaseField(useGetSet = true, canBeNull = false)
   private Integer z;
+
+  public SignLocation(String world, Integer x, Integer y, Integer z) {
+    this.id = null; // Used for auto id generation of database.
+    this.world = world;
+    this.x = x;
+    this.y = y;
+    this.z = z;
+  }
+
+  public SignLocation() {}
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public String getWorld() {
+    return world;
+  }
+
+  public void setWorld(String world) {
+    this.world = world;
+  }
+
+  public Integer getX() {
+    return x;
+  }
+
+  public void setX(Integer x) {
+    this.x = x;
+  }
+
+  public Integer getY() {
+    return y;
+  }
+
+  public void setY(Integer y) {
+    this.y = y;
+  }
+
+  public Integer getZ() {
+    return z;
+  }
+
+  public void setZ(Integer z) {
+    this.z = z;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(world, x, y, z);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (!(obj instanceof SignLocation)) {
+      return false;
+    }
+    SignLocation other = (SignLocation) obj;
+    return Objects.equals(world, other.world)
+        && Objects.equals(x, other.x)
+        && Objects.equals(y, other.y)
+        && Objects.equals(z, other.z);
+  }
 }

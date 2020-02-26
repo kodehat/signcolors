@@ -15,24 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.signcolors.listener;
+package de.codehat.signcolors.database;
 
-import de.codehat.signcolors.SignColors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.inject.Inject;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerJoinEvent;
+import com.j256.ormlite.jdbc.JdbcConnectionSource;
+import java.sql.SQLException;
 
-public class PlayerListener extends AbstractListener {
-
-  @Inject
-  public PlayerListener(SignColors plugin, Logger logger) {
-    super(plugin, logger);
-  }
-
-  @EventHandler
-  protected void onPlayerJoin(PlayerJoinEvent event) {
-    getLogger().log(Level.INFO, "Player {0} joined the game.", event.getPlayer().getName());
-  }
+public interface Database {
+  JdbcConnectionSource getConnectionSource() throws SQLException;
 }

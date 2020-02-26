@@ -39,7 +39,8 @@ public class DatabaseTest {
   @BeforeAll
   public static void setup() throws SQLException {
     connectionSource = new JdbcConnectionSource("jdbc:h2:mem:sign_colors");
-    dao = new SignLocationDaoImpl(connectionSource);
+    // TODO: Provide H2 database here
+    dao = new SignLocationDaoImpl(null);
 
     TableUtils.createTableIfNotExists(connectionSource, SignLocation.class);
   }
@@ -51,7 +52,7 @@ public class DatabaseTest {
 
   @Test
   public void testInsert() throws SQLException {
-    final SignLocation signLocation = new SignLocation(null, "world", 1, 10, 100);
+    final SignLocation signLocation = new SignLocation("world", 1, 10, 100);
     dao.create(signLocation);
 
     final SignLocation loadedSignLocation = dao.queryForId(signLocation.getId());

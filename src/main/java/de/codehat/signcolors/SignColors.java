@@ -17,18 +17,34 @@
  */
 package de.codehat.signcolors;
 
+import de.codehat.signcolors.config.Config;
 import de.codehat.signcolors.di.DaggerSignColorsBukkitComponent;
 import de.codehat.signcolors.di.SignColorsBukkitComponent;
+import de.codehat.signcolors.util.SimpleLogger;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SignColors extends JavaPlugin {
+
+  private SimpleLogger logger;
+  private Config config;
 
   @Override
   public void onEnable() {
     SignColorsBukkitComponent component =
         DaggerSignColorsBukkitComponent.builder().signColors(this).build();
 
+    logger = component.logger();
+    config = component.config();
+
     getServer().getPluginManager().registerEvents(component.playerListener(), this);
+
+    logger.info(
+        "Database URL is: jdbc://{0}:{1}/{2} with user {3} and password {4}.",
+        config.getDatabaseHost(),
+        config.getDatabasePort(),
+        config.getDatabaseName(),
+        config.getDatabaseUser(),
+        config.getDatabasePassword());
   }
 
   @Override
