@@ -1,6 +1,6 @@
 /*
  * SignColors is a plug-in for Spigot adding colors and formatting to signs.
- * Copyright (C) 2020 CodeHat
+ * Copyright (C) 2021 CodeHat
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,6 @@ package de.codehat.signcolors.database;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import java.sql.SQLException;
 
-public interface Database {
+public interface IDatabase {
   JdbcConnectionSource getConnectionSource() throws SQLException;
 }

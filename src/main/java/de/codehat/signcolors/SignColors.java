@@ -1,6 +1,6 @@
 /*
  * SignColors is a plug-in for Spigot adding colors and formatting to signs.
- * Copyright (C) 2020 CodeHat
+ * Copyright (C) 2021 CodeHat
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,24 +17,23 @@
  */
 package de.codehat.signcolors;
 
+import com.j256.ormlite.logger.LocalLog;
 import de.codehat.signcolors.config.Config;
-import de.codehat.signcolors.di.DaggerSignColorsBukkitComponent;
-import de.codehat.signcolors.di.SignColorsBukkitComponent;
 import de.codehat.signcolors.util.SimpleLogger;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SignColors extends JavaPlugin {
 
-  private SimpleLogger logger;
-  private Config config;
-
   @Override
   public void onEnable() {
+    // Disable DEBUG logs of ORMLite.
+    System.setProperty(LocalLog.LOCAL_LOG_LEVEL_PROPERTY, "ERROR");
+
     SignColorsBukkitComponent component =
         DaggerSignColorsBukkitComponent.builder().signColors(this).build();
 
-    logger = component.logger();
-    config = component.config();
+    SimpleLogger logger = component.logger();
+    Config config = component.config();
 
     getServer().getPluginManager().registerEvents(component.playerListener(), this);
 

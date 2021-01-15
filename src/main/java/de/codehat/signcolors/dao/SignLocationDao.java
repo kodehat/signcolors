@@ -1,6 +1,6 @@
 /*
  * SignColors is a plug-in for Spigot adding colors and formatting to signs.
- * Copyright (C) 2020 CodeHat
+ * Copyright (C) 2021 CodeHat
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,93 +17,100 @@
  */
 package de.codehat.signcolors.dao;
 
-import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.BaseDaoImpl;
+import com.j256.ormlite.jdbc.JdbcConnectionSource;
+import de.codehat.signcolors.database.IDatabase;
 import de.codehat.signcolors.model.SignLocation;
 import java.sql.SQLException;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 
-public interface SignLocationDao extends Dao<SignLocation, Long> {
+public class SignLocationDao extends BaseDaoImpl<SignLocation, Long> implements ISignLocationDao {
 
-  /**
-   * Checks if the given block exists in the database. Takes the location from the block.
-   *
-   * @param block the block to check
-   * @return true if location of block exists in database, false otherwise
-   * @throws SQLException if unable to query database
-   */
-  boolean exists(Block block) throws SQLException;
+  public SignLocationDao(JdbcConnectionSource connectionSource, Class<SignLocation> dataClass)
+      throws SQLException {
+    super(connectionSource, dataClass);
+  }
 
-  /**
-   * Checks if the given location exists in the database.
-   *
-   * @param location the location check
-   * @return true if location exists in database, false otherwise
-   * @throws SQLException if unable to query database
-   */
-  boolean exists(Location location) throws SQLException;
+  public SignLocationDao(IDatabase database) throws SQLException {
+    this(database.getConnectionSource(), SignLocation.class);
+  }
 
-  /**
-   * Checks if the given combination of coordinates exists in the database.
-   *
-   * @param world the world for the x, y, z coordinates
-   * @param x the x coordinate
-   * @param y the y coordinate
-   * @param z the z coordinate
-   * @return true if the combination of coordinates exists in database, false otherwise
-   * @throws SQLException if unable to query database
-   */
-  boolean exists(String world, int x, int y, int z) throws SQLException;
+  @Override
+  public boolean exists(Block block) throws SQLException {
+    return exists(block.getLocation());
+  }
 
-  /**
-   * Create a entry in the database for the given block. Takes the location from the block.
-   *
-   * @param block the block whose location is inserted into the database
-   */
-  void create(Block block) throws SQLException;
+  @Override
+  public boolean exists(Location location) throws SQLException {
+    if (location != null && location.getWorld() != null) {
+      return exists(
+          location.getWorld().getName(),
+          location.getBlockX(),
+          location.getBlockY(),
+          location.getBlockZ());
+    }
+    return false;
+  }
 
-  /**
-   * Create a entry in the database for the given location.
-   *
-   * @param location the location that is inserted into the database
-   */
-  void create(Location location) throws SQLException;
+  @Override
+  public boolean exists(String world, int x, int y, int z) throws SQLException {
+    var queryBuilder =
+        queryBuilder()
+            .where()
+            .eq("world", world)
+            .and()
+            .eq("x", x)
+            .and()
+            .eq("y", y)
+            .and()
+            .eq("z", z);
 
-  /**
-   * Create a entry in the database for the given coordinates.
-   *
-   * @param world the world for the x, y, z coordinates
-   * @param x the x coordinate
-   * @param y the y coordinate
-   * @param z the z coordinate
-   * @throws SQLException if unable to query database
-   */
-  void create(String world, int x, int y, int z) throws SQLException;
+    return !query(queryBuilder.prepare()).isEmpty();
+  }
 
-  /**
-   * Deletes the given block from the database. Take the location from the block.
-   *
-   * @param block the block to delete
-   * @throws SQLException if unable to query
-   */
-  void delete(Block block) throws SQLException;
+  @Override
+  public void create(Block block) throws SQLException {
+    create(block.getLocation());
+  }
 
-  /**
-   * Deletes the given location from the database.
-   *
-   * @param location the location to delete
-   * @throws SQLException if unable to query
-   */
-  void delete(Location location) throws SQLException;
+  @Override
+  public void create(Location location) throws SQLException {
+    if (location != null && location.getWorld() != null) {
+      create(
+          location.getWorld().getName(),
+          location.getBlockX(),
+          location.getBlockY(),
+          location.getBlockZ());
+    }
+  }
 
-  /**
-   * Delete the given combination of coordinates from the database.
-   *
-   * @param world the world for the x, y, z coordinates
-   * @param x the x coordinate
-   * @param y the y coordinate
-   * @param z the z coordinate
-   * @throws SQLException if unable to query database
-   */
-  void delete(String world, int x, int y, int z) throws SQLException;
+  @Override
+  public void create(String world, int x, int y, int z) throws SQLException {
+    create(new SignLocation(world, x, y, z));
+  }
+
+  @Override
+  public void delete(Block block) throws SQLException {
+    delete(block.getLocation());
+  }
+
+  @Override
+  public void delete(Location location) throws SQLException {
+    if (location != null && location.getWorld() != null) {
+      delete(
+          location.getWorld().getName(),
+          location.getBlockX(),
+          location.getBlockY(),
+          location.getBlockZ());
+    }
+  }
+
+  @Override
+  public void delete(String world, int x, int y, int z) throws SQLException {
+    var deleteBuilder = deleteBuilder();
+    deleteBuilder.where().eq("world", world).and().eq("x", x).and().eq("y", y).and().eq("z", z);
+
+    deleteBuilder.delete();
+  }
 }

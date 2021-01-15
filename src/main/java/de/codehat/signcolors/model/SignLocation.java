@@ -1,6 +1,6 @@
 /*
  * SignColors is a plug-in for Spigot adding colors and formatting to signs.
- * Copyright (C) 2020 CodeHat
+ * Copyright (C) 2021 CodeHat
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,10 +19,10 @@ package de.codehat.signcolors.model;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import de.codehat.signcolors.dao.impl.SignLocationDaoImpl;
+import de.codehat.signcolors.dao.SignLocationDao;
 import java.util.Objects;
 
-@DatabaseTable(tableName = SignLocation.TABLE_NAME, daoClass = SignLocationDaoImpl.class)
+@DatabaseTable(tableName = SignLocation.TABLE_NAME, daoClass = SignLocationDao.class)
 public class SignLocation {
 
   public static final String TABLE_NAME = "sc_sign_locations";

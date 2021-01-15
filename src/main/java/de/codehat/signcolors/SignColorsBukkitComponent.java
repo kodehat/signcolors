@@ -1,6 +1,6 @@
 /*
  * SignColors is a plug-in for Spigot adding colors and formatting to signs.
- * Copyright (C) 2020 CodeHat
+ * Copyright (C) 2021 CodeHat
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,15 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.signcolors.di;
+package de.codehat.signcolors;
 
 import dagger.BindsInstance;
 import dagger.Component;
-import de.codehat.signcolors.SignColors;
 import de.codehat.signcolors.config.Config;
-import de.codehat.signcolors.database.impl.SqliteDatabase;
-import de.codehat.signcolors.di.module.SignColorsBukkitModule;
-import de.codehat.signcolors.listener.impl.PlayerListener;
+import de.codehat.signcolors.database.SqliteDatabase;
+import de.codehat.signcolors.listener.PlayerListener;
+import de.codehat.signcolors.module.SignColorsBukkitModule;
 import de.codehat.signcolors.util.SimpleLogger;
 import javax.inject.Singleton;
 

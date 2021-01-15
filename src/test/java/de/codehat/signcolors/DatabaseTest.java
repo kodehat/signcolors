@@ -1,6 +1,6 @@
 /*
  * SignColors is a plug-in for Spigot adding colors and formatting to signs.
- * Copyright (C) 2020 CodeHat
+ * Copyright (C) 2021 CodeHat
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,8 +22,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+import de.codehat.signcolors.dao.ISignLocationDao;
 import de.codehat.signcolors.dao.SignLocationDao;
-import de.codehat.signcolors.dao.impl.SignLocationDaoImpl;
 import de.codehat.signcolors.model.SignLocation;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -31,16 +31,16 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class DatabaseTest {
+class DatabaseTest {
 
   private static JdbcConnectionSource connectionSource;
-  private static SignLocationDao dao;
+  private static ISignLocationDao dao;
 
   @BeforeAll
   public static void setup() throws SQLException {
     connectionSource = new JdbcConnectionSource("jdbc:h2:mem:sign_colors");
     // TODO: Provide H2 database here
-    dao = new SignLocationDaoImpl(null);
+    dao = new SignLocationDao(null);
 
     TableUtils.createTableIfNotExists(connectionSource, SignLocation.class);
   }
@@ -51,7 +51,7 @@ public class DatabaseTest {
   }
 
   @Test
-  public void testInsert() throws SQLException {
+  void testInsert() throws SQLException {
     final SignLocation signLocation = new SignLocation("world", 1, 10, 100);
     dao.create(signLocation);
 
