@@ -15,31 +15,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.signcolors;
+package de.codehat.signcolors.database;
 
-import com.j256.ormlite.logger.LocalLog;
-import de.codehat.signcolors.util.SimpleLogger;
-import org.bukkit.plugin.java.JavaPlugin;
+import com.j256.ormlite.jdbc.JdbcConnectionSource;
+import java.sql.SQLException;
 
-public class SignColors extends JavaPlugin {
+public class H2Database implements IDatabase {
+
+  public static final String CONFIGURATION_KEY = "h2";
+
+  private static final String H2_CONNECTION_TEMPLATE = "jdbc:h2:mem:sign_colors";
 
   @Override
-  public void onEnable() {
-    // Disable DEBUG logs of ORMLite.
-    System.setProperty(LocalLog.LOCAL_LOG_LEVEL_PROPERTY, "ERROR");
-
-    SignColorsBukkitComponent component =
-        DaggerSignColorsBukkitComponent.builder().signColors(this).build();
-
-    SimpleLogger logger = component.logger();
-
-    getServer().getPluginManager().registerEvents(component.playerListener(), this);
-
-    logger.info("Enabled!");
+  public String getConfigurationKey() {
+    return CONFIGURATION_KEY;
   }
 
   @Override
-  public void onDisable() {
-    // HINT: Clean-up.
+  public JdbcConnectionSource getConnectionSource() throws SQLException {
+    return new JdbcConnectionSource(H2_CONNECTION_TEMPLATE);
   }
 }

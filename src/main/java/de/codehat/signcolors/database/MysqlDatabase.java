@@ -18,27 +18,25 @@
 package de.codehat.signcolors.database;
 
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
+import de.codehat.signcolors.config.Config;
 import de.codehat.signcolors.util.SimpleLogger;
-import java.io.File;
 import java.sql.SQLException;
 import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
 
-@Singleton
-public class SqliteDatabase implements IDatabase {
+public class MysqlDatabase implements IDatabase {
 
-  public static final String CONFIGURATION_KEY = "sqlite";
+  public static final String CONFIGURATION_KEY = "mysql";
 
-  private static final String SQLITE_JDBC_CONNECTION_TEMPLATE = "jdbc:sqlite:%s";
+  private static final String MYSQL_JDBC_CONNECTION_TEMPLATE =
+      "jdbc:mysql://%s:%s/%s?user=%s&password=%s&useSSL=false&autoReconnect=true";
 
   private final SimpleLogger logger;
-  private final File dataFolder;
+  private final Config config;
 
   @Inject
-  public SqliteDatabase(SimpleLogger logger, @Named("dataFolder") File dataFolder) {
+  public MysqlDatabase(SimpleLogger logger, Config config) {
     this.logger = logger;
-    this.dataFolder = dataFolder;
+    this.config = config;
   }
 
   @Override
@@ -51,10 +49,14 @@ public class SqliteDatabase implements IDatabase {
     try {
       return new JdbcConnectionSource(
           String.format(
-              SQLITE_JDBC_CONNECTION_TEMPLATE,
-              dataFolder.toPath().resolve("sign_locations.db").toAbsolutePath().toString()));
+              MYSQL_JDBC_CONNECTION_TEMPLATE,
+              config.getDatabaseHost(),
+              config.getDatabasePort(),
+              config.getDatabaseName(),
+              config.getDatabaseUser(),
+              config.getDatabasePassword()));
     } catch (SQLException e) {
-      logger.error("Unable to load SQLite driver!", e);
+      logger.error("Unable to load MySQL driver!", e);
       return null;
     }
   }

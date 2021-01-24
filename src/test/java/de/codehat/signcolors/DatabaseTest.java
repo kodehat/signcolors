@@ -20,10 +20,11 @@ package de.codehat.signcolors;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import de.codehat.signcolors.dao.ISignLocationDao;
 import de.codehat.signcolors.dao.SignLocationDao;
+import de.codehat.signcolors.database.H2Database;
+import de.codehat.signcolors.database.IDatabase;
 import de.codehat.signcolors.model.SignLocation;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -33,21 +34,20 @@ import org.junit.jupiter.api.Test;
 
 class DatabaseTest {
 
-  private static JdbcConnectionSource connectionSource;
+  private static IDatabase database;
   private static ISignLocationDao dao;
 
   @BeforeAll
   public static void setup() throws SQLException {
-    connectionSource = new JdbcConnectionSource("jdbc:h2:mem:sign_colors");
-    // TODO: Provide H2 database here
-    dao = new SignLocationDao(null);
+    database = new H2Database();
+    dao = new SignLocationDao(database);
 
-    TableUtils.createTableIfNotExists(connectionSource, SignLocation.class);
+    TableUtils.createTableIfNotExists(database.getConnectionSource(), SignLocation.class);
   }
 
   @AfterAll
-  public static void cleanup() throws IOException {
-    connectionSource.close();
+  public static void cleanup() throws IOException, SQLException {
+    database.getConnectionSource().close();
   }
 
   @Test

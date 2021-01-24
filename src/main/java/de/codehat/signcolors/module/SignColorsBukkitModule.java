@@ -17,16 +17,12 @@
  */
 package de.codehat.signcolors.module;
 
-import com.j256.ormlite.table.TableUtils;
 import dagger.Module;
 import dagger.Provides;
 import de.codehat.signcolors.SignColors;
-import de.codehat.signcolors.config.Config;
 import de.codehat.signcolors.dao.ISignLocationDao;
 import de.codehat.signcolors.dao.SignLocationDao;
 import de.codehat.signcolors.database.IDatabase;
-import de.codehat.signcolors.database.SqliteDatabase;
-import de.codehat.signcolors.model.SignLocation;
 import de.codehat.signcolors.util.SimpleLogger;
 import java.io.File;
 import java.sql.SQLException;
@@ -59,22 +55,6 @@ public interface SignColorsBukkitModule {
       logger.info("Created data folder as it did not exist.");
     }
     return dataFolder;
-  }
-
-  @Provides
-  @Singleton
-  static IDatabase provideDatabase(Config config, SqliteDatabase sqliteDatabase) {
-    // TODO: Create a hook or something different for initial table creation.
-    try {
-      TableUtils.createTableIfNotExists(sqliteDatabase.getConnectionSource(), SignLocation.class);
-    } catch (SQLException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    if (config.isSqlite()) {
-      return sqliteDatabase;
-    }
-    return null;
   }
 
   @Provides

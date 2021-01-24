@@ -19,24 +19,19 @@ package de.codehat.signcolors;
 
 import dagger.BindsInstance;
 import dagger.Component;
-import de.codehat.signcolors.config.Config;
-import de.codehat.signcolors.database.SqliteDatabase;
 import de.codehat.signcolors.listener.PlayerListener;
+import de.codehat.signcolors.module.DatabaseModule;
 import de.codehat.signcolors.module.SignColorsBukkitModule;
 import de.codehat.signcolors.util.SimpleLogger;
 import javax.inject.Singleton;
 
 @Singleton
-@Component(modules = SignColorsBukkitModule.class)
+@Component(modules = {SignColorsBukkitModule.class, DatabaseModule.class})
 public interface SignColorsBukkitComponent {
 
   PlayerListener playerListener();
 
   SimpleLogger logger();
-
-  Config config();
-
-  SqliteDatabase sqliteDatabase();
 
   @Component.Builder
   interface Builder {

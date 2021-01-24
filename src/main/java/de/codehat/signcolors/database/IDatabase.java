@@ -21,5 +21,7 @@ import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import java.sql.SQLException;
 
 public interface IDatabase {
+  String getConfigurationKey();
+
   JdbcConnectionSource getConnectionSource() throws SQLException;
 }
