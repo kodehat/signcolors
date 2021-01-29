@@ -15,31 +15,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.signcolors;
+package de.codehat.spigot.signcolors.listener;
 
-import com.j256.ormlite.logger.LocalLog;
-import de.codehat.signcolors.util.SimpleLogger;
-import org.bukkit.plugin.java.JavaPlugin;
+import de.codehat.spigot.signcolors.SignColors;
+import de.codehat.spigot.signcolors.util.SimpleLogger;
+import org.bukkit.event.Listener;
 
-public class SignColors extends JavaPlugin {
+public class AbstractListener implements Listener {
 
-  @Override
-  public void onEnable() {
-    // Disable DEBUG logs of ORMLite.
-    System.setProperty(LocalLog.LOCAL_LOG_LEVEL_PROPERTY, "ERROR");
+  private final SignColors plugin;
+  private final SimpleLogger logger;
 
-    SignColorsBukkitComponent component =
-        DaggerSignColorsBukkitComponent.builder().signColors(this).build();
-
-    SimpleLogger logger = component.logger();
-
-    getServer().getPluginManager().registerEvents(component.playerListener(), this);
-
-    logger.info("Enabled!");
+  public AbstractListener(SignColors plugin, SimpleLogger logger) {
+    this.plugin = plugin;
+    this.logger = logger;
   }
 
-  @Override
-  public void onDisable() {
-    // HINT: Clean-up.
+  protected SignColors getPlugin() {
+    return plugin;
+  }
+
+  protected SimpleLogger getLogger() {
+    return logger;
   }
 }

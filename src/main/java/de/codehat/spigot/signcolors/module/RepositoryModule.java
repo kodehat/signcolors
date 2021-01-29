@@ -15,32 +15,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.signcolors.util;
+package de.codehat.spigot.signcolors.module;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import dagger.Binds;
+import dagger.Module;
+import de.codehat.spigot.signcolors.repository.ISignLocationRepository;
+import de.codehat.spigot.signcolors.repository.SignLocationRepository;
 
-@Singleton
-public final class SimpleLogger {
-
-  private final Logger logger;
-
-  @Inject
-  public SimpleLogger(Logger logger) {
-    this.logger = logger;
-  }
-
-  public void info(String msg, Object... params) {
-    logger.log(Level.INFO, msg, params);
-  }
-
-  public void warn(String msg, Object... params) {
-    logger.log(Level.WARNING, msg, params);
-  }
-
-  public void error(String msg, Throwable thrown) {
-    logger.log(Level.SEVERE, msg, thrown);
-  }
+@Module
+public interface RepositoryModule {
+  @Binds
+  ISignLocationRepository bindSignLocationRepository(SignLocationRepository repository);
 }

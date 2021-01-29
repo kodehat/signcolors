@@ -15,17 +15,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.signcolors.module;
+package de.codehat.spigot.signcolors.module;
 
 import dagger.Module;
 import dagger.Provides;
-import de.codehat.signcolors.SignColors;
-import de.codehat.signcolors.dao.ISignLocationDao;
-import de.codehat.signcolors.dao.SignLocationDao;
-import de.codehat.signcolors.database.IDatabase;
-import de.codehat.signcolors.util.SimpleLogger;
+import de.codehat.spigot.commons.config.BaseConfig;
+import de.codehat.spigot.signcolors.SignColors;
+import de.codehat.spigot.signcolors.util.SimpleLogger;
 import java.io.File;
-import java.sql.SQLException;
+import java.nio.file.Path;
 import java.util.logging.Logger;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -48,23 +46,18 @@ public interface SignColorsBukkitModule {
 
   @Provides
   @Singleton
-  @Named("dataFolder")
-  static File provideDataFolder(SimpleLogger logger, SignColors plugin) {
-    File dataFolder = plugin.getDataFolder();
-    if (dataFolder.mkdirs()) {
-      logger.info("Created data folder as it did not exist.");
-    }
-    return dataFolder;
+  static BaseConfig provideBaseConfig(FileConfiguration pluginConfig) {
+    return new BaseConfig(pluginConfig);
   }
 
   @Provides
   @Singleton
-  static ISignLocationDao provideSignLocationDao(SimpleLogger logger, IDatabase database) {
-    try {
-      return new SignLocationDao(database);
-    } catch (SQLException e) {
-      logger.error("Unable to provide Dao for SignLocation model!", e);
-      return null;
+  @Named("dataFolder")
+  static Path provideDataFolder(SimpleLogger logger, SignColors plugin) {
+    File dataFolder = plugin.getDataFolder();
+    if (dataFolder.mkdirs()) {
+      logger.info("Created data folder as it did not exist.");
     }
+    return dataFolder.toPath();
   }
 }

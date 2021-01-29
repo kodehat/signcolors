@@ -15,13 +15,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.signcolors.database;
+package de.codehat.spigot.signcolors.util;
 
-import com.j256.ormlite.jdbc.JdbcConnectionSource;
-import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
-public interface IDatabase {
-  String getConfigurationKey();
+@Singleton
+public final class SimpleLogger {
 
-  JdbcConnectionSource getConnectionSource() throws SQLException;
+  private final Logger logger;
+
+  @Inject
+  public SimpleLogger(Logger logger) {
+    this.logger = logger;
+  }
+
+  public void info(String msg, Object... params) {
+    logger.log(Level.INFO, msg, params);
+  }
+
+  public void warn(String msg, Object... params) {
+    logger.log(Level.WARNING, msg, params);
+  }
+
+  public void error(String msg, Throwable thrown) {
+    logger.log(Level.SEVERE, msg, thrown);
+  }
 }

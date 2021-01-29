@@ -15,12 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.signcolors.listener;
+package de.codehat.spigot.signcolors.listener;
 
-import de.codehat.signcolors.SignColors;
-import de.codehat.signcolors.dao.ISignLocationDao;
-import de.codehat.signcolors.util.SimpleLogger;
-import java.sql.SQLException;
+import de.codehat.spigot.signcolors.SignColors;
+import de.codehat.spigot.signcolors.repository.SignLocationRepository;
+import de.codehat.spigot.signcolors.util.SimpleLogger;
 import javax.inject.Inject;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
@@ -29,12 +28,13 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class PlayerListener extends AbstractListener {
 
-  private final ISignLocationDao signLocationDao;
+  private final SignLocationRepository signLocationRepository;
 
   @Inject
-  public PlayerListener(SignColors plugin, SimpleLogger logger, ISignLocationDao signLocationDao) {
+  public PlayerListener(
+      SignColors plugin, SimpleLogger logger, SignLocationRepository signLocationRepository) {
     super(plugin, logger);
-    this.signLocationDao = signLocationDao;
+    this.signLocationRepository = signLocationRepository;
   }
 
   @EventHandler
@@ -47,17 +47,13 @@ public class PlayerListener extends AbstractListener {
   @SuppressWarnings("unused")
   protected void onPlayerCreateBlock(BlockPlaceEvent event) {
     final Location blockLocation = event.getBlock().getLocation();
-    try {
-      signLocationDao.create(blockLocation);
-      getLogger()
-          .info(
-              "Saving block with coordinates World={0}, X={1}, Y={2}, Z={3}.",
-              blockLocation.getWorld().getName(),
-              blockLocation.getBlockX(),
-              blockLocation.getBlockY(),
-              blockLocation.getBlockZ());
-    } catch (SQLException e) {
-      getLogger().error("Unable to save block in db!", e);
-    }
+    signLocationRepository.insert(blockLocation);
+    getLogger()
+        .info(
+            "Saving block with coordinates World={0}, X={1}, Y={2}, Z={3}.",
+            blockLocation.getWorld().getName(),
+            blockLocation.getBlockX(),
+            blockLocation.getBlockY(),
+            blockLocation.getBlockZ());
   }
 }

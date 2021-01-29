@@ -15,42 +15,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.signcolors.model;
+package de.codehat.spigot.signcolors.model;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
-import de.codehat.signcolors.dao.SignLocationDao;
 import java.util.Objects;
 
-@DatabaseTable(tableName = SignLocation.TABLE_NAME, daoClass = SignLocationDao.class)
 public class SignLocation {
 
-  public static final String TABLE_NAME = "sc_sign_locations";
-
-  @DatabaseField(useGetSet = true, generatedId = true, canBeNull = false)
   private Long id;
-
-  @DatabaseField(useGetSet = true, canBeNull = false)
   private String world;
+  private int x;
+  private int y;
+  private int z;
 
-  @DatabaseField(useGetSet = true, canBeNull = false)
-  private Integer x;
+  public SignLocation() {
+    // Required.
+  }
 
-  @DatabaseField(useGetSet = true, canBeNull = false)
-  private Integer y;
-
-  @DatabaseField(useGetSet = true, canBeNull = false)
-  private Integer z;
-
-  public SignLocation(String world, Integer x, Integer y, Integer z) {
-    this.id = null; // Used for auto id generation of database.
+  public SignLocation(String world, int x, int y, int z) {
     this.world = world;
     this.x = x;
     this.y = y;
     this.z = z;
   }
-
-  public SignLocation() {}
 
   public Long getId() {
     return id;
@@ -68,27 +54,27 @@ public class SignLocation {
     this.world = world;
   }
 
-  public Integer getX() {
+  public int getX() {
     return x;
   }
 
-  public void setX(Integer x) {
+  public void setX(int x) {
     this.x = x;
   }
 
-  public Integer getY() {
+  public int getY() {
     return y;
   }
 
-  public void setY(Integer y) {
+  public void setY(int y) {
     this.y = y;
   }
 
-  public Integer getZ() {
+  public int getZ() {
     return z;
   }
 
-  public void setZ(Integer z) {
+  public void setZ(int z) {
     this.z = z;
   }
 

@@ -15,27 +15,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.signcolors.listener;
+package de.codehat.spigot.signcolors.repository;
 
-import de.codehat.signcolors.SignColors;
-import de.codehat.signcolors.util.SimpleLogger;
-import org.bukkit.event.Listener;
+import de.codehat.spigot.signcolors.model.SignLocation;
+import java.util.List;
+import org.bukkit.Location;
 
-public class AbstractListener implements Listener {
+public interface ISignLocationRepository {
+  void insert(Location location);
 
-  private final SignColors plugin;
-  private final SimpleLogger logger;
+  void insert(SignLocation signLocation);
 
-  public AbstractListener(SignColors plugin, SimpleLogger logger) {
-    this.plugin = plugin;
-    this.logger = logger;
-  }
+  SignLocation find(Location location);
 
-  protected SignColors getPlugin() {
-    return plugin;
-  }
+  SignLocation find(String world, int x, int y, int z);
 
-  protected SimpleLogger getLogger() {
-    return logger;
-  }
+  List<SignLocation> all();
 }

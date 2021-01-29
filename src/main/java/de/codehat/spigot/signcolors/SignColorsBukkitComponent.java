@@ -15,18 +15,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.signcolors;
+package de.codehat.spigot.signcolors;
 
 import dagger.BindsInstance;
 import dagger.Component;
-import de.codehat.signcolors.listener.PlayerListener;
-import de.codehat.signcolors.module.DatabaseModule;
-import de.codehat.signcolors.module.SignColorsBukkitModule;
-import de.codehat.signcolors.util.SimpleLogger;
+import de.codehat.spigot.signcolors.listener.PlayerListener;
+import de.codehat.spigot.signcolors.module.DatabaseModule;
+import de.codehat.spigot.signcolors.module.RepositoryModule;
+import de.codehat.spigot.signcolors.module.SignColorsBukkitModule;
+import de.codehat.spigot.signcolors.util.SimpleLogger;
 import javax.inject.Singleton;
 
 @Singleton
-@Component(modules = {SignColorsBukkitModule.class, DatabaseModule.class})
+@Component(modules = {SignColorsBukkitModule.class, DatabaseModule.class, RepositoryModule.class})
 public interface SignColorsBukkitComponent {
 
   PlayerListener playerListener();

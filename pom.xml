@@ -22,18 +22,21 @@
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
 
-    <spigot.version>1.16.4-R0.1-SNAPSHOT</spigot.version>
+    <spigot.version>1.16.5-R0.1-SNAPSHOT</spigot.version>
     <vault.version>1.7</vault.version>
-    <lombok.version>1.18.10</lombok.version>
     <dagger.version>2.30.1</dagger.version>
-    <mysql.connector.version>8.0.22</mysql.connector.version>
-    <ormlite.version>5.3</ormlite.version>
+    <spigot-commons.version>1.0.0-SNAPSHOT</spigot-commons.version>
 
     <skipTests>false</skipTests>
   </properties>
 
   <dependencies>
     <!-- Production dependencies -->
+    <dependency>
+      <groupId>com.google.code.findbugs</groupId>
+      <artifactId>jsr305</artifactId>
+      <version>3.0.2</version>
+    </dependency>
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
@@ -52,31 +55,15 @@
       <version>${dagger.version}</version>
     </dependency>
     <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <version>${mysql.connector.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.j256.ormlite</groupId>
-      <artifactId>ormlite-core</artifactId>
-      <version>${ormlite.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.j256.ormlite</groupId>
-      <artifactId>ormlite-jdbc</artifactId>
-      <version>${ormlite.version}</version>
+      <groupId>de.codehat</groupId>
+      <artifactId>spigot-commons</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
     </dependency>
     <!-- Test dependencies -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
       <version>5.7.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.platform</groupId>
-      <artifactId>junit-platform-runner</artifactId>
-      <version>1.7.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>

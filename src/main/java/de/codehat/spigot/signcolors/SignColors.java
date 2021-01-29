@@ -15,24 +15,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.signcolors.database;
+package de.codehat.spigot.signcolors;
 
-import com.j256.ormlite.jdbc.JdbcConnectionSource;
-import java.sql.SQLException;
+import de.codehat.spigot.signcolors.util.SimpleLogger;
+import org.bukkit.plugin.java.JavaPlugin;
 
-public class H2Database implements IDatabase {
-
-  public static final String CONFIGURATION_KEY = "h2";
-
-  private static final String H2_CONNECTION_TEMPLATE = "jdbc:h2:mem:sign_colors";
+public class SignColors extends JavaPlugin {
 
   @Override
-  public String getConfigurationKey() {
-    return CONFIGURATION_KEY;
+  public void onEnable() {
+    SignColorsBukkitComponent component =
+        DaggerSignColorsBukkitComponent.builder().signColors(this).build();
+
+    SimpleLogger logger = component.logger();
+
+    getServer().getPluginManager().registerEvents(component.playerListener(), this);
+
+    logger.info("Enabled!");
   }
 
   @Override
-  public JdbcConnectionSource getConnectionSource() throws SQLException {
-    return new JdbcConnectionSource(H2_CONNECTION_TEMPLATE);
+  public void onDisable() {
+    // HINT: Clean-up.
   }
 }
