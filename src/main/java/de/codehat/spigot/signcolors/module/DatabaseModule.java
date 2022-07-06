@@ -21,12 +21,12 @@ import dagger.Module;
 import dagger.Provides;
 import dagger.multibindings.IntoMap;
 import dagger.multibindings.StringKey;
-import de.codehat.spigot.commons.config.BaseConfig;
 import de.codehat.spigot.commons.database.IDatabase;
 import de.codehat.spigot.commons.database.MysqlDatabase;
 import de.codehat.spigot.commons.database.SqliteDatabase;
 import de.codehat.spigot.commons.database.manager.DatabaseManager;
 import de.codehat.spigot.commons.database.manager.IDatabaseManager;
+import de.codehat.spigot.signcolors.config.MainConfig;
 import de.codehat.spigot.signcolors.util.SimpleLogger;
 import java.nio.file.Path;
 import java.util.Map;
@@ -47,7 +47,7 @@ public interface DatabaseModule {
   @Provides
   @IntoMap
   @StringKey("mysql")
-  static IDatabase provideMysqlDatabase(BaseConfig config) {
+  static IDatabase provideMysqlDatabase(MainConfig config) {
     return new MysqlDatabase(
         config.getDatabaseHost(),
         config.getDatabasePort(),
@@ -64,7 +64,7 @@ public interface DatabaseModule {
 
   @Provides
   @Singleton
-  static IDatabase provideActiveDatabase(IDatabaseManager databaseManager, BaseConfig config) {
+  static IDatabase provideActiveDatabase(IDatabaseManager databaseManager, MainConfig config) {
     return databaseManager.getDatabase(config.getDatabaseType());
   }
 

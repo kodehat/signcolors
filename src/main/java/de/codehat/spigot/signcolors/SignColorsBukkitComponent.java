@@ -19,18 +19,28 @@ package de.codehat.spigot.signcolors;
 
 import dagger.BindsInstance;
 import dagger.Component;
+import de.codehat.spigot.commons.database.migration.manager.IMigrationManager;
 import de.codehat.spigot.signcolors.listener.PlayerListener;
 import de.codehat.spigot.signcolors.module.DatabaseModule;
+import de.codehat.spigot.signcolors.module.MigrationModule;
 import de.codehat.spigot.signcolors.module.RepositoryModule;
 import de.codehat.spigot.signcolors.module.SignColorsBukkitModule;
 import de.codehat.spigot.signcolors.util.SimpleLogger;
 import javax.inject.Singleton;
 
 @Singleton
-@Component(modules = {SignColorsBukkitModule.class, DatabaseModule.class, RepositoryModule.class})
+@Component(
+    modules = {
+      SignColorsBukkitModule.class,
+      DatabaseModule.class,
+      MigrationModule.class,
+      RepositoryModule.class
+    })
 public interface SignColorsBukkitComponent {
 
   PlayerListener playerListener();
+
+  IMigrationManager migrationManager();
 
   SimpleLogger logger();
 

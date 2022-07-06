@@ -17,6 +17,7 @@
  */
 package de.codehat.spigot.signcolors;
 
+import de.codehat.spigot.commons.database.migration.manager.IMigrationManager;
 import de.codehat.spigot.signcolors.util.SimpleLogger;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -29,13 +30,20 @@ public class SignColors extends JavaPlugin {
 
     SimpleLogger logger = component.logger();
 
-    getServer().getPluginManager().registerEvents(component.playerListener(), this);
+    migrate(component.migrationManager(), logger);
 
+    getServer().getPluginManager().registerEvents(component.playerListener(), this);
     logger.info("Enabled!");
   }
 
   @Override
   public void onDisable() {
     // HINT: Clean-up.
+  }
+
+  private void migrate(IMigrationManager migrationManager, SimpleLogger logger) {
+    migrationManager
+        .migrate()
+        .forEach(migrationInfo -> logger.info("Applied migration {0}", migrationInfo.getName()));
   }
 }

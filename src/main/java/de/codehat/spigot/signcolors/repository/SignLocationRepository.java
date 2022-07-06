@@ -17,36 +17,19 @@
  */
 package de.codehat.spigot.signcolors.repository;
 
+import de.codehat.spigot.commons.repository.AbstractRepository;
 import de.codehat.spigot.signcolors.model.SignLocation;
-import java.util.List;
 import javax.inject.Inject;
 import org.bukkit.Location;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-public final class SignLocationRepository implements ISignLocationRepository {
-
-  private final JdbcTemplate jdbcTemplate;
+public final class SignLocationRepository extends AbstractRepository<SignLocation> {
 
   @Inject
   public SignLocationRepository(JdbcTemplate jdbcTemplate) {
-    this.jdbcTemplate = jdbcTemplate;
-    createTable();
+    super(SignLocation.class, jdbcTemplate);
   }
 
-  private void createTable() {
-    String sql =
-        "CREATE TABLE IF NOT EXISTS sc_sign_locations("
-            + "id INTEGER PRIMARY KEY /*!40101 AUTO_INCREMENT */,"
-            + "world VARCHAR(255) NOT NULL,"
-            + "x INTEGER NOT NULL,"
-            + "y INTEGER NOT NULL,"
-            + "z INTEGER NOT NULL"
-            + ")";
-    jdbcTemplate.execute(sql);
-  }
-
-  @Override
   public void insert(Location location) {
     insert(
         new SignLocation(
@@ -63,24 +46,28 @@ public final class SignLocationRepository implements ISignLocationRepository {
         new Object[] {
           signLocation.getWorld(), signLocation.getX(), signLocation.getY(), signLocation.getZ()
         };
-    jdbcTemplate.update(sql, params);
+    getJdbcTemplate().update(sql, params);
   }
 
   @Override
-  public SignLocation find(Location location) {
-    return null;
+  public void delete(SignLocation model) {
+    String sql =
+        String.format(
+            "DELETE FROM %s WHERE world = ? AND x = ? AND y = ? AND z = ?", model.getTableName());
+    getJdbcTemplate().update(sql, model.getWorld(), model.getX(), model.getY(), model.getZ());
   }
 
   @Override
-  public SignLocation find(String world, int x, int y, int z) {
+  public SignLocation find(Object... params) {
     String sql = "SELECT * FROM sc_sign_locations WHERE world = ? AND x = ? AND y = ? AND z = ?";
-    Object[] params = new Object[] {world, x, y, z};
-    return jdbcTemplate.queryForObject(sql, SignLocation.class, params);
+    return getJdbcTemplate().queryForObject(sql, SignLocation.class, params);
   }
 
-  @Override
-  public List<SignLocation> all() {
-    String sql = "SELECT * FROM sc_sign_locations";
-    return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(SignLocation.class));
+  public SignLocation find(Location location) {
+    return find(
+        location.getWorld().getName(),
+        location.getBlockX(),
+        location.getBlockY(),
+        location.getBlockZ());
   }
 }

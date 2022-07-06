@@ -15,20 +15,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.spigot.signcolors.repository;
+package de.codehat.spigot.signcolors.config;
 
-import de.codehat.spigot.signcolors.model.SignLocation;
-import java.util.List;
-import org.bukkit.Location;
+import de.codehat.spigot.commons.config.BaseConfig;
+import java.nio.file.Path;
+import javax.inject.Inject;
+import javax.inject.Named;
 
-public interface ISignLocationRepository {
-  void insert(Location location);
+public class MainConfig extends BaseConfig {
 
-  void insert(SignLocation signLocation);
-
-  SignLocation find(Location location);
-
-  SignLocation find(String world, int x, int y, int z);
-
-  List<SignLocation> all();
+  @Inject
+  public MainConfig(@Named("dataFolder") Path dataFolder) {
+    super(dataFolder.resolve("config.yml"));
+  }
 }

@@ -19,8 +19,8 @@ package de.codehat.spigot.signcolors.module;
 
 import dagger.Module;
 import dagger.Provides;
-import de.codehat.spigot.commons.config.BaseConfig;
 import de.codehat.spigot.signcolors.SignColors;
+import de.codehat.spigot.signcolors.config.MainConfig;
 import de.codehat.spigot.signcolors.util.SimpleLogger;
 import java.io.File;
 import java.nio.file.Path;
@@ -46,8 +46,8 @@ public interface SignColorsBukkitModule {
 
   @Provides
   @Singleton
-  static BaseConfig provideBaseConfig(FileConfiguration pluginConfig) {
-    return new BaseConfig(pluginConfig);
+  static MainConfig provideMainConfig(@Named("dataFolder") Path dataFolder) {
+    return new MainConfig(dataFolder);
   }
 
   @Provides
@@ -56,7 +56,7 @@ public interface SignColorsBukkitModule {
   static Path provideDataFolder(SimpleLogger logger, SignColors plugin) {
     File dataFolder = plugin.getDataFolder();
     if (dataFolder.mkdirs()) {
-      logger.info("Created data folder as it did not exist.");
+      logger.info("Created data folder as it did not exist");
     }
     return dataFolder.toPath();
   }

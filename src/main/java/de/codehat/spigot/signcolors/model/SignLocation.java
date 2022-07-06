@@ -17,9 +17,10 @@
  */
 package de.codehat.spigot.signcolors.model;
 
+import de.codehat.spigot.commons.database.model.AbstractModel;
 import java.util.Objects;
 
-public class SignLocation {
+public class SignLocation extends AbstractModel {
 
   private Long id;
   private String world;
@@ -36,6 +37,11 @@ public class SignLocation {
     this.x = x;
     this.y = y;
     this.z = z;
+  }
+
+  @Override
+  public String getTableName() {
+    return "sc_sign_locations";
   }
 
   public Long getId() {

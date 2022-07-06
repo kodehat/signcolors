@@ -19,11 +19,12 @@ package de.codehat.spigot.signcolors.module;
 
 import dagger.Binds;
 import dagger.Module;
-import de.codehat.spigot.signcolors.repository.ISignLocationRepository;
+import de.codehat.spigot.commons.repository.IRepository;
+import de.codehat.spigot.signcolors.model.SignLocation;
 import de.codehat.spigot.signcolors.repository.SignLocationRepository;
 
 @Module
 public interface RepositoryModule {
   @Binds
-  ISignLocationRepository bindSignLocationRepository(SignLocationRepository repository);
+  IRepository<SignLocation> bindSignLocationRepository(SignLocationRepository repository);
 }
