@@ -1,29 +1,30 @@
 name: SignColors
-main: de.codehat.spigot.signcolors.SignColors
-author: CodeHat
+main: de.codehat.signcolors.SignColorsPlugin
+author: kodehat
 website: https://signcolors.codehat.de
 softdepend: [Vault]
-description: Apply colors and formatting on signs.
+description: SignColors is a Spigot plugin that brings colors and formatting to signs.
 version: 2.0.0
-api-version: 1.16
+api-version: 1.19
 
 commands:
   sc:
     usage: /<command> <name>
-    description: Get some information about the plugin like the plugin's version
+    description: Shows basic details about the plugin.
     aliases: [signcolors]
   help:
     usage: /sc help
-    description: List all available commands
+    description: Lists all available commands.
   reload:
     usage: /sc reload
-    description: Reload the plugin's configuration file
-  givesign:
-    usage: /sc givesign <player> <amount>
-    description: Give a player a specific amount of colored signs
+    description: Reloads the plugin's configuration file.
+  give:
+    usage: /sc give <player> <amount>
+    description: Gives a player a specific amount of colored signs.
   colorcodes:
     usage: /sc colorcodes
-    description: List all color and formatting codes
+    description: Lists all color and formatting codes.
+    aliases: [cc]
 
 permissions:
   signcolors.all:
@@ -31,26 +32,26 @@ permissions:
     default: op
     children:
       signcolors.command.all: true
-      signcolors.specialsign.all: true
+      signcolors.buysign.all: true
       signcolors.color.all: true
       signcolors.formatting.all: true
       signcolors.signcrafting.bypass: true
       signcolors.blockedfirstlines.bypass: true
       signcolors.updatemessage: true
   signcolors.command.all:
-    description: Access to all the plugin's commands.
+    description: Gives access to all the plugin's commands.
     children:
       signcolors.command.info: true
       signcolors.command.help: true
       signcolors.command.reload: true
       signcolors.command.colorcodes: true
-      signcolors.command.givesign: true
+      signcolors.command.give: true
       signcolors.command.migratedatabase: true
-  signcolors.specialsign.all:
-    description: Allows you to create and use [SC] signs.
+  signcolors.buysign.all:
+    description: Allows you to create and use buy signs.
     children:
-      signcolors.specialsign.create: true
-      signcolors.specialsign.use: true
+      signcolors.buysign.create: true
+      signcolors.buysign.use: true
   signcolors.color.all:
     description: Allows you to apply all colors on signs.
     children:
@@ -80,25 +81,25 @@ permissions:
       signcolors.formatting.o: true
       signcolors.formatting.r: true
   signcolors.command.info:
-    description: Allows you to view the plugin's info.
+    description: Allows you to view the plugin's details.
   signcolors.command.help:
     description: Allows you to view the help page.
   signcolors.command.reload:
     description: Allows you to reload the config.yml.
   signcolors.command.colorcodes:
     description: Allows you to use the color codes command.
-  signcolors.command.givesign:
+  signcolors.command.give:
     description: Allows you to use the give sign command.
   signcolors.specialsign.create:
-    description: Allows you to create [SC] signs.
+    description: Allows you to create buy signs.
   signcolors.specialsign.use:
-    description: Allows you to use [SC] signs.
+    description: Allows you to use buy signs.
   signcolors.signcrafting.bypass:
-    description: Allows you to apply colors on a normal sign, even if 'sign_crafting' is true.
+    description: Allows you to apply colors on a normal sign, even if crafting is required.
   signcolors.blockedfirstlines.bypass:
     description: Allows you to bypass the blocked first lines.
   signcolors.updatemessage:
-    description: Shows an update message to you upon joining the server, if an update is available.
+    description: Shows an update message to you, if an update is available.
   signcolors.color.0:
     description: Access to BLACK color.
   signcolors.color.1:
