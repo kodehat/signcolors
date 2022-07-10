@@ -1,6 +1,6 @@
 /*
  * SignColors is a plug-in for Spigot adding colors and formatting to signs.
- * Copyright (C) 2021 CodeHat
+ * Copyright (C) 2022 CodeHat
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,33 +17,31 @@
  */
 package de.codehat.spigot.signcolors;
 
-import de.codehat.spigot.commons.database.migration.manager.IMigrationManager;
-import de.codehat.spigot.signcolors.util.SimpleLogger;
+import de.codehat.spigot.signcolors.api.database.Database;
+import de.codehat.spigot.signcolors.database.SqliteDatabase;
+import de.codehat.spigot.signcolors.model.SlSignLocations;
+import java.util.logging.Logger;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SignColors extends JavaPlugin {
 
+  private static Logger logger;
+
   @Override
   public void onEnable() {
-    SignColorsBukkitComponent component =
-        DaggerSignColorsBukkitComponent.builder().signColors(this).build();
-
-    SimpleLogger logger = component.logger();
-
-    migrate(component.migrationManager(), logger);
-
-    getServer().getPluginManager().registerEvents(component.playerListener(), this);
-    logger.info("Enabled!");
+    logger = getLogger();
+    getDataFolder().mkdirs();
+    final Database dBase =
+        new SqliteDatabase(getDataFolder().toPath().resolve("data.sqlite").toString());
+    final SlSignLocations signs = new SlSignLocations(dBase.dataSource());
+    signs.createTable();
+    signs.add("world", 1, 2, 3);
+    logger.info("Added sign");
+    signs.iterate().forEach(s -> logger.info("ID: " + s.id()));
   }
 
   @Override
   public void onDisable() {
     // HINT: Clean-up.
-  }
-
-  private void migrate(IMigrationManager migrationManager, SimpleLogger logger) {
-    migrationManager
-        .migrate()
-        .forEach(migrationInfo -> logger.info("Applied migration {0}", migrationInfo.getName()));
   }
 }

@@ -1,6 +1,6 @@
 /*
  * SignColors is a plug-in for Spigot adding colors and formatting to signs.
- * Copyright (C) 2021 CodeHat
+ * Copyright (C) 2022 CodeHat
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,27 +15,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.spigot.signcolors.listener;
+package de.codehat.spigot.signcolors.database;
 
-import de.codehat.spigot.signcolors.SignColors;
-import de.codehat.spigot.signcolors.util.SimpleLogger;
-import org.bukkit.event.Listener;
+import de.codehat.spigot.signcolors.api.database.Database;
+import javax.sql.DataSource;
+import org.sqlite.SQLiteDataSource;
 
-public class AbstractListener implements Listener {
+public final class SqliteDatabase implements Database {
 
-  private final SignColors plugin;
-  private final SimpleLogger logger;
+  private final DataSource dbase;
 
-  public AbstractListener(SignColors plugin, SimpleLogger logger) {
-    this.plugin = plugin;
-    this.logger = logger;
+  public SqliteDatabase(String dbasePath) {
+    final SQLiteDataSource dbase = new SQLiteDataSource();
+    dbase.setUrl("jdbc:sqlite:%s".formatted(dbasePath));
+    this.dbase = dbase;
   }
 
-  protected SignColors getPlugin() {
-    return plugin;
+  @Override
+  public boolean connect() {
+    // There is no need to connect to the SQLite database.
+    return true;
   }
 
-  protected SimpleLogger getLogger() {
-    return logger;
+  @Override
+  public DataSource dataSource() {
+    return dbase;
   }
 }

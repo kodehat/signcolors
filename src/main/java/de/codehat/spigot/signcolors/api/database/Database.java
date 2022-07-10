@@ -1,6 +1,6 @@
 /*
  * SignColors is a plug-in for Spigot adding colors and formatting to signs.
- * Copyright (C) 2021 CodeHat
+ * Copyright (C) 2022 CodeHat
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,16 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.spigot.signcolors.module;
+package de.codehat.spigot.signcolors.api.database;
 
-import dagger.Binds;
-import dagger.Module;
-import de.codehat.spigot.commons.repository.IRepository;
-import de.codehat.spigot.signcolors.model.SignLocation;
-import de.codehat.spigot.signcolors.repository.SignLocationRepository;
+import javax.sql.DataSource;
 
-@Module
-public interface RepositoryModule {
-  @Binds
-  IRepository<SignLocation> bindSignLocationRepository(SignLocationRepository repository);
+public interface Database {
+  boolean connect();
+
+  DataSource dataSource();
 }

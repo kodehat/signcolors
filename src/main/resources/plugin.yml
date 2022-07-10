@@ -1,5 +1,5 @@
 name: SignColors
-main: de.codehat.signcolors.SignColorsPlugin
+main: de.codehat.spigot.signcolors.SignColors
 author: kodehat
 website: https://signcolors.codehat.de
 softdepend: [Vault]
