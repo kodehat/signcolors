@@ -18,6 +18,7 @@
 package de.codehat.spigot.signcolors;
 
 import de.codehat.spigot.signcolors.api.database.Database;
+import de.codehat.spigot.signcolors.database.ConstSqliteDatabase;
 import de.codehat.spigot.signcolors.database.SqliteDatabase;
 import de.codehat.spigot.signcolors.model.SlSignLocations;
 import java.util.logging.Logger;
@@ -32,7 +33,8 @@ public class SignColors extends JavaPlugin {
     logger = getLogger();
     getDataFolder().mkdirs();
     final Database dBase =
-        new SqliteDatabase(getDataFolder().toPath().resolve("data.sqlite").toString());
+        new ConstSqliteDatabase(
+            new SqliteDatabase(getDataFolder().toPath().resolve("data.sqlite").toString()));
     final SlSignLocations signs = new SlSignLocations(dBase.dataSource());
     signs.createTable();
     signs.add("world", 1, 2, 3);

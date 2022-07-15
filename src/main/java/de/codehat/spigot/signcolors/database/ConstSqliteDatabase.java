@@ -19,26 +19,24 @@ package de.codehat.spigot.signcolors.database;
 
 import de.codehat.spigot.signcolors.api.database.Database;
 import javax.sql.DataSource;
-import org.sqlite.SQLiteDataSource;
 
-public final class SqliteDatabase implements Database {
+public class ConstSqliteDatabase implements Database {
 
-  private final String dbasePath;
+  private final Database origin;
+  private final DataSource dbase;
 
-  public SqliteDatabase(String dbasePath) {
-    this.dbasePath = dbasePath;
+  public ConstSqliteDatabase(Database origin) {
+    this.origin = origin;
+    this.dbase = origin.dataSource();
   }
 
   @Override
   public boolean connect() {
-    // There is no need to connect to the SQLite database.
-    return true;
+    return this.origin.connect();
   }
 
   @Override
   public DataSource dataSource() {
-    final SQLiteDataSource dbase = new SQLiteDataSource();
-    dbase.setUrl("jdbc:sqlite:%s".formatted(dbasePath));
-    return dbase;
+    return this.dbase;
   }
 }

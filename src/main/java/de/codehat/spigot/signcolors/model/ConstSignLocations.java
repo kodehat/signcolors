@@ -58,6 +58,6 @@ public class ConstSignLocations implements SignLocations {
 
   @Override
   public SignLocation add(String world, int x, int y, int z) {
-    return null;
+    return new SlSignLocations(this.dbase).add(world, x, y, z);
   }
 }
