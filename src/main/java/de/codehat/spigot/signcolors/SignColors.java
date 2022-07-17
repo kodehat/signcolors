@@ -18,32 +18,42 @@
 package de.codehat.spigot.signcolors;
 
 import de.codehat.spigot.signcolors.api.database.Database;
+import de.codehat.spigot.signcolors.api.model.SignLocations;
 import de.codehat.spigot.signcolors.database.ConstSqliteDatabase;
 import de.codehat.spigot.signcolors.database.SqliteDatabase;
+import de.codehat.spigot.signcolors.listener.BlockPlaceListener;
 import de.codehat.spigot.signcolors.model.SlSignLocations;
-import java.util.logging.Logger;
+import de.codehat.spigot.signcolors.plugin.DataFolderInitializer;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SignColors extends JavaPlugin {
 
-  private static Logger logger;
-
   @Override
   public void onEnable() {
-    logger = getLogger();
-    getDataFolder().mkdirs();
+    runInitializer();
+
     final Database dBase =
         new ConstSqliteDatabase(
             new SqliteDatabase(getDataFolder().toPath().resolve("data.sqlite").toString()));
-    final SlSignLocations signs = new SlSignLocations(dBase.dataSource());
-    signs.createTable();
-    signs.add("world", 1, 2, 3);
-    logger.info("Added sign");
-    signs.iterate().forEach(s -> logger.info("ID: " + s.id()));
+
+    final SignLocations signLocations = new SlSignLocations(dBase.dataSource());
+    signLocations.createTable();
+
+    registerListener(signLocations);
   }
 
   @Override
   public void onDisable() {
     // HINT: Clean-up.
+  }
+
+  void runInitializer() {
+    new DataFolderInitializer(this).initialize();
+  }
+
+  void registerListener(SignLocations signLocations) {
+    getServer()
+        .getPluginManager()
+        .registerEvents(new BlockPlaceListener(getLogger(), signLocations), this);
   }
 }
