@@ -15,16 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.spigot.signcolors.api.model;
+package de.codehat.spigot.signcolors.api.check;
 
-public interface SignLocation {
-  long id();
-
-  String world();
-
-  int x();
-
-  int y();
-
-  int z();
+public interface Check {
+  boolean check();
 }

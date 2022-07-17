@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.spigot.signcolors.model;
+package de.codehat.spigot.signcolors.model.signlocation;
 
-import de.codehat.spigot.signcolors.api.model.SignLocation;
+import de.codehat.spigot.signcolors.api.model.signlocation.SignLocation;
 
 public final class ConstSignLocation implements SignLocation {
 

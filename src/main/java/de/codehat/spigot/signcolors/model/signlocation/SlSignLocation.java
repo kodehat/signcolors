@@ -15,67 +15,75 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.spigot.signcolors.model;
+package de.codehat.spigot.signcolors.model.signlocation;
 
 import com.jcabi.jdbc.JdbcSession;
-import com.jcabi.jdbc.ListOutcome;
 import com.jcabi.jdbc.SingleOutcome;
-import de.codehat.spigot.signcolors.api.model.SignLocation;
-import de.codehat.spigot.signcolors.api.model.SignLocations;
+import de.codehat.spigot.signcolors.api.model.signlocation.SignLocation;
 import java.sql.SQLException;
 import javax.sql.DataSource;
 
-public final class SlSignLocations implements SignLocations {
+public final class SlSignLocation implements SignLocation {
 
   private final DataSource dbase;
+  private final long number;
 
-  public SlSignLocations(DataSource data) {
+  public SlSignLocation(DataSource data, long id) {
     this.dbase = data;
+    this.number = id;
   }
 
   @Override
-  public void createTable() {
-    try {
-      new JdbcSession(this.dbase)
-          .sql(
-              """
-        CREATE TABLE IF NOT EXISTS sign_locations(
-          id INTEGER PRIMARY KEY,
-          world VARCHAR(255) NOT NULL,
-          x INTEGER NOT NULL,
-          y INTEGER NOT NULL,
-          z INTEGER NOT NULL
-        )
-        """)
-          .execute();
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    }
+  public long id() {
+    return this.number;
   }
 
   @Override
-  public Iterable<SignLocation> iterate() {
+  public String world() {
     try {
       return new JdbcSession(this.dbase)
-          .sql("SELECT id FROM sign_locations")
-          .select(new ListOutcome<>(rSet -> new SlSignLocation(this.dbase, rSet.getInt(1))));
+          .sql("SELECT world FROM sign_locations WHERE id = ?")
+          .set(this.number)
+          .select(new SingleOutcome<>(String.class));
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
   }
 
   @Override
-  public SignLocation add(String world, int x, int y, int z) {
+  public int x() {
     try {
-      return new SlSignLocation(
-          this.dbase,
-          new JdbcSession(this.dbase)
-              .sql("INSERT INTO sign_locations (world, x, y, z) VALUES (?, ?, ?, ?)")
-              .set(world)
-              .set(x)
-              .set(y)
-              .set(z)
-              .insert(new SingleOutcome<>(Long.class)));
+      return new JdbcSession(this.dbase)
+          .sql("SELECT x FROM sign_locations WHERE id = ?")
+          .set(this.number)
+          .select(new SingleOutcome<>(Long.class))
+          .intValue();
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Override
+  public int y() {
+    try {
+      return new JdbcSession(this.dbase)
+          .sql("SELECT y FROM sign_locations WHERE id = ?")
+          .set(this.number)
+          .select(new SingleOutcome<>(Long.class))
+          .intValue();
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Override
+  public int z() {
+    try {
+      return new JdbcSession(this.dbase)
+          .sql("SELECT z FROM sign_locations WHERE id = ?")
+          .set(this.number)
+          .select(new SingleOutcome<>(Long.class))
+          .intValue();
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }

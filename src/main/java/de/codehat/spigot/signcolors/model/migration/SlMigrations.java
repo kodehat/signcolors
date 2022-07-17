@@ -15,49 +15,55 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.spigot.signcolors.model;
+package de.codehat.spigot.signcolors.model.migration;
 
 import com.jcabi.jdbc.JdbcSession;
 import com.jcabi.jdbc.ListOutcome;
-import de.codehat.spigot.signcolors.api.model.SignLocation;
-import de.codehat.spigot.signcolors.api.model.SignLocations;
+import de.codehat.spigot.signcolors.api.model.migration.Migration;
+import de.codehat.spigot.signcolors.api.model.migration.Migrations;
 import java.sql.SQLException;
 import javax.sql.DataSource;
 
-public class ConstSignLocations implements SignLocations {
+public class SlMigrations implements Migrations {
 
   private final DataSource dbase;
 
-  public ConstSignLocations(DataSource dbase) {
-    this.dbase = dbase;
+  public SlMigrations(DataSource data) {
+    this.dbase = data;
   }
 
   @Override
   public void createTable() {
-    new SlSignLocations(this.dbase).createTable();
-  }
-
-  @Override
-  public Iterable<SignLocation> iterate() {
     try {
-      return new JdbcSession(this.dbase)
-          .sql("SELECT * FROM sign_locations")
-          .select(
-              new ListOutcome<>(
-                  rset ->
-                      new ConstSignLocation(
-                          new SlSignLocation(ConstSignLocations.this.dbase, rset.getInt(1)),
-                          rset.getString(2),
-                          rset.getInt(3),
-                          rset.getInt(4),
-                          rset.getInt(5))));
+      new JdbcSession(this.dbase)
+          .sql(
+              """
+          CREATE TABLE IF NOT EXISTS migrations(
+            id INTEGER PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            version INTEGER NOT NULL,
+            applied_at INTEGER NOT NULL
+          )
+          """)
+          .execute();
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
   }
 
   @Override
-  public SignLocation add(String world, int x, int y, int z) {
-    return new SlSignLocations(this.dbase).add(world, x, y, z);
+  public Iterable<Migration> iterate() {
+    try {
+      return new JdbcSession(this.dbase)
+          .sql("SELECT id FROM migrations")
+          .select(new ListOutcome<>(rSet -> new SlMigration(this.dbase, rSet.getInt(1))));
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Override
+  public Migration add(String name, long version, long appliedAt) {
+    return null;
   }
 }

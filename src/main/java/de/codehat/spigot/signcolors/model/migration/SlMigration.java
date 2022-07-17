@@ -15,20 +15,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.spigot.signcolors.model;
+package de.codehat.spigot.signcolors.model.migration;
 
 import com.jcabi.jdbc.JdbcSession;
 import com.jcabi.jdbc.SingleOutcome;
-import de.codehat.spigot.signcolors.api.model.SignLocation;
+import de.codehat.spigot.signcolors.api.model.migration.Migration;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import javax.sql.DataSource;
 
-public final class SlSignLocation implements SignLocation {
+public final class SlMigration implements Migration {
 
   private final DataSource dbase;
   private final long number;
 
-  public SlSignLocation(DataSource data, long id) {
+  public SlMigration(DataSource data, long id) {
     this.dbase = data;
     this.number = id;
   }
@@ -39,10 +42,10 @@ public final class SlSignLocation implements SignLocation {
   }
 
   @Override
-  public String world() {
+  public String name() {
     try {
       return new JdbcSession(this.dbase)
-          .sql("SELECT world FROM sign_locations WHERE id = ?")
+          .sql("SELECT name FROM migrations WHERE id = ?")
           .set(this.number)
           .select(new SingleOutcome<>(String.class));
     } catch (SQLException e) {
@@ -51,39 +54,27 @@ public final class SlSignLocation implements SignLocation {
   }
 
   @Override
-  public int x() {
+  public long version() {
     try {
       return new JdbcSession(this.dbase)
-          .sql("SELECT x FROM sign_locations WHERE id = ?")
+          .sql("SELECT version FROM migrations WHERE id = ?")
           .set(this.number)
-          .select(new SingleOutcome<>(Long.class))
-          .intValue();
+          .select(new SingleOutcome<>(Long.class));
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
   }
 
   @Override
-  public int y() {
+  public LocalDateTime appliedAt() {
     try {
-      return new JdbcSession(this.dbase)
-          .sql("SELECT y FROM sign_locations WHERE id = ?")
-          .set(this.number)
-          .select(new SingleOutcome<>(Long.class))
-          .intValue();
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
-  @Override
-  public int z() {
-    try {
-      return new JdbcSession(this.dbase)
-          .sql("SELECT z FROM sign_locations WHERE id = ?")
-          .set(this.number)
-          .select(new SingleOutcome<>(Long.class))
-          .intValue();
+      return LocalDateTime.ofInstant(
+          new JdbcSession(this.dbase)
+              .sql("SELECT appliedAt FROM migrations WHERE id = ?")
+              .set(this.number)
+              .select(new SingleOutcome<>(Date.class))
+              .toInstant(),
+          ZoneId.systemDefault());
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
