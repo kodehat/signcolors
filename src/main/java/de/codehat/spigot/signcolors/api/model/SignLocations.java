@@ -17,10 +17,15 @@
  */
 package de.codehat.spigot.signcolors.api.model;
 
+import org.jdbi.v3.sqlobject.statement.SqlQuery;
+import org.jdbi.v3.sqlobject.statement.SqlUpdate;
+
+import java.util.List;
+
 public interface SignLocations {
-  void createTable();
+  @SqlQuery("SELECT * FROM sign_locations")
+  List<SignLocation> all();
 
-  Iterable<SignLocation> iterate();
-
-  SignLocation add(String world, int x, int y, int z);
+  @SqlUpdate("INSERT INTO sign_locations (world, x, y, z) VALUES (?, ?, ?, ?)")
+  void add(String world, int x, int y, int z);
 }

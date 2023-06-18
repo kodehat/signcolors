@@ -17,12 +17,8 @@
  */
 package de.codehat.spigot.signcolors;
 
-import de.codehat.spigot.signcolors.api.database.Database;
 import de.codehat.spigot.signcolors.api.model.SignLocations;
-import de.codehat.spigot.signcolors.database.ConstSqliteDatabase;
-import de.codehat.spigot.signcolors.database.SqliteDatabase;
 import de.codehat.spigot.signcolors.listener.BlockPlaceListener;
-import de.codehat.spigot.signcolors.model.SlSignLocations;
 import de.codehat.spigot.signcolors.plugin.DataFolderInitializer;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -32,14 +28,9 @@ public class SignColors extends JavaPlugin {
   public void onEnable() {
     runInitializer();
 
-    final Database dBase =
-        new ConstSqliteDatabase(
-            new SqliteDatabase(getDataFolder().toPath().resolve("data.sqlite").toString()));
+    SignColorsComponent component = DaggerSignColorsComponent.builder().signColors(this).build();
 
-    final SignLocations signLocations = new SlSignLocations(dBase.dataSource());
-    signLocations.createTable();
-
-    registerListener(signLocations);
+    //registerListener(signLocations);
   }
 
   @Override
