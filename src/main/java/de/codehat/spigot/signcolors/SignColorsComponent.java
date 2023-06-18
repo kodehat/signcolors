@@ -15,30 +15,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.spigot.signcolors.database;
+package de.codehat.spigot.signcolors;
 
-import com.jcabi.jdbc.JdbcSession;
-import java.util.concurrent.Callable;
-import javax.sql.DataSource;
+import dagger.BindsInstance;
+import dagger.Component;
+import de.codehat.spigot.signcolors.listener.BlockPlaceListener;
+import de.codehat.spigot.signcolors.module.DatabaseModule;
+import de.codehat.spigot.signcolors.module.ListenerModule;
+import de.codehat.spigot.signcolors.module.SignColorsModule;
+import javax.inject.Singleton;
 
-public final class Txn {
+@Singleton
+@Component(modules = {SignColorsModule.class, DatabaseModule.class, ListenerModule.class})
+public interface SignColorsComponent {
 
-  private final DataSource dbase;
+  BlockPlaceListener blockPlaceListener();
 
-  public Txn(DataSource dbase) {
-    this.dbase = dbase;
-  }
+  @Component.Builder
+  interface Builder {
+    @BindsInstance
+    Builder signColors(SignColors plugin);
 
-  public <T> T call(Callable<T> callable) throws Exception {
-    JdbcSession session = new JdbcSession(this.dbase);
-    try {
-      session.sql("BEGIN TRANSACTION").execute();
-      T result = callable.call();
-      session.sql("COMMIT").execute();
-      return result;
-    } catch (Exception e) {
-      session.sql("ROLLBACK").execute();
-      throw e;
-    }
+    SignColorsComponent build();
   }
 }

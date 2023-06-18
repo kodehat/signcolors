@@ -45,13 +45,13 @@ public class BlockPlaceListener implements Listener {
             new BlockIsSignCheck(event.getBlock()))
         .check()) {
       assert location.getWorld() != null;
-      var signLocation =
+      var id =
           signLocations.add(
               location.getWorld().getName(),
               location.getBlockX(),
               location.getBlockY(),
               location.getBlockZ());
-      logger.info(() -> "Saved sign with id: " + signLocation.id());
+      logger.info(() -> "Saved sign with id: " + id);
     }
   }
 }

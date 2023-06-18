@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/signcolors.iml" filepath="$PROJECT_DIR$/signcolors.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../spigot-commons/spigot-commons.iml" filepath="$PROJECT_DIR$/../spigot-commons/spigot-commons.iml" />
     </modules>
   </component>
 </project>

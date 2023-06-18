@@ -15,30 +15,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.spigot.signcolors.database;
+package de.codehat.spigot.signcolors.module;
 
-import de.codehat.spigot.signcolors.api.database.Database;
-import javax.sql.DataSource;
-import org.sqlite.SQLiteDataSource;
+import dagger.Module;
+import dagger.Provides;
+import de.codehat.spigot.signcolors.api.model.SignLocations;
+import de.codehat.spigot.signcolors.listener.BlockPlaceListener;
+import java.util.logging.Logger;
+import org.jdbi.v3.core.Jdbi;
 
-public final class SqliteDatabase implements Database {
+@Module
+public interface ListenerModule {
 
-  private final String dbasePath;
-
-  public SqliteDatabase(String dbasePath) {
-    this.dbasePath = dbasePath;
-  }
-
-  @Override
-  public boolean connect() {
-    // There is no need to connect to the SQLite database.
-    return true;
-  }
-
-  @Override
-  public DataSource dataSource() {
-    final SQLiteDataSource dbase = new SQLiteDataSource();
-    dbase.setUrl("jdbc:sqlite:%s".formatted(dbasePath));
-    return dbase;
+  @Provides
+  static BlockPlaceListener provideBlockPlaceListener(Logger logger, Jdbi jdbi) {
+    SignLocations signLocations = jdbi.onDemand(SignLocations.class);
+    return new BlockPlaceListener(logger, signLocations);
   }
 }

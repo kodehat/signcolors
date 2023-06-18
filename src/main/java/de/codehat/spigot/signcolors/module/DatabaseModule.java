@@ -15,28 +15,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.spigot.signcolors.database;
+package de.codehat.spigot.signcolors.module;
 
-import de.codehat.spigot.signcolors.api.database.Database;
-import javax.sql.DataSource;
+import dagger.Module;
+import dagger.Provides;
+import java.nio.file.Path;
+import javax.inject.Named;
+import javax.inject.Singleton;
+import org.jdbi.v3.core.Handle;
+import org.jdbi.v3.core.Jdbi;
+import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 
-public class ConstSqliteDatabase implements Database {
+@Module
+public interface DatabaseModule {
 
-  private final Database origin;
-  private final DataSource dbase;
-
-  public ConstSqliteDatabase(Database origin) {
-    this.origin = origin;
-    this.dbase = origin.dataSource();
+  @Provides
+  @Singleton
+  static Jdbi provideJdbi(@Named("dataFolder") Path dataFolder) {
+    Jdbi jdbi = Jdbi.create("jdbc:sqlite:" + dataFolder.resolve("data.sqlite").toAbsolutePath());
+    jdbi.installPlugin(new SqlObjectPlugin());
+    return jdbi;
   }
 
-  @Override
-  public boolean connect() {
-    return this.origin.connect();
-  }
-
-  @Override
-  public DataSource dataSource() {
-    return this.dbase;
+  @Provides
+  static Handle provideHandle(Jdbi jdbi) {
+    return jdbi.open();
   }
 }
