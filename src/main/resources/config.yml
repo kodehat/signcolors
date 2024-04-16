@@ -51,7 +51,7 @@ recipes:
       B: 'INK_SAC:2'
       C: 'INK_SAC:4'
       D: 'INK_SAC:11'
-      S: 'SIGN'
+      S: 'OAK_SIGN'
     crafting_shape:
     - 'A B'
     - ' S '
@@ -67,7 +67,7 @@ recipes:
     - 'INK_SAC:2'
     - 'INK_SAC:4'
     - 'INK_SAC:11'
-    - 'SIGN'
+    - 'OAK_SIGN'
 
 # Prevents players to create clickable signs like the
 # plugin's [SC] sign or Essential's [Buy] sign. You

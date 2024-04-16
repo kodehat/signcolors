@@ -13,7 +13,7 @@ class SoundUtil {
 
             val sound: Sound?
             try {
-                sound = Sound.valueOf(config.getString("$configPath.type"))
+                sound = Sound.valueOf(config.getString("$configPath.type")!!)
             } catch (e: IllegalArgumentException) {
 				ErrorUtil.report(e)
                 with(SignColors.instance.logger) {

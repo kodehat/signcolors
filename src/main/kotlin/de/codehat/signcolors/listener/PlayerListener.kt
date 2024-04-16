@@ -28,7 +28,7 @@ class PlayerListener: Listener {
                 && player.hasPermission(Permissions.SHOW_UPDATE_MESSAGE)) {
             val version = SignColors.instance.updateAvailablePair.second
             val playerMessage = SignColors.languageConfig.get(LanguageKey.NEW_VERSION_AVAILABLE)
-            player.sendLogoMsg(String.format(playerMessage, version))
+            player.sendLogoMsg(String.format(playerMessage!!, version))
         }
     }
 
@@ -47,8 +47,8 @@ class PlayerListener: Listener {
 
 		if (event.action != Action.RIGHT_CLICK_BLOCK) return
 
-		if (event.clickedBlock.state is Sign) {
-			val clickedSign = event.clickedBlock.state as Sign
+		if (event.clickedBlock!!.state is Sign) {
+			val clickedSign = event.clickedBlock!!.state as Sign
 			val indicatorLine = clickedSign.getLine(0)
 			val dataLine = clickedSign.getLine(2)
 
@@ -64,7 +64,7 @@ class PlayerListener: Listener {
 
 
 					// [0] = sign amount, [1] = sign price for the specified amount
-					val signData = ChatColor.stripColor(dataLine).split(":")
+					val signData = ChatColor.stripColor(dataLine)!!.split(":")
 
 					// Check if written types are valid for Int and Double
 					if (signData[0].trim().toIntOrNull() == null || signData[1].trim().toDoubleOrNull() == null) {
@@ -103,7 +103,7 @@ class PlayerListener: Listener {
 					// Play the appropriate sound
 					SoundUtil.playPlayerSound("sounds.receive_signs_from_special_sign", player)
 
-					val successMessage = String.format(SignColors.languageConfig.get(LanguageKey.SPECIAL_SIGN_RECEIVED_SIGNS),
+					val successMessage = String.format(SignColors.languageConfig.get(LanguageKey.SPECIAL_SIGN_RECEIVED_SIGNS)!!,
 							signPrice, signAmount)
 					player.sendLogoMsg(successMessage)
 				} else {

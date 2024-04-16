@@ -2,7 +2,6 @@ package de.codehat.signcolors.util
 
 import de.codehat.signcolors.SignColors
 import de.codehat.signcolors.config.ConfigKey
-import io.sentry.Sentry
 import java.lang.Exception
 
 class ErrorUtil {
@@ -12,7 +11,7 @@ class ErrorUtil {
 
 			if (!config.getBoolean(ConfigKey.OTHER_ERROR_REPORTING.toString())) return
 
-			Sentry.capture(e)
+			//Sentry.capture(e)
 		}
 	}
 }

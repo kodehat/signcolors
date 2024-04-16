@@ -58,10 +58,10 @@ class GiveSignCommand: Command() {
         playerStack.amount = signAmount
         player.inventory.addItem(playerStack)
 
-        val donatorSuccessMessage = SignColors.languageConfig.get(LanguageKey.GIVE_SIGN_DONATOR_SUCCESS)
-        sender.sendLogoMsg(String.format(donatorSuccessMessage, signAmount, player.name))
+        val donationSourceSuccessMessage = SignColors.languageConfig.get(LanguageKey.GIVE_SIGN_DONATOR_SUCCESS)
+        sender.sendLogoMsg(String.format(donationSourceSuccessMessage!!, signAmount, player.name))
 
-        val targetSuccessMessage = SignColors.languageConfig.get(LanguageKey.GIVE_SIGN_TARGET_SUCCESS)
-        player.sendLogoMsg(String.format(targetSuccessMessage, signAmount, sender.name))
+        val donationTargetSuccessMessage = SignColors.languageConfig.get(LanguageKey.GIVE_SIGN_TARGET_SUCCESS)
+        player.sendLogoMsg(String.format(donationTargetSuccessMessage!!, signAmount, sender.name))
     }
 }

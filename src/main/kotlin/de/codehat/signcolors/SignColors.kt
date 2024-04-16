@@ -1,6 +1,5 @@
 package de.codehat.signcolors
 
-import de.codehat.pluginupdatechecker.UpdateChecker
 import de.codehat.signcolors.command.CommandManager
 import de.codehat.signcolors.command.TabCompletion
 import de.codehat.signcolors.commands.HelpCommand
@@ -15,12 +14,12 @@ import de.codehat.signcolors.database.MysqlDatabase
 import de.codehat.signcolors.database.SqliteDatabase
 import de.codehat.signcolors.database.abstraction.Database
 import de.codehat.signcolors.dependencies.VaultDependency
+import de.codehat.signcolors.language.LanguageKey
 import de.codehat.signcolors.listener.BlockListener
 import de.codehat.signcolors.listener.PlayerListener
 import de.codehat.signcolors.listener.SignListener
 import de.codehat.signcolors.managers.BackupOldFilesManager
 import de.codehat.signcolors.managers.ColoredSignManager
-import io.sentry.Sentry
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
@@ -75,7 +74,7 @@ class SignColors: JavaPlugin() {
         loadManagers()
         registerCommands()
         registerListener()
-        startUpdateCheckerIfEnabled()
+        //startUpdateCheckerIfEnabled()
 
         logger.info("v${description.version} has been enabled.")
     }
@@ -149,10 +148,9 @@ class SignColors: JavaPlugin() {
             registerCommand(CommandManager.CMD_RELOAD, ReloadCommand())
             //registerCommand(CommandManager.CMD_MIGRATE_DATABASE, MigrateDatabaseCommand())
         }
-
         with(getCommand(CommandManager.CMD_PREFIX)) {
-            executor = commandManager
-            tabCompleter = TabCompletion()
+            this?.setExecutor(commandManager)
+            this?.setTabCompleter(TabCompletion())
         }
     }
 
@@ -164,33 +162,33 @@ class SignColors: JavaPlugin() {
         }
     }
 
-    private fun startUpdateCheckerIfEnabled() {
-        if (config.getBoolean(ConfigKey.OTHER_UPDATE_CHECK.toString())) {
-            logger.info("Checking for an update...")
-            val updateChecker = UpdateChecker.Builder(this)
-                    .setUrl(UPDATE_CHECKER_URL)
-                    .setPluginId(UPDATE_CHECKER_PLUGIN_ID)
-                    .setCurrentVersion(description.version)
-                    .onNewVersion {
-                        logger.info("New version (v$it) is available!")
-                        updateAvailablePair = Pair(true, it)
-                    }
-                    .onLatestVersion {
-                        logger.info("No new version available.")
-                    }
-                    .onError {
-                        logger.warning("Unable to check for an update!")
-                    }
-                    .build()
-            updateChecker.check()
-        }
-    }
+//    private fun startUpdateCheckerIfEnabled() {
+//        if (config.getBoolean(ConfigKey.OTHER_UPDATE_CHECK.toString())) {
+//            logger.info("Checking for an update...")
+//            val updateChecker = UpdateChecker.Builder(this)
+//                    .setUrl(UPDATE_CHECKER_URL)
+//                    .setPluginId(UPDATE_CHECKER_PLUGIN_ID)
+//                    .setCurrentVersion(description.version)
+//                    .onNewVersion {
+//                        logger.info("New version (v$it) is available!")
+//                        updateAvailablePair = Pair(true, it)
+//                    }
+//                    .onLatestVersion {
+//                        logger.info("No new version available.")
+//                    }
+//                    .onError {
+//                        logger.warning("Unable to check for an update!")
+//                    }
+//                    .build()
+//            updateChecker.check()
+//        }
+//    }
 
-	private fun enableErrorReporting() {
-		if (config.getBoolean(ConfigKey.OTHER_ERROR_REPORTING.toString())) {
-			Sentry.init(SENTRY_DSN)
-			logger.info("Error reporting has been enabled.")
-		}
-	}
+//	private fun enableErrorReporting() {
+//		if (config.getBoolean(ConfigKey.OTHER_ERROR_REPORTING.toString())) {
+//			Sentry.init(SENTRY_DSN)
+//			logger.info("Error reporting has been enabled.")
+//		}
+//	}
 
 }

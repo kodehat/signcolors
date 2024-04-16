@@ -16,7 +16,7 @@ class SignLocationDao(connectionSource: JdbcConnectionSource):
 
     fun exists(location: Location): Boolean {
         with(location) {
-            return exists(this.world.name, this.blockX, this.blockY, this.blockZ)
+            return exists(this.world!!.name, this.blockX, this.blockY, this.blockZ)
         }
     }
 
@@ -43,7 +43,7 @@ class SignLocationDao(connectionSource: JdbcConnectionSource):
 
     fun create(location: Location) {
         with(location) {
-            create(this.world.name, this.blockX, this.blockY, this.blockZ)
+            create(this.world!!.name, this.blockX, this.blockY, this.blockZ)
         }
     }
 
@@ -59,7 +59,7 @@ class SignLocationDao(connectionSource: JdbcConnectionSource):
 
     fun delete(location: Location) {
         with(location) {
-            delete(this.world.name, this.blockX, this.blockY, this.blockZ)
+            delete(this.world!!.name, this.blockX, this.blockY, this.blockZ)
         }
     }
 

@@ -31,9 +31,9 @@ class SignListener: Listener {
             val colorCharacter = SignColors.instance.config.getString(ConfigKey.COLOR_CHARACTER.toString())
 
             for (line in SIGN_LINE_FIRST_INDEX..SIGN_LINE_LAST_INDEX) {
-                if (event.getLine(line).isEmpty() || !event.getLine(line).contains(colorCharacter)) continue
+                if (event.getLine(line)!!.isEmpty() || !event.getLine(line)!!.contains(colorCharacter!!)) continue
 
-                val colorLine = event.getLine(line).split(colorCharacter)
+                val colorLine = event.getLine(line)!!.split(colorCharacter)
                 var newLine = ""
                 if (colorLine.isNotEmpty()) newLine = colorLine[0]
                 colorLine.forEach {
@@ -64,9 +64,9 @@ class SignListener: Listener {
             with(event) {
                 setLine(SIGN_LINE_FIRST_INDEX, SPECIAL_SIGN_INDICATOR.color())
                 setLine(SIGN_LINE_SECOND_INDEX, SignColors.languageConfig
-						.get(LanguageKey.SPECIAL_SIGN_LINE_TWO).color())
+						.get(LanguageKey.SPECIAL_SIGN_LINE_TWO)!!.color())
                 setLine(SIGN_LINE_THIRD_INDEX, "&8$amount : $price".color())
-                setLine(SIGN_LINE_LAST_INDEX, SignColors.languageConfig.get(LanguageKey.SPECIAL_SIGN_LINE_FOUR).color())
+                setLine(SIGN_LINE_LAST_INDEX, SignColors.languageConfig.get(LanguageKey.SPECIAL_SIGN_LINE_FOUR)!!.color())
             }
         }
     }
@@ -87,7 +87,7 @@ class SignListener: Listener {
                         SignColors.instance.signLocationDao.create(block)
                     }
                 } else {
-                    if (itemInMainHand.itemMeta.hasLore()) {
+                    if (itemInMainHand.itemMeta!!.hasLore()) {
 						// Not checking if present cause not relevant yet
                         SignColors.instance.fixSignPlayers.remove(player)
                         applyColorsOnSign(event, player)
@@ -111,7 +111,7 @@ class SignListener: Listener {
             if (player.hasPermission(Permissions.SPECIAL_SIGN_CREATE)) {
                 val dataLine = event.getLine(1)
                 // Check if line 1 isn't empty and contains the sign amount and the price split with ":"
-                if (dataLine.isNotEmpty() && dataLine.contains(":")) {
+                if (dataLine!!.isNotEmpty() && dataLine.contains(":")) {
                     // [0] = sign amount, [1] = sign price for the specified amount
                     val signData = dataLine.split(":")
 
@@ -152,7 +152,7 @@ class SignListener: Listener {
     @EventHandler(priority = EventPriority.HIGH)
     fun checkFirstLineOnSpecialSignCreation(event: SignChangeEvent) {
         val player = event.player
-        val firstLine = event.getLine(0).trim().replace(ChatColor.COLOR_CHAR.toString(), "&", true)
+        val firstLine = event.getLine(0)!!.trim().replace(ChatColor.COLOR_CHAR.toString(), "&", true)
 
         // If player has permission to create a special sign, let him create it
         if (firstLine == SPECIAL_SIGN_INDICATOR && player.hasPermission(Permissions.SPECIAL_SIGN_CREATE.toString())) {
@@ -160,7 +160,7 @@ class SignListener: Listener {
 		}
 
         // Contains all blocked first lines defined in config
-        val blockedLines = SignColors.instance.config.getList("blocked_first_lines").filterIsInstance<String>()
+        val blockedLines = SignColors.instance.config.getList("blocked_first_lines")!!.filterIsInstance<String>()
 
         // Check if the first line is a blocked line
         if (blockedLines.contains(firstLine)

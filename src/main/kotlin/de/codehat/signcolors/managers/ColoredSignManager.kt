@@ -51,7 +51,7 @@ class ColoredSignManager: Manager {
     }
 
     private fun addShapelessRecipe() {
-        val ingredients = SignColors.instance.config.getList(ConfigKey.RECIPES_SHAPELESS_INGREDIENTS.toString())
+        val ingredients = SignColors.instance.config.getList(ConfigKey.RECIPES_SHAPELESS_INGREDIENTS.toString())!!
 				.filterIsInstance<String>()
         if (ingredients.size > MAX_INGREDIENTS) {
             SignColors.instance.logger.warning("You have added more than nine crafting items to the config.")
@@ -67,10 +67,10 @@ class ColoredSignManager: Manager {
                 val ingredientData = it.split(":")
                 val material = Material.getMaterial(ingredientData[0])
                 @Suppress("DEPRECATION")
-                shapelessRecipe.addIngredient(material, ingredientData[1].toInt())
+                shapelessRecipe.addIngredient(material!!, ingredientData[1].toInt())
             } else {
                 Material.getMaterial(it).apply {
-                    shapelessRecipe.addIngredient(this)
+                    shapelessRecipe.addIngredient(this!!)
                 }
             }
         }
@@ -78,7 +78,7 @@ class ColoredSignManager: Manager {
     }
 
     private fun addShapedRecipe() {
-        val shapes = SignColors.instance.config.getList(ConfigKey.RECIPES_SHAPED_CRAFTING_SHAPE.toString())
+        val shapes = SignColors.instance.config.getList(ConfigKey.RECIPES_SHAPED_CRAFTING_SHAPE.toString())!!
 				.filterIsInstance<String>()
         if (shapes.size > MAX_SHAPES) {
             with(SignColors.instance.logger) {
@@ -106,16 +106,16 @@ class ColoredSignManager: Manager {
         val ingredientsSection = SignColors.instance.config
 				.getConfigurationSection(ConfigKey.RECIPES_SHAPED_INGREDIENTS.toString())
 
-        ingredientsSection.getKeys(false).forEach {
+        ingredientsSection!!.getKeys(false).forEach {
             val value = ingredientsSection[it].toString()
             if (value.contains(":")) {
                 val ingredientData = value.split(":")
                 val material = Material.getMaterial(ingredientData[0])
                 @Suppress("DEPRECATION")
-                shapedRecipe.setIngredient(it.toString()[0], material, ingredientData[1].toInt())
+                shapedRecipe.setIngredient(it.toString()[0], material!!, ingredientData[1].toInt())
             } else {
                 Material.getMaterial(value).apply {
-                    shapedRecipe.setIngredient(it.toString()[0], this)
+                    shapedRecipe.setIngredient(it.toString()[0], this!!)
                 }
             }
         }
@@ -136,13 +136,13 @@ class ColoredSignManager: Manager {
     }
 
     private fun getColoredSignStack(amount: Int = 1): ItemStack {
-        val signStack = ItemStack(Material.SIGN, amount)
+        val signStack = ItemStack(Material.SPRUCE_SIGN, amount)
         val signStackMeta = signStack.itemMeta
-        val signStackLore = arrayListOf(SignColors.languageConfig.get(LanguageKey.SIGN_LORE).color())
+        val signStackLore = arrayListOf(SignColors.languageConfig.get(LanguageKey.SIGN_LORE)?.color())
 
         with(signStackMeta) {
-            displayName = SignColors.languageConfig.get(LanguageKey.SIGN_NAME).color()
-            lore = signStackLore
+			this?.setDisplayName(SignColors.languageConfig.get(LanguageKey.SIGN_NAME)!!.color())
+            this?.lore = signStackLore
         }
         signStack.itemMeta = signStackMeta
 

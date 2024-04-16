@@ -9,11 +9,11 @@ class MysqlDatabase(connectionString: String): Database(connectionString) {
         private const val MYSQL_JDBC_CONNECTION_STRING
 				= "jdbc:mysql://%s:%s/%s?user=%s&password=%s&useSSL=false&autoReconnect=true"
 
-        fun createConnectionString(hostname: String,
+        fun createConnectionString(hostname: String?,
 								   port: Int,
-								   database: String,
-								   user: String,
-								   password: String): String {
+								   database: String?,
+								   user: String?,
+								   password: String?): String {
             return String.format(MYSQL_JDBC_CONNECTION_STRING,
                     hostname,
                     port,

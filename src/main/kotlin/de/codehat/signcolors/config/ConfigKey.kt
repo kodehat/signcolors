@@ -31,5 +31,5 @@ enum class ConfigKey(private val configKey: String) {
     OTHER_DEBUG("other.debug"),
     OTHER_CONFIG_VERSION("other.config_version");
 
-    override fun toString() = configKey
+    override fun toString(): String = configKey
 }

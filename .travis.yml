@@ -1,5 +1,0 @@
-language: java
-jdk:
-- oraclejdk8
-script: "./gradlew shadowJar"
-#before_deploy: "mv build/libs/*.jar build/libs/signcolors-${TRAVIS_BUILD_NUMBER}.jar"

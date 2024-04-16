@@ -19,10 +19,9 @@ class BlockListener: Listener {
         val player = event.player
         val itemInMainHand = player.inventory.itemInMainHand
 
-        if (itemInMainHand != null && SignColors.instance.coloredSignManager.signCrafting
-            && !player.hasPermission(Permissions.BYPASS_SIGN_CRAFTING)) {
-            if (itemInMainHand.amount == 1 && itemInMainHand.type == Material.SIGN
-                && itemInMainHand.itemMeta.hasLore()) {
+        if (SignColors.instance.coloredSignManager.signCrafting && !player.hasPermission(Permissions.BYPASS_SIGN_CRAFTING)) {
+            if (itemInMainHand.amount == 1 && itemInMainHand.type.name.endsWith("_SIGN")
+                && itemInMainHand.itemMeta!!.hasLore()) {
                 SignColors.instance.fixSignPlayers.add(player)
             }
         }
@@ -35,7 +34,7 @@ class BlockListener: Listener {
         val block = event.block
 
         if (SignColors.instance.coloredSignManager.signCrafting
-                && (block.type == Material.WALL_SIGN || block.type == Material.SIGN)
+                && (block.type.name.endsWith("_SIGN"))
                 && SignColors.instance.signLocationDao.exists(block)) {
             block.type = Material.AIR
             if (player.gameMode == GameMode.SURVIVAL) {

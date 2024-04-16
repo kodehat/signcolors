@@ -12,9 +12,7 @@ abstract class Config(private val fileName: String) {
         private set
 
     protected fun setup(extract: Boolean) {
-		if (file.exists()) return
-
-		if (extract) {
+		if (!file.exists() && extract) {
 			try {
 				SignColors.instance.saveResource(this.fileName, false)
 			} catch (e: IllegalArgumentException) {
@@ -24,7 +22,9 @@ abstract class Config(private val fileName: String) {
 				return
 			}
 		} // May throw an exception if resource is not found
-		else this.file.createNewFile()
+		else if (!file.exists()) {
+			this.file.createNewFile()
+		}
 
         this.cfg = YamlConfiguration.loadConfiguration(this.file)
     }
