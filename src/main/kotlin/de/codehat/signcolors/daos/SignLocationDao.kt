@@ -1,14 +1,30 @@
+/*
+ * SignColors is a plug-in for Spigot adding colors and formatting to signs.
+ * Copyright (C) 2022 CodeHat
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 package de.codehat.signcolors.daos
 
 import com.j256.ormlite.jdbc.JdbcConnectionSource
-import de.codehat.signcolors.SignColors
 import de.codehat.signcolors.dao.Dao
 import de.codehat.signcolors.database.model.SignLocation
 import org.bukkit.Location
 import org.bukkit.block.Block
 
-class SignLocationDao(connectionSource: JdbcConnectionSource):
-		Dao<SignLocation, Void>(connectionSource, SignLocation::class.java) {
+class SignLocationDao(connectionSource: JdbcConnectionSource) :
+    Dao<SignLocation, Void>(connectionSource, SignLocation::class.java) {
 
     fun exists(block: Block): Boolean {
         return exists(block.location)
@@ -42,15 +58,11 @@ class SignLocationDao(connectionSource: JdbcConnectionSource):
     }
 
     fun create(location: Location) {
-        with(location) {
-            create(this.world!!.name, this.blockX, this.blockY, this.blockZ)
-        }
+        with(location) { create(this.world!!.name, this.blockX, this.blockY, this.blockZ) }
     }
 
     fun create(world: String, x: Int, y: Int, z: Int) {
-        SignLocation(world, x, y, z).apply {
-            dao.create(this)
-        }
+        SignLocation(world, x, y, z).apply { dao.create(this) }
     }
 
     fun delete(block: Block) {
@@ -58,9 +70,7 @@ class SignLocationDao(connectionSource: JdbcConnectionSource):
     }
 
     fun delete(location: Location) {
-        with(location) {
-            delete(this.world!!.name, this.blockX, this.blockY, this.blockZ)
-        }
+        with(location) { delete(this.world!!.name, this.blockX, this.blockY, this.blockZ) }
     }
 
     fun delete(world: String, x: Int, y: Int, z: Int) {

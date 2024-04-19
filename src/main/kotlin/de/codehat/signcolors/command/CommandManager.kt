@@ -1,3 +1,20 @@
+/*
+ * SignColors is a plug-in for Spigot adding colors and formatting to signs.
+ * Copyright (C) 2022 CodeHat
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 package de.codehat.signcolors.command
 
 import de.codehat.signcolors.language.LanguageKey
@@ -5,7 +22,7 @@ import de.codehat.signcolors.util.sendLogoMsg
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 
-class CommandManager: CommandExecutor {
+class CommandManager : CommandExecutor {
 
     private val commands: MutableMap<String, Command> = mutableMapOf()
 
@@ -19,13 +36,16 @@ class CommandManager: CommandExecutor {
         const val CMD_MIGRATE_DATABASE = "migratedb"
     }
 
-    override fun onCommand(sender: CommandSender,
-						   command: org.bukkit.command.Command,
-						   label: String,
-						   args: Array<out String>): Boolean {
+    override fun onCommand(
+        sender: CommandSender,
+        command: org.bukkit.command.Command,
+        label: String,
+        args: Array<out String>
+    ): Boolean {
         when {
             args.isEmpty() -> commands[""]?.onCommand(sender, command, label, args)
-            commands.containsKey(args[0]) -> commands[args[0]]?.onCommand(sender, command, label, args)
+            commands.containsKey(args[0]) ->
+                commands[args[0]]?.onCommand(sender, command, label, args)
             else -> sender.sendLogoMsg(LanguageKey.UNKNOWN_CMD)
         }
         return true

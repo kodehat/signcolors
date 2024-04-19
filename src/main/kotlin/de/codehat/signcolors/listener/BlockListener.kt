@@ -1,3 +1,20 @@
+/*
+ * SignColors is a plug-in for Spigot adding colors and formatting to signs.
+ * Copyright (C) 2022 CodeHat
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 package de.codehat.signcolors.listener
 
 import de.codehat.signcolors.SignColors
@@ -11,7 +28,7 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.inventory.ItemStack
 
-class BlockListener: Listener {
+class BlockListener : Listener {
 
     @Suppress("unused")
     @EventHandler
@@ -19,9 +36,15 @@ class BlockListener: Listener {
         val player = event.player
         val itemInMainHand = player.inventory.itemInMainHand
 
-        if (SignColors.instance.coloredSignManager.signCrafting && !player.hasPermission(Permissions.BYPASS_SIGN_CRAFTING)) {
-            if (itemInMainHand.amount == 1 && itemInMainHand.type.name.endsWith("_SIGN")
-                && itemInMainHand.itemMeta!!.hasLore()) {
+        if (
+            SignColors.instance.coloredSignManager.signCrafting &&
+                !player.hasPermission(Permissions.BYPASS_SIGN_CRAFTING)
+        ) {
+            if (
+                itemInMainHand.amount == 1 &&
+                    itemInMainHand.type.name.endsWith("_SIGN") &&
+                    itemInMainHand.itemMeta!!.hasLore()
+            ) {
                 SignColors.instance.fixSignPlayers.add(player)
             }
         }
@@ -33,12 +56,15 @@ class BlockListener: Listener {
         val player = event.player
         val block = event.block
 
-        if (SignColors.instance.coloredSignManager.signCrafting
-                && (block.type.name.endsWith("_SIGN"))
-                && SignColors.instance.signLocationDao.exists(block)) {
+        if (
+            SignColors.instance.coloredSignManager.signCrafting &&
+                (block.type.name.endsWith("_SIGN")) &&
+                SignColors.instance.signLocationDao.exists(block)
+        ) {
             block.type = Material.AIR
             if (player.gameMode == GameMode.SURVIVAL) {
-                val droppedStack = ItemStack(SignColors.instance.coloredSignManager.coloredSignStack)
+                val droppedStack =
+                    ItemStack(SignColors.instance.coloredSignManager.coloredSignStack)
                 droppedStack.amount = 1
                 block.world.dropItemNaturally(block.location, droppedStack)
             }
@@ -46,5 +72,4 @@ class BlockListener: Listener {
             event.isCancelled = true
         }
     }
-
 }

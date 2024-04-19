@@ -1,6 +1,6 @@
 /*
  * SignColors is a plug-in for Spigot adding colors and formatting to signs.
- * Copyright (C) 2022 CodeHat
+ * Copyright (C) 2024 CodeHat
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,26 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.signcolors.commands
+package de.codehat.signcolors
 
-import de.codehat.signcolors.command.Command
-import de.codehat.signcolors.language.LanguageKey
-import de.codehat.signcolors.permission.Permissions
-import de.codehat.signcolors.util.hasPermission
-import de.codehat.signcolors.util.sendLogoMsg
-import org.bukkit.command.CommandSender
+import org.hamcrest.CoreMatchers.*
+import org.hamcrest.MatcherAssert.*
+import org.junit.jupiter.api.Test
 
-class MigrateDatabaseCommand : Command() {
+class DummyTest {
 
-    override fun onCommand(
-        sender: CommandSender,
-        command: org.bukkit.command.Command,
-        label: String,
-        args: Array<out String>
-    ) {
-        if (!sender.hasPermission(Permissions.CMD_MIGRATE_DATABASE)) {
-            sender.sendLogoMsg(LanguageKey.NO_PERMISSION)
-            return
-        }
+    @Test
+    fun alwaysTrueTest() {
+        assertThat(1 + 1, `is`(2))
     }
 }

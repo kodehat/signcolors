@@ -1,3 +1,20 @@
+/*
+ * SignColors is a plug-in for Spigot adding colors and formatting to signs.
+ * Copyright (C) 2022 CodeHat
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 package de.codehat.signcolors.managers
 
 import de.codehat.signcolors.SignColors
@@ -10,7 +27,7 @@ import java.io.FileOutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
-class BackupOldFilesManager: Manager {
+class BackupOldFilesManager : Manager {
 
     companion object {
         const val CONFIG_VERSION = 6
@@ -32,11 +49,16 @@ class BackupOldFilesManager: Manager {
     init {
         when {
             SignColors.instance.config.getInt(ConfigKey.OTHER_CONFIG_VERSION.toString()) == 0 -> {
-                SignColors.instance.logger.info("No config version code found! Making a backup of all old files now.")
+                SignColors.instance.logger.info(
+                    "No config version code found! Making a backup of all old files now."
+                )
                 setup()
             }
-            CONFIG_VERSION > SignColors.instance.config.getInt(ConfigKey.OTHER_CONFIG_VERSION.toString()) -> {
-                SignColors.instance.logger.info("Old config version found! Making a backup of the old config now.")
+            CONFIG_VERSION >
+                SignColors.instance.config.getInt(ConfigKey.OTHER_CONFIG_VERSION.toString()) -> {
+                SignColors.instance.logger.info(
+                    "Old config version found! Making a backup of the old config now."
+                )
                 setup()
             }
             else -> SignColors.instance.logger.info("Config is up to date.")
@@ -50,20 +72,26 @@ class BackupOldFilesManager: Manager {
         val zos = ZipOutputStream(fos)
 
         // Add all .yml files to the .zip file
-        dataFolder.listFiles { _, name -> name.endsWith(".yml")}.forEach {
-            SignColors.instance.logger.info("Backing up '${it.name}'")
-            addToZipFile(it, zos)
-        }
+        dataFolder
+            .listFiles { _, name -> name.endsWith(".yml") }
+            .forEach {
+                SignColors.instance.logger.info("Backing up '${it.name}'")
+                addToZipFile(it, zos)
+            }
 
         zos.close()
         fos.close()
 
         // Now delete all old files
-        dataFolder.listFiles { _, name -> name.endsWith(".yml")}.forEach {
-            SignColors.instance.logger.info("Deleting old '${it.name}'")
-            it.delete()
-        }
+        dataFolder
+            .listFiles { _, name -> name.endsWith(".yml") }
+            .forEach {
+                SignColors.instance.logger.info("Deleting old '${it.name}'")
+                it.delete()
+            }
 
-        SignColors.instance.logger.info("Created backup file '$backupZipName' in the plugin's data folder!")
+        SignColors.instance.logger.info(
+            "Created backup file '$backupZipName' in the plugin's data folder!"
+        )
     }
 }

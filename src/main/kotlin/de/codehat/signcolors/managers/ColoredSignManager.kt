@@ -1,3 +1,20 @@
+/*
+ * SignColors is a plug-in for Spigot adding colors and formatting to signs.
+ * Copyright (C) 2022 CodeHat
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 package de.codehat.signcolors.managers
 
 import de.codehat.signcolors.SignColors
@@ -11,12 +28,14 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.ShapedRecipe
 import org.bukkit.inventory.ShapelessRecipe
 
-class ColoredSignManager: Manager {
+class ColoredSignManager : Manager {
 
-    private val namespacedKey = NamespacedKey(SignColors.instance, SignColors.instance.description.name)
+    private val namespacedKey =
+        NamespacedKey(SignColors.instance, SignColors.instance.description.name)
 
     internal var oldSignAmount = 0
-    internal var signCrafting = SignColors.instance.config.getBoolean(ConfigKey.SIGN_CRAFTING.toString())
+    internal var signCrafting =
+        SignColors.instance.config.getBoolean(ConfigKey.SIGN_CRAFTING.toString())
     internal var coloredSignStack = getColoredSignStack()
         private set
 
@@ -24,9 +43,9 @@ class ColoredSignManager: Manager {
         private const val MAX_INGREDIENTS = 9
         private const val MAX_SHAPES = 3
 
-		private const val SHAPE_SIZE_ONE = 1
-		private const val SHAPE_SIZE_TWO = 2
-		private const val SHAPE_SIZE_THREE = 3
+        private const val SHAPE_SIZE_ONE = 1
+        private const val SHAPE_SIZE_TWO = 2
+        private const val SHAPE_SIZE_THREE = 3
     }
 
     init {
@@ -42,24 +61,34 @@ class ColoredSignManager: Manager {
             when (recipeType) {
                 "shapeless" -> addShapelessRecipe()
                 "shaped" -> addShapedRecipe()
-                else -> with(SignColors.instance.logger) {
-                    warning("Unknown config value for 'recipes.type'! Possible values are: 'shaped' and 'shapeless'.")
-                    warning("Please change it or you won't be able to craft colored signs!")
-                }
+                else ->
+                    with(SignColors.instance.logger) {
+                        warning(
+                            "Unknown config value for 'recipes.type'! Possible values are: 'shaped' and 'shapeless'."
+                        )
+                        warning("Please change it or you won't be able to craft colored signs!")
+                    }
             }
         }
     }
 
     private fun addShapelessRecipe() {
-        val ingredients = SignColors.instance.config.getList(ConfigKey.RECIPES_SHAPELESS_INGREDIENTS.toString())!!
-				.filterIsInstance<String>()
+        val ingredients =
+            SignColors.instance.config
+                .getList(ConfigKey.RECIPES_SHAPELESS_INGREDIENTS.toString())!!
+                .filterIsInstance<String>()
         if (ingredients.size > MAX_INGREDIENTS) {
-            SignColors.instance.logger.warning("You have added more than nine crafting items to the config.")
-            SignColors.instance.logger.warning("Please change it or you won't be able to craft colored signs!")
+            SignColors.instance.logger.warning(
+                "You have added more than nine crafting items to the config."
+            )
+            SignColors.instance.logger.warning(
+                "Please change it or you won't be able to craft colored signs!"
+            )
             return
         }
         val recipeStack = ItemStack(coloredSignStack)
-        recipeStack.amount = SignColors.instance.config.getInt(ConfigKey.SIGN_AMOUNT_CRAFTING.toString())
+        recipeStack.amount =
+            SignColors.instance.config.getInt(ConfigKey.SIGN_AMOUNT_CRAFTING.toString())
         val shapelessRecipe = ShapelessRecipe(namespacedKey, recipeStack)
 
         ingredients.forEach {
@@ -69,17 +98,17 @@ class ColoredSignManager: Manager {
                 @Suppress("DEPRECATION")
                 shapelessRecipe.addIngredient(material!!, ingredientData[1].toInt())
             } else {
-                Material.getMaterial(it).apply {
-                    shapelessRecipe.addIngredient(this!!)
-                }
+                Material.getMaterial(it).apply { shapelessRecipe.addIngredient(this!!) }
             }
         }
         SignColors.instance.server.addRecipe(shapelessRecipe)
     }
 
     private fun addShapedRecipe() {
-        val shapes = SignColors.instance.config.getList(ConfigKey.RECIPES_SHAPED_CRAFTING_SHAPE.toString())!!
-				.filterIsInstance<String>()
+        val shapes =
+            SignColors.instance.config
+                .getList(ConfigKey.RECIPES_SHAPED_CRAFTING_SHAPE.toString())!!
+                .filterIsInstance<String>()
         if (shapes.size > MAX_SHAPES) {
             with(SignColors.instance.logger) {
                 warning("You have added more than three recipe shapes to the config.")
@@ -88,10 +117,11 @@ class ColoredSignManager: Manager {
             }
         }
         val recipeStack = ItemStack(coloredSignStack)
-        recipeStack.amount = SignColors.instance.config.getInt(ConfigKey.SIGN_AMOUNT_CRAFTING.toString())
+        recipeStack.amount =
+            SignColors.instance.config.getInt(ConfigKey.SIGN_AMOUNT_CRAFTING.toString())
         val shapedRecipe = ShapedRecipe(namespacedKey, recipeStack)
 
-        when(shapes.size) {
+        when (shapes.size) {
             SHAPE_SIZE_ONE -> shapedRecipe.shape(shapes[0])
             SHAPE_SIZE_TWO -> shapedRecipe.shape(shapes[0], shapes[1])
             SHAPE_SIZE_THREE -> shapedRecipe.shape(shapes[0], shapes[1], shapes[2])
@@ -103,8 +133,10 @@ class ColoredSignManager: Manager {
                 }
             }
         }
-        val ingredientsSection = SignColors.instance.config
-				.getConfigurationSection(ConfigKey.RECIPES_SHAPED_INGREDIENTS.toString())
+        val ingredientsSection =
+            SignColors.instance.config.getConfigurationSection(
+                ConfigKey.RECIPES_SHAPED_INGREDIENTS.toString()
+            )
 
         ingredientsSection!!.getKeys(false).forEach {
             val value = ingredientsSection[it].toString()
@@ -138,10 +170,11 @@ class ColoredSignManager: Manager {
     private fun getColoredSignStack(amount: Int = 1): ItemStack {
         val signStack = ItemStack(Material.SPRUCE_SIGN, amount)
         val signStackMeta = signStack.itemMeta
-        val signStackLore = arrayListOf(SignColors.languageConfig.get(LanguageKey.SIGN_LORE)?.color())
+        val signStackLore =
+            arrayListOf(SignColors.languageConfig.get(LanguageKey.SIGN_LORE)?.color())
 
         with(signStackMeta) {
-			this?.setDisplayName(SignColors.languageConfig.get(LanguageKey.SIGN_NAME)!!.color())
+            this?.setDisplayName(SignColors.languageConfig.get(LanguageKey.SIGN_NAME)!!.color())
             this?.lore = signStackLore
         }
         signStack.itemMeta = signStackMeta
