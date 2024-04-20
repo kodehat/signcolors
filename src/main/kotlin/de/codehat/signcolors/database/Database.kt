@@ -15,26 +15,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.signcolors.commands
+package de.codehat.signcolors.database
 
-import de.codehat.signcolors.command.Command
-import de.codehat.signcolors.language.LanguageKey
-import de.codehat.signcolors.permission.Permissions
-import de.codehat.signcolors.util.hasPermission
-import de.codehat.signcolors.util.sendLogoMsg
-import org.bukkit.command.CommandSender
+import com.j256.ormlite.jdbc.JdbcConnectionSource
+import com.j256.ormlite.table.TableUtils
+import de.codehat.signcolors.database.model.SignLocation
 
-class MigrateDatabaseCommand : Command() {
+abstract class Database(connectionString: String) {
+  var connectionSource: JdbcConnectionSource
+    private set
 
-    override fun onCommand(
-        sender: CommandSender,
-        command: org.bukkit.command.Command,
-        label: String,
-        args: Array<out String>
-    ) {
-        if (!sender.hasPermission(Permissions.CMD_MIGRATE_DATABASE)) {
-            sender.sendLogoMsg(LanguageKey.NO_PERMISSION)
-            return
-        }
-    }
+  init {
+    connectionSource = JdbcConnectionSource(connectionString)
+
+    createRequiredTablesIfNotExist()
+  }
+
+  fun close() {
+    connectionSource.closeQuietly() // Or just '#close()'?
+  }
+
+  private fun createRequiredTablesIfNotExist() {
+    TableUtils.createTableIfNotExists(connectionSource, SignLocation::class.java)
+  }
 }

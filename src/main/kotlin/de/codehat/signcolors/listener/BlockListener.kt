@@ -28,48 +28,46 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.inventory.ItemStack
 
-class BlockListener : Listener {
+class BlockListener(private val plugin: SignColors) : Listener {
+  @Suppress("unused")
+  @EventHandler
+  fun onPlacingOneSign(event: BlockPlaceEvent) {
+    val player = event.player
+    val itemInMainHand = player.inventory.itemInMainHand
 
-    @Suppress("unused")
-    @EventHandler
-    fun onPlacingOneSign(event: BlockPlaceEvent) {
-        val player = event.player
-        val itemInMainHand = player.inventory.itemInMainHand
-
-        if (
-            SignColors.instance.coloredSignManager.signCrafting &&
-                !player.hasPermission(Permissions.BYPASS_SIGN_CRAFTING)
-        ) {
-            if (
-                itemInMainHand.amount == 1 &&
-                    itemInMainHand.type.name.endsWith("_SIGN") &&
-                    itemInMainHand.itemMeta!!.hasLore()
-            ) {
-                SignColors.instance.fixSignPlayers.add(player)
-            }
-        }
+    if (
+      plugin.coloredSignManager.craftingEnabled == true &&
+      !player.hasPermission(Permissions.BYPASS_CRAFTING)
+    ) {
+      if (
+        itemInMainHand.amount == 1 &&
+        itemInMainHand.type.name.endsWith("_SIGN") &&
+        itemInMainHand.itemMeta!!.hasLore()
+      ) {
+        plugin.fixSignPlayers.add(player)
+      }
     }
+  }
 
-    @Suppress("unused")
-    @EventHandler
-    fun onBreakColoredSign(event: BlockBreakEvent) {
-        val player = event.player
-        val block = event.block
+  @Suppress("unused")
+  @EventHandler
+  fun onBreakColoredSign(event: BlockBreakEvent) {
+    val player = event.player
+    val block = event.block
 
-        if (
-            SignColors.instance.coloredSignManager.signCrafting &&
-                (block.type.name.endsWith("_SIGN")) &&
-                SignColors.instance.signLocationDao.exists(block)
-        ) {
-            block.type = Material.AIR
-            if (player.gameMode == GameMode.SURVIVAL) {
-                val droppedStack =
-                    ItemStack(SignColors.instance.coloredSignManager.coloredSignStack)
-                droppedStack.amount = 1
-                block.world.dropItemNaturally(block.location, droppedStack)
-            }
-            SignColors.instance.signLocationDao.delete(block)
-            event.isCancelled = true
-        }
+    if (
+      plugin.coloredSignManager.craftingEnabled == true &&
+      (block.type.name.endsWith("_SIGN")) &&
+      plugin.signLocationDao.exists(block)
+    ) {
+      block.type = Material.AIR
+      if (player.gameMode == GameMode.SURVIVAL) {
+        val droppedStack = ItemStack(plugin.coloredSignManager.coloredSignStack)
+        droppedStack.amount = 1
+        block.world.dropItemNaturally(block.location, droppedStack)
+      }
+      plugin.signLocationDao.delete(block)
+      event.isCancelled = true
     }
+  }
 }

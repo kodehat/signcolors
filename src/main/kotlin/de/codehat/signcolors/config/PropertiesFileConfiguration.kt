@@ -1,6 +1,6 @@
 /*
  * SignColors is a plug-in for Spigot adding colors and formatting to signs.
- * Copyright (C) 2022 CodeHat
+ * Copyright (C) 2024 CodeHat
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,15 +15,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.signcolors.database
+package de.codehat.signcolors.config
 
-class SqliteDatabase(connectionString: String) : Database(connectionString) {
-  companion object {
-    // Pattern is DATABASE_FILE_PATH
-    private const val SQLITE_JDBC_CONNECTION_STRING = "jdbc:sqlite:%s"
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.util.Properties
 
-    fun createConnectionString(databaseFilePath: String): String {
-      return String.format(SQLITE_JDBC_CONNECTION_STRING, databaseFilePath)
-    }
+class PropertiesFileConfiguration : IFileConfiguration<Properties> {
+  override fun load(file: File): Properties {
+    val properties = Properties()
+    FileInputStream(file).use { properties.load(it) }
+    return properties
+  }
+
+  override fun save(
+    configuration: Properties,
+    file: File,
+  ) {
+    FileOutputStream(file).use { configuration.store(it, null) }
   }
 }

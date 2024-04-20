@@ -2,7 +2,7 @@ name: SignColors
 main: de.codehat.signcolors.SignColors
 author: kodehat
 website: https://signcolors.codehat.de
-softdepend: [Vault]
+softdepend: [ Vault ]
 description: SignColors is a Spigot plugin that brings colors and formatting to signs.
 version: 2.0.0
 api-version: 1.19
@@ -11,7 +11,7 @@ commands:
   sc:
     usage: /<command> <name>
     description: Shows basic details about the plugin.
-    aliases: [signcolors]
+    aliases: [ signcolors ]
   help:
     usage: /sc help
     description: Lists all available commands.
@@ -24,21 +24,21 @@ commands:
   colorcodes:
     usage: /sc colorcodes
     description: Lists all color and formatting codes.
-    aliases: [cc]
+    aliases: [ cc ]
 
 permissions:
-  signcolors.all:
+  signcolors.*:
     description: Access to all features.
     default: op
     children:
-      signcolors.command.all: true
-      signcolors.buysign.all: true
-      signcolors.color.all: true
-      signcolors.formatting.all: true
-      signcolors.signcrafting.bypass: true
-      signcolors.blockedfirstlines.bypass: true
+      signcolors.command.*: true
+      signcolors.buysign.*: true
+      signcolors.color.*: true
+      signcolors.formatting.*: true
+      signcolors.crafting.*: true
+      signcolors.bypass.*: true
       signcolors.updatemessage: true
-  signcolors.command.all:
+  signcolors.command.*:
     description: Gives access to all the plugin's commands.
     children:
       signcolors.command.info: true
@@ -46,13 +46,12 @@ permissions:
       signcolors.command.reload: true
       signcolors.command.colorcodes: true
       signcolors.command.give: true
-      signcolors.command.migratedatabase: true
-  signcolors.buysign.all:
+  signcolors.buysign.*:
     description: Allows you to create and use buy signs.
     children:
       signcolors.buysign.create: true
       signcolors.buysign.use: true
-  signcolors.color.all:
+  signcolors.color.*:
     description: Allows you to apply all colors on signs.
     children:
       signcolors.color.0: true
@@ -71,7 +70,7 @@ permissions:
       signcolors.color.d: true
       signcolors.color.e: true
       signcolors.color.f: true
-  signcolors.formatting.all:
+  signcolors.formatting.*:
     description: Allows you to apply all formatting options on signs.
     children:
       signcolors.formatting.k: true
@@ -80,6 +79,11 @@ permissions:
       signcolors.formatting.n: true
       signcolors.formatting.o: true
       signcolors.formatting.r: true
+  signcolors.bypass.*:
+    description: Allows you to bypass crafting and blocked first lines on buy signs.
+    children:
+      signcolors.bypass.crafting: true
+      signcolors.bypass.blockedfirstlines: true
   signcolors.command.info:
     description: Allows you to view the plugin's details.
   signcolors.command.help:
@@ -89,14 +93,14 @@ permissions:
   signcolors.command.colorcodes:
     description: Allows you to use the color codes command.
   signcolors.command.give:
-    description: Allows you to use the give sign command.
-  signcolors.specialsign.create:
+    description: Allows you to use the give command.
+  signcolors.buysign.create:
     description: Allows you to create buy signs.
-  signcolors.specialsign.use:
+  signcolors.buysign.use:
     description: Allows you to use buy signs.
-  signcolors.signcrafting.bypass:
+  signcolors.bypass.crafting:
     description: Allows you to apply colors on a normal sign, even if crafting is required.
-  signcolors.blockedfirstlines.bypass:
+  signcolors.bypass.blockedfirstlines:
     description: Allows you to bypass the blocked first lines.
   signcolors.updatemessage:
     description: Shows an update message to you, if an update is available.

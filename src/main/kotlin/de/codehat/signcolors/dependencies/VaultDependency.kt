@@ -23,20 +23,19 @@ import org.bukkit.plugin.RegisteredServiceProvider
 import org.bukkit.plugin.java.JavaPlugin
 
 class VaultDependency(plugin: JavaPlugin) : Dependency(plugin) {
+  var economy: Economy? = null
+    private set
 
-    var economy: Economy? = null
-        private set
+  init {
+    setupEconomy()
+  }
 
-    init {
-        setupEconomy()
+  private fun setupEconomy() {
+    if (plugin.server.pluginManager.getPlugin("Vault") == null) {
+      return
     }
-
-    private fun setupEconomy() {
-        if (plugin.server.pluginManager.getPlugin("Vault") == null) {
-            return
-        }
-        val rsp: RegisteredServiceProvider<Economy> =
-            plugin.server.servicesManager.getRegistration(Economy::class.java) ?: return
-        economy = rsp.provider
-    }
+    val rsp: RegisteredServiceProvider<Economy> =
+      plugin.server.servicesManager.getRegistration(Economy::class.java) ?: return
+    economy = rsp.provider
+  }
 }

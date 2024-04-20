@@ -17,14 +17,13 @@
  */
 package de.codehat.signcolors
 
-import org.hamcrest.CoreMatchers.*
-import org.hamcrest.MatcherAssert.*
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 
 class DummyTest {
-
-    @Test
-    fun alwaysTrueTest() {
-        assertThat(1 + 1, `is`(2))
-    }
+  @Test
+  fun alwaysTrueTest() {
+    assertThat(1 + 1, `is`(2))
+  }
 }

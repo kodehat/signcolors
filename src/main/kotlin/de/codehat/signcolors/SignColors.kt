@@ -24,194 +24,222 @@ import de.codehat.signcolors.commands.GiveSignCommand
 import de.codehat.signcolors.commands.HelpCommand
 import de.codehat.signcolors.commands.InfoCommand
 import de.codehat.signcolors.commands.ReloadCommand
-import de.codehat.signcolors.config.ConfigKey
-import de.codehat.signcolors.configs.LanguageConfig
+import de.codehat.signcolors.configs.PluginConfig
+import de.codehat.signcolors.configs.TranslationConfig
+import de.codehat.signcolors.configs.TranslationConfigKey
 import de.codehat.signcolors.daos.SignLocationDao
+import de.codehat.signcolors.database.Database
 import de.codehat.signcolors.database.MysqlDatabase
 import de.codehat.signcolors.database.SqliteDatabase
-import de.codehat.signcolors.database.abstraction.Database
 import de.codehat.signcolors.dependencies.VaultDependency
 import de.codehat.signcolors.listener.BlockListener
 import de.codehat.signcolors.listener.PlayerListener
 import de.codehat.signcolors.listener.SignListener
 import de.codehat.signcolors.managers.BackupOldFilesManager
 import de.codehat.signcolors.managers.ColoredSignManager
-import java.io.File
 import net.milkbowl.vault.economy.Economy
+import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
+import java.io.File
+import java.nio.file.Files
 
 @Suppress("unused")
 class SignColors : JavaPlugin() {
+  lateinit var pluginConfig: PluginConfig
+    private set
 
-    private val commandManager = CommandManager()
+  private val translationConfigs: MutableMap<String, TranslationConfig> = mutableMapOf()
 
-    internal val fixSignPlayers = mutableListOf<Player>()
-    internal var updateAvailablePair: Pair<Boolean, String> = Pair(false, "")
+  private var vaultDependency: VaultDependency? = null
 
-    lateinit var database: Database
-        private set
+  private lateinit var database: Database
 
-    lateinit var signLocationDao: SignLocationDao
-        private set
+  lateinit var signLocationDao: SignLocationDao
+    private set
 
-    lateinit var coloredSignManager: ColoredSignManager
+  lateinit var coloredSignManager: ColoredSignManager
 
-    companion object {
-        private const val UPDATE_CHECKER_URL = "https://pluginapi.codehat.de/plugins"
-        private const val UPDATE_CHECKER_PLUGIN_ID = "Syjzymgdz"
-        private const val SENTRY_DSN = "https://e811618a183e43558b27567e9e79e8b2@sentry.io/1322662"
+  private val commandManager = CommandManager(this)
 
-        internal lateinit var instance: SignColors
-        internal lateinit var languageConfig: LanguageConfig
-        internal var debug = false
-            private set
+  internal val fixSignPlayers = mutableListOf<Player>()
+  internal var updateAvailablePair: Pair<Boolean, String> = Pair(false, "")
 
-        private var vaultDependency: VaultDependency? = null
+  companion object {
+    private const val UPDATE_CHECKER_RESOURCE_ID = "6135"
+    private val PROVIDED_LANGUAGES = arrayOf("de_DE", "en_US")
+  }
 
-        fun isVaultAvailable(): Pair<Boolean, Economy?> {
-            with(vaultDependency) {
-                return if (this != null && this.economy != null) {
-                    Pair(true, this.economy)
-                } else {
-                    Pair(false, null)
-                }
-            }
-        }
+  override fun onEnable() {
+    loadConfig()
+    checkAndDoBackup()
+    loadConfig()
+    pluginConfig.reload() // Must reload if backup has been made.
+    loadTranslations()
+    loadDependencies()
+    loadDatabase()
+    signLocationDao = SignLocationDao(database.connectionSource)
+    loadManagers()
+    registerCommands()
+    registerListener()
+    startUpdateCheckerIfEnabled()
+
+    logger.info("v${description.version} has been enabled.")
+  }
+
+  override fun onDisable() {
+    database.close()
+
+    logger.info("v${description.version} has been disabled.")
+  }
+
+  internal fun loadConfig() {
+    pluginConfig = PluginConfig(this)
+  }
+
+  private fun checkAndDoBackup() {
+    BackupOldFilesManager(this)
+  }
+
+  internal fun loadTranslations() {
+    PROVIDED_LANGUAGES.forEach(this::loadTranslation)
+    Files.list(dataFolder.toPath().resolve("translations"))
+      .filter { it.fileName.toString().endsWith(".properties") }
+      .map { it.fileName.toString().replace(".properties", "") }
+      .filter { !PROVIDED_LANGUAGES.contains(it) }
+      .forEach(this::loadTranslation)
+  }
+
+  private fun loadTranslation(language: String) {
+    val translationConfig = TranslationConfig(this, language)
+    translationConfigs[language] = translationConfig
+    logger.info("Loaded translations for language '$language'.")
+  }
+
+  internal fun getTranslation(): TranslationConfig? {
+    return translationConfigs[pluginConfig.getLanguage()]
+  }
+
+  private fun loadDependencies() {
+    logger.info("Looking for available dependencies...")
+
+    // Find and load Vault.
+    try {
+      vaultDependency = VaultDependency(this)
+    } catch (e: NoClassDefFoundError) {
+      // Drop error silently.
     }
 
-    override fun onEnable() {
-        instance = this
-
-        checkAndDoBackup()
-        saveDefaultConfig()
-        loadLanguage()
-        loadDependencies()
-        loadDatabase()
-        signLocationDao = SignLocationDao(database.connectionSource)
-        loadManagers()
-        registerCommands()
-        registerListener()
-        // startUpdateCheckerIfEnabled()
-
-        logger.info("v${description.version} has been enabled.")
+    if (isVaultAvailable().first) {
+      logger.info("Vault found and loaded.")
+    } else {
+      logger.warning("Vault is missing! Economy features have been disabled.")
     }
+  }
 
-    override fun onDisable() {
-        database.close()
-
-        logger.info("v${description.version} has been disabled.")
+  internal fun isVaultAvailable(): Pair<Boolean, Economy?> {
+    with(vaultDependency) {
+      return if (this != null && this.economy != null) {
+        Pair(true, this.economy)
+      } else {
+        Pair(false, null)
+      }
     }
+  }
 
-    private fun checkAndDoBackup() {
-        BackupOldFilesManager()
+  private fun loadDatabase() {
+    val databaseType = pluginConfig.getDatabaseType()
+
+    if (databaseType.equals("sqlite", true)) {
+      val sqliteDatabasePath = dataFolder.absolutePath + File.separator + "sign_locations.db"
+
+      database = SqliteDatabase(SqliteDatabase.createConnectionString(sqliteDatabasePath))
+
+      logger.info(
+        "Using SQLite to save sign locations (path to DB is '$sqliteDatabasePath').",
+      )
+    } else if (databaseType.equals("mysql", true)) {
+      database =
+        MysqlDatabase(
+          MysqlDatabase.createConnectionString(
+            pluginConfig.getDatabaseHost(),
+            pluginConfig.getDatabasePort()!!,
+            pluginConfig.getDatabaseName(),
+            pluginConfig.getDatabaseUser(),
+            pluginConfig.getDatabasePassword(),
+          ),
+        )
+
+      logger.info("Using MySQL to save sign locations.")
     }
+  }
 
-    internal fun loadLanguage() {
-        val language = config.getString(ConfigKey.LANGUAGE.toString())
-        languageConfig = LanguageConfig(language)
+  private fun loadManagers() {
+    coloredSignManager = ColoredSignManager(this)
+  }
 
-        logger.info("Loaded language '$language'.")
+  private fun registerCommands() {
+    with(commandManager) {
+      registerCommand(CommandManager.CMD_INFO, InfoCommand(this@SignColors))
+      registerCommand(CommandManager.CMD_HELP, HelpCommand(this@SignColors))
+      registerCommand(CommandManager.CMD_GIVE_SIGN, GiveSignCommand(this@SignColors))
+      registerCommand(CommandManager.CMD_COLOR_CODES, ColorcodesCommand(this@SignColors))
+      registerCommand(CommandManager.CMD_RELOAD, ReloadCommand(this@SignColors))
     }
+    with(getCommand(CommandManager.CMD_PREFIX)) {
+      this?.setExecutor(commandManager)
+      this?.setTabCompleter(TabCompletion())
+    }
+  }
 
-    private fun loadDependencies() {
-        logger.info("Looking for available dependencies...")
+  private fun registerListener() {
+    with(server.pluginManager) {
+      registerEvents(BlockListener(this@SignColors), this@SignColors)
+      registerEvents(SignListener(this@SignColors), this@SignColors)
+      registerEvents(PlayerListener(this@SignColors), this@SignColors)
+    }
+  }
 
-        // Find and load Vault
-        try {
-            vaultDependency = VaultDependency(this)
-        } catch (e: NoClassDefFoundError) {
-            // Drop error silently
-        }
-
-        if (isVaultAvailable().first) {
-            logger.info("Vault found and loaded.")
+  private fun startUpdateCheckerIfEnabled() {
+    if (pluginConfig.getUpdateCheck() == true) {
+      logger.info("Checking for an update...")
+      UpdateChecker(this, UPDATE_CHECKER_RESOURCE_ID).getVersion { version ->
+        if (description.version == version) {
+          logger.info("No new version available.")
         } else {
-            logger.warning("Vault is missing! Economy features have been disabled.")
+          logger.info("New version ($version) is available!")
+          updateAvailablePair = Pair(true, version)
         }
+      }
     }
+  }
 
-    internal fun loadDatabase() {
-        val databaseType = config.getString(ConfigKey.DATABASE_TYPE.toString())
+  internal fun sendColoredMessage(
+    commandSender: CommandSender,
+    message: String,
+  ) {
+    commandSender.sendMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', message))
+  }
 
-        if (databaseType.equals("sqlite", true)) {
-            val sqliteDatabasePath = dataFolder.absolutePath + File.separator + "sign_locations.db"
+  internal fun sendLogoMessage(
+    commandSender: CommandSender,
+    message: String,
+  ) {
+    commandSender.sendMessage("${getTranslation()?.t(TranslationConfigKey.TAG)!!} $message")
+  }
 
-            database = SqliteDatabase(SqliteDatabase.createConnectionString(sqliteDatabasePath))
+  internal fun sendLogoMessage(
+    commandSender: CommandSender,
+    translationConfigKey: TranslationConfigKey,
+    vararg params: Any,
+  ) {
+    sendLogoMessage(commandSender, getTranslation()?.t(translationConfigKey, *params)!!)
+  }
 
-            logger.info(
-                "Using SQLite to save sign locations (path to DB is '$sqliteDatabasePath')."
-            )
-        } else if (databaseType.equals("mysql", true)) {
-            database =
-                MysqlDatabase(
-                    MysqlDatabase.createConnectionString(
-                        config.getString(ConfigKey.DATABASE_HOST.toString()),
-                        config.getInt(ConfigKey.DATABASE_PORT.toString()),
-                        config.getString(ConfigKey.DATABASE_NAME.toString()),
-                        config.getString(ConfigKey.DATABASE_USER.toString()),
-                        config.getString(ConfigKey.DATABASE_PASSWORD.toString())
-                    )
-                )
-
-            logger.info("Using MySQL to save sign locations.")
-        }
-    }
-
-    private fun loadManagers() {
-        coloredSignManager = ColoredSignManager()
-    }
-
-    private fun registerCommands() {
-        with(commandManager) {
-            registerCommand(CommandManager.CMD_INFO, InfoCommand())
-            registerCommand(CommandManager.CMD_HELP, HelpCommand())
-            registerCommand(CommandManager.CMD_GIVE_SIGN, GiveSignCommand())
-            registerCommand(CommandManager.CMD_COLOR_CODES, ColorcodesCommand())
-            registerCommand(CommandManager.CMD_RELOAD, ReloadCommand())
-            // registerCommand(CommandManager.CMD_MIGRATE_DATABASE, MigrateDatabaseCommand())
-        }
-        with(getCommand(CommandManager.CMD_PREFIX)) {
-            this?.setExecutor(commandManager)
-            this?.setTabCompleter(TabCompletion())
-        }
-    }
-
-    private fun registerListener() {
-        with(server.pluginManager) {
-            registerEvents(BlockListener(), this@SignColors)
-            registerEvents(SignListener(), this@SignColors)
-            registerEvents(PlayerListener(), this@SignColors)
-        }
-    }
-
-    //    private fun startUpdateCheckerIfEnabled() {
-    //        if (config.getBoolean(ConfigKey.OTHER_UPDATE_CHECK.toString())) {
-    //            logger.info("Checking for an update...")
-    //            val updateChecker = UpdateChecker.Builder(this)
-    //                    .setUrl(UPDATE_CHECKER_URL)
-    //                    .setPluginId(UPDATE_CHECKER_PLUGIN_ID)
-    //                    .setCurrentVersion(description.version)
-    //                    .onNewVersion {
-    //                        logger.info("New version (v$it) is available!")
-    //                        updateAvailablePair = Pair(true, it)
-    //                    }
-    //                    .onLatestVersion {
-    //                        logger.info("No new version available.")
-    //                    }
-    //                    .onError {
-    //                        logger.warning("Unable to check for an update!")
-    //                    }
-    //                    .build()
-    //            updateChecker.check()
-    //        }
-    //    }
-
-    //	private fun enableErrorReporting() {
-    //		if (config.getBoolean(ConfigKey.OTHER_ERROR_REPORTING.toString())) {
-    //			Sentry.init(SENTRY_DSN)
-    //			logger.info("Error reporting has been enabled.")
-    //		}
-    //	}
-
+  // 	private fun enableErrorReporting() {
+  // 		if (config.getBoolean(ConfigKey.OTHER_ERROR_REPORTING.toString())) {
+  // 			Sentry.init(SENTRY_DSN)
+  // 			logger.info("Error reporting has been enabled.")
+  // 		}
+  // 	}
 }

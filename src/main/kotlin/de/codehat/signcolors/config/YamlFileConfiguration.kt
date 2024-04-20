@@ -1,6 +1,6 @@
 /*
  * SignColors is a plug-in for Spigot adding colors and formatting to signs.
- * Copyright (C) 2022 CodeHat
+ * Copyright (C) 2024 CodeHat
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,28 +15,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.signcolors.database.abstraction
+package de.codehat.signcolors.config
 
-import com.j256.ormlite.jdbc.JdbcConnectionSource
-import com.j256.ormlite.table.TableUtils
-import de.codehat.signcolors.database.model.SignLocation
+import org.bukkit.configuration.file.YamlConfiguration
+import java.io.File
 
-abstract class Database(connectionString: String) {
+class YamlFileConfiguration : IFileConfiguration<YamlConfiguration> {
+  override fun load(file: File): YamlConfiguration {
+    return YamlConfiguration.loadConfiguration(file)
+  }
 
-    var connectionSource: JdbcConnectionSource
-        private set
-
-    init {
-        connectionSource = JdbcConnectionSource(connectionString)
-
-        createRequiredTablesIfNotExist()
-    }
-
-    fun close() {
-        connectionSource.closeQuietly() // Or just '#close()'?
-    }
-
-    private fun createRequiredTablesIfNotExist() {
-        TableUtils.createTableIfNotExists(connectionSource, SignLocation::class.java)
-    }
+  override fun save(
+    configuration: YamlConfiguration,
+    file: File,
+  ) {
+    configuration.save(file)
+  }
 }

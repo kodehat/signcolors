@@ -18,19 +18,18 @@
 package de.codehat.signcolors.util
 
 import de.codehat.signcolors.SignColors
-import de.codehat.signcolors.config.ConfigKey
-import java.lang.Exception
 import java.util.logging.Level
 
 class ErrorUtil {
-    companion object {
-        internal fun report(e: Exception) {
-            val config = SignColors.instance.config
+  companion object {
+    internal fun report(
+      plugin: SignColors,
+      e: Exception,
+    ) {
+      if (!plugin.pluginConfig.getErrorReporting()!!) return
 
-            if (!config.getBoolean(ConfigKey.OTHER_ERROR_REPORTING.toString())) return
-
-            SignColors.instance.logger.log(Level.SEVERE) { e.localizedMessage }
-            // Sentry.capture(e)
-        }
+      plugin.logger.log(Level.SEVERE) { e.localizedMessage }
+      // Sentry.capture(e)
     }
+  }
 }

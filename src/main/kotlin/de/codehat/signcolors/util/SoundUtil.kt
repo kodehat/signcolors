@@ -22,30 +22,43 @@ import org.bukkit.Sound
 import org.bukkit.entity.Player
 
 class SoundUtil {
-    companion object {
-        internal fun playPlayerSound(configPath: String, player: Player) {
-            val config = SignColors.instance.config
+  companion object {
+    internal fun playPlayerSound(
+      plugin: SignColors,
+      configPath: String,
+      player: Player,
+    ) {
+      if (!plugin.pluginConfig.getConfigurationData()?.getBoolean("$configPath.enabled")!!) {
+        return
+      }
 
-            if (!config.getBoolean("$configPath.enabled")) return
-
-            val sound: Sound?
-            try {
-                sound = Sound.valueOf(config.getString("$configPath.type")!!)
-            } catch (e: IllegalArgumentException) {
-                ErrorUtil.report(e)
-                with(SignColors.instance.logger) {
-                    warning("The value for the sound at '$configPath.type' doesn't exist.")
-                    warning("Please set it to a valid type or no sound is played!")
-                }
-                return
-            }
-
-            player.playSound(
-                player.location,
-                sound,
-                config.getDouble("$configPath.volume").toFloat(),
-                config.getDouble("$configPath.pitch").toFloat()
-            )
+      val sound: Sound?
+      try {
+        sound =
+          Sound.valueOf(
+            plugin.pluginConfig.getConfigurationData()?.getString("$configPath.type")!!,
+          )
+      } catch (e: IllegalArgumentException) {
+        ErrorUtil.report(plugin, e)
+        with(plugin.logger) {
+          warning("The value for the sound at '$configPath.type' doesn't exist.")
+          warning("Please set it to a valid type or no sound is played!")
         }
+        return
+      }
+
+      player.playSound(
+        player.location,
+        sound,
+        plugin.pluginConfig
+          .getConfigurationData()
+          ?.getDouble("$configPath.volume")
+          ?.toFloat() ?: 1.0.toFloat(),
+        plugin.pluginConfig
+          .getConfigurationData()
+          ?.getDouble("$configPath.pitch")
+          ?.toFloat() ?: 1.0.toFloat(),
+      )
     }
+  }
 }

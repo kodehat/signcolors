@@ -1,6 +1,6 @@
 /*
  * SignColors is a plug-in for Spigot adding colors and formatting to signs.
- * Copyright (C) 2022 CodeHat
+ * Copyright (C) 2024 CodeHat
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,18 +15,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package de.codehat.signcolors.configs
+package de.codehat.signcolors.config
 
-import de.codehat.signcolors.config.Config
-import de.codehat.signcolors.language.LanguageKey
+import java.io.File
 
-class LanguageConfig(language: String? = "en") : Config("lang-$language.yml") {
+interface IFileConfiguration<T> {
+  fun load(file: File): T
 
-    init {
-        this.setup(true)
-    }
-
-    fun get(languageKey: LanguageKey): String? {
-        return cfg.getString(languageKey.toString())
-    }
+  fun save(
+    configuration: T,
+    file: File,
+  )
 }

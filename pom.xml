@@ -114,9 +114,7 @@
                 <licenseHeader>
                   <file>${basedir}/license-header.txt</file>
                 </licenseHeader>
-                <ktfmt>
-                  <style>KOTLINLANG</style>
-                </ktfmt>
+                <ktlint/>
               </kotlin>
             </configuration>
           </execution>

@@ -19,41 +19,50 @@ package de.codehat.signcolors.commands
 
 import de.codehat.signcolors.SignColors
 import de.codehat.signcolors.command.Command
-import de.codehat.signcolors.language.LanguageKey
+import de.codehat.signcolors.configs.TranslationConfigKey
 import de.codehat.signcolors.permission.Permissions
 import de.codehat.signcolors.util.hasPermission
-import de.codehat.signcolors.util.sendColoredMsg
-import de.codehat.signcolors.util.sendLogoMsg
 import org.bukkit.command.CommandSender
 
-class InfoCommand : Command() {
-
-    override fun onCommand(
-        sender: CommandSender,
-        command: org.bukkit.command.Command,
-        label: String,
-        args: Array<out String>
-    ) {
-        if (!sender.hasPermission(Permissions.CMD_INFO)) {
-            sender.sendLogoMsg(LanguageKey.NO_PERMISSION)
-            return
-        }
-
-        with(sender) {
-            sendColoredMsg(
-                "&6+--------------------&r${SignColors.languageConfig
-					.get(LanguageKey.TAG)}&r&6--------------------+"
-            )
-            sendColoredMsg(
-                " ${SignColors.languageConfig.get(LanguageKey.INFO_AUTHOR)} &a${SignColors
-					.instance.description.authors.joinToString(",")}"
-            )
-            sendColoredMsg(
-                " ${SignColors.languageConfig.get(LanguageKey.INFO_VERSION)} &a${SignColors
-					.instance.description.version}"
-            )
-            sendColoredMsg(" ${SignColors.languageConfig.get(LanguageKey.INFO_CMD_HELP)}")
-            sendColoredMsg("&6+---------------------------------------------------+")
-        }
+class InfoCommand(plugin: SignColors) : Command(plugin) {
+  override fun onCommand(
+    sender: CommandSender,
+    command: org.bukkit.command.Command,
+    label: String,
+    args: Array<out String>,
+  ) {
+    if (!sender.hasPermission(Permissions.CMD_INFO)) {
+      plugin.sendLogoMessage(sender, TranslationConfigKey.ERROR_PERMISSION_MISSING)
+      return
     }
+
+    with(sender) {
+      plugin.sendColoredMessage(
+        this,
+        "&6+--------------------&r${
+          plugin.getTranslation()?.t(TranslationConfigKey.TAG)
+        }&r&6--------------------+",
+      )
+      plugin.sendColoredMessage(
+        this,
+        " ${plugin.getTranslation()?.t(TranslationConfigKey.INFO_AUTHOR)} &a${
+          plugin.description.authors.joinToString(",")
+        }",
+      )
+      plugin.sendColoredMessage(
+        this,
+        " ${plugin.getTranslation()?.t(TranslationConfigKey.INFO_VERSION)} &a${
+          plugin.description.version
+        }",
+      )
+      plugin.sendColoredMessage(
+        this,
+        " ${plugin.getTranslation()?.t(TranslationConfigKey.COMMAND_HELP)}",
+      )
+      plugin.sendColoredMessage(
+        this,
+        "&6+---------------------------------------------------+",
+      )
+    }
+  }
 }
