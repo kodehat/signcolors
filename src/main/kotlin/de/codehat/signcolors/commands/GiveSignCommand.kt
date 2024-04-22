@@ -21,6 +21,7 @@ import de.codehat.signcolors.SignColors
 import de.codehat.signcolors.command.Command
 import de.codehat.signcolors.configs.TranslationConfigKey
 import de.codehat.signcolors.permission.Permissions
+import de.codehat.signcolors.util.color
 import de.codehat.signcolors.util.hasPermission
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
@@ -51,7 +52,7 @@ class GiveSignCommand(plugin: SignColors) : Command(plugin) {
           plugin.getTranslation()?.t(TranslationConfigKey.PARAMETER_PLAYER)
         }&c] &c[&e${
           plugin.getTranslation()?.t(TranslationConfigKey.PARAMETER_AMOUNT)
-        }&c]",
+        }&c]".color(),
       )
       return
     }

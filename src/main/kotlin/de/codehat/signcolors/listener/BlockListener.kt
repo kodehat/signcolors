@@ -56,9 +56,7 @@ class BlockListener(private val plugin: SignColors) : Listener {
     val block = event.block
 
     if (
-      plugin.coloredSignManager.craftingEnabled == true &&
-      (block.type.name.endsWith("_SIGN")) &&
-      plugin.signLocationDao.exists(block)
+      plugin.coloredSignManager.craftingEnabled && block.type.name.endsWith("_SIGN") && plugin.modelManager.signLocationDao.exists(block)
     ) {
       block.type = Material.AIR
       if (player.gameMode == GameMode.SURVIVAL) {
@@ -66,7 +64,7 @@ class BlockListener(private val plugin: SignColors) : Listener {
         droppedStack.amount = 1
         block.world.dropItemNaturally(block.location, droppedStack)
       }
-      plugin.signLocationDao.delete(block)
+      plugin.modelManager.signLocationDao.delete(block)
       event.isCancelled = true
     }
   }

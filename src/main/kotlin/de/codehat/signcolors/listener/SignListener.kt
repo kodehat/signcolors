@@ -123,14 +123,14 @@ class SignListener(private val plugin: SignColors) : Listener {
           if (plugin.fixSignPlayers.contains(player)) {
             plugin.fixSignPlayers.remove(player)
             applyColorsOnSign(plugin.pluginConfig.getPrefixCharacter(), event, player)
-            plugin.signLocationDao.create(block)
+            plugin.modelManager.signLocationDao.create(block)
           }
         } else {
           if (itemInMainHand.itemMeta!!.hasLore()) {
             // Not checking if present cause not relevant yet
             plugin.fixSignPlayers.remove(player)
             applyColorsOnSign(plugin.pluginConfig.getPrefixCharacter(), event, player)
-            plugin.signLocationDao.create(block)
+            plugin.modelManager.signLocationDao.create(block)
           }
         }
       } else {

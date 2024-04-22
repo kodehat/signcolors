@@ -37,10 +37,11 @@ class ReloadCommand(plugin: SignColors) : Command(plugin) {
     }
 
     with(plugin) {
-      loadConfig()
+      pluginConfig.reload()
       loadTranslations()
-      coloredSignManager.removeRecipe()
-      coloredSignManager.setup()
+      databaseManager.reload()
+      modelManager.reload()
+      coloredSignManager.reload()
     }
 
     plugin.sendLogoMessage(sender, TranslationConfigKey.CONFIG_RELOAD)

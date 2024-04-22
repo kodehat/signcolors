@@ -53,7 +53,7 @@ abstract class AbstractConfig<T : IFileConfiguration<V>, V, K>(
   }
 
   override fun reload() {
-    load(false)
+    load(true)
   }
 
   override fun getFileName(): String {

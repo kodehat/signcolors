@@ -27,11 +27,12 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.ShapedRecipe
 import org.bukkit.inventory.ShapelessRecipe
 
-class ColoredSignManager(private val plugin: SignColors) : Manager {
+class ColoredSignManager(plugin: SignColors) : Manager(plugin) {
   private val namespacedKey = NamespacedKey(plugin, plugin.description.name)
 
-  internal var craftingEnabled = plugin.pluginConfig.getCraftingEnabled()
-  internal var coloredSignStack = getColoredSignStack()
+  internal var craftingEnabled = false
+    private set
+  internal lateinit var coloredSignStack: ItemStack
     private set
 
   companion object {
@@ -44,12 +45,14 @@ class ColoredSignManager(private val plugin: SignColors) : Manager {
   }
 
   init {
-    setup()
+    start()
   }
 
-  override fun setup() {
+  override fun start() {
+    craftingEnabled = plugin.pluginConfig.getCraftingEnabled()!!
+    coloredSignStack = getColoredSignStack()
     // Check if crafting colored signs is enabled
-    if (craftingEnabled == true) {
+    if (craftingEnabled) {
       // Check if recipe type is set to 'shapeless'
       val recipeType = plugin.pluginConfig.getCraftingRecipeType()
       when (recipeType) {
@@ -64,6 +67,10 @@ class ColoredSignManager(private val plugin: SignColors) : Manager {
           }
       }
     }
+  }
+
+  override fun stop() {
+    removeRecipe()
   }
 
   private fun addShapelessRecipe() {

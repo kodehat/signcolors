@@ -17,6 +17,8 @@
  */
 package de.codehat.signcolors
 
+import com.j256.ormlite.logger.Level
+import com.j256.ormlite.logger.Logger
 import de.codehat.signcolors.command.CommandManager
 import de.codehat.signcolors.command.TabCompletion
 import de.codehat.signcolors.commands.ColorcodesCommand
@@ -27,21 +29,18 @@ import de.codehat.signcolors.commands.ReloadCommand
 import de.codehat.signcolors.configs.PluginConfig
 import de.codehat.signcolors.configs.TranslationConfig
 import de.codehat.signcolors.configs.TranslationConfigKey
-import de.codehat.signcolors.daos.SignLocationDao
-import de.codehat.signcolors.database.Database
-import de.codehat.signcolors.database.MysqlDatabase
-import de.codehat.signcolors.database.SqliteDatabase
 import de.codehat.signcolors.dependencies.VaultDependency
 import de.codehat.signcolors.listener.BlockListener
 import de.codehat.signcolors.listener.PlayerListener
 import de.codehat.signcolors.listener.SignListener
 import de.codehat.signcolors.managers.BackupOldFilesManager
 import de.codehat.signcolors.managers.ColoredSignManager
+import de.codehat.signcolors.managers.DatabaseManager
+import de.codehat.signcolors.managers.ModelManager
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
-import java.io.File
 import java.nio.file.Files
 
 @Suppress("unused")
@@ -53,10 +52,9 @@ class SignColors : JavaPlugin() {
 
   private var vaultDependency: VaultDependency? = null
 
-  private lateinit var database: Database
+  internal lateinit var databaseManager: DatabaseManager
 
-  lateinit var signLocationDao: SignLocationDao
-    private set
+  internal lateinit var modelManager: ModelManager
 
   lateinit var coloredSignManager: ColoredSignManager
 
@@ -71,14 +69,13 @@ class SignColors : JavaPlugin() {
   }
 
   override fun onEnable() {
+    Logger.setGlobalLogLevel(Level.WARNING)
     loadConfig()
     checkAndDoBackup()
-    loadConfig()
     pluginConfig.reload() // Must reload if backup has been made.
     loadTranslations()
     loadDependencies()
     loadDatabase()
-    signLocationDao = SignLocationDao(database.connectionSource)
     loadManagers()
     registerCommands()
     registerListener()
@@ -88,12 +85,14 @@ class SignColors : JavaPlugin() {
   }
 
   override fun onDisable() {
-    database.close()
+    databaseManager.stop()
+    modelManager.stop()
+    coloredSignManager.stop()
 
     logger.info("v${description.version} has been disabled.")
   }
 
-  internal fun loadConfig() {
+  private fun loadConfig() {
     pluginConfig = PluginConfig(this)
   }
 
@@ -148,34 +147,12 @@ class SignColors : JavaPlugin() {
   }
 
   private fun loadDatabase() {
-    val databaseType = pluginConfig.getDatabaseType()
-
-    if (databaseType.equals("sqlite", true)) {
-      val sqliteDatabasePath = dataFolder.absolutePath + File.separator + "sign_locations.db"
-
-      database = SqliteDatabase(SqliteDatabase.createConnectionString(sqliteDatabasePath))
-
-      logger.info(
-        "Using SQLite to save sign locations (path to DB is '$sqliteDatabasePath').",
-      )
-    } else if (databaseType.equals("mysql", true)) {
-      database =
-        MysqlDatabase(
-          MysqlDatabase.createConnectionString(
-            pluginConfig.getDatabaseHost(),
-            pluginConfig.getDatabasePort()!!,
-            pluginConfig.getDatabaseName(),
-            pluginConfig.getDatabaseUser(),
-            pluginConfig.getDatabasePassword(),
-          ),
-        )
-
-      logger.info("Using MySQL to save sign locations.")
-    }
+    databaseManager = DatabaseManager(this)
   }
 
   private fun loadManagers() {
     coloredSignManager = ColoredSignManager(this)
+    modelManager = ModelManager(this)
   }
 
   private fun registerCommands() {

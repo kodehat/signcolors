@@ -44,10 +44,10 @@ class HelpCommand(plugin: SignColors) : Command(plugin) {
       }
             | &c[] ${plugin.getTranslation()?.t(TranslationConfigKey.PARAMETER_REQUIRED)}, &7<> ${
         plugin.getTranslation()?.t(TranslationConfigKey.PARAMETER_OPTIONAL)
-      }
-            ${if (sender.hasPermission(Permissions.CMD_INFO)) "| &7&l- &r&6/sc" else ""}
-            ${if (sender.hasPermission(Permissions.CMD_HELP)) "| &7&l- &r&6/sc &ehelp" else ""}
-            ${if (sender.hasPermission(Permissions.CMD_RELOAD)) "| &7&l- &r&6/sc &ereload" else ""}
+      }&r
+            ${if (sender.hasPermission(Permissions.CMD_INFO)) "| &7&l- &r&6/sc" else ""}&r
+            ${if (sender.hasPermission(Permissions.CMD_HELP)) "| &7&l- &r&6/sc &ehelp" else ""}&r
+            ${if (sender.hasPermission(Permissions.CMD_RELOAD)) "| &7&l- &r&6/sc &ereload" else ""}&r
             ${
         if (sender.hasPermission(Permissions.CMD_GIVE)) {
           "| &7&l- &r&6/sc &egivesign &c[&e${
@@ -58,8 +58,8 @@ class HelpCommand(plugin: SignColors) : Command(plugin) {
         } else {
           ""
         }
-      }
-            ${if (sender.hasPermission(Permissions.CMD_COLOR_CODES)) "| &7&l- &r&6/sc &ecolorcodes" else ""}
+      }&r
+            ${if (sender.hasPermission(Permissions.CMD_COLOR_CODES)) "| &7&l- &r&6/sc &ecolorcodes" else ""}&r
             """
         .trimMargin(),
     )

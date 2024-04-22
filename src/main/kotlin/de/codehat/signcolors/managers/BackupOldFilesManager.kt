@@ -25,8 +25,9 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
+import kotlin.io.path.name
 
-class BackupOldFilesManager(private val plugin: SignColors) : Manager {
+class BackupOldFilesManager(plugin: SignColors) : Manager(plugin) {
   companion object {
     const val CONFIG_VERSION = 7
     private const val BUFFER_SIZE = 1024
@@ -48,24 +49,28 @@ class BackupOldFilesManager(private val plugin: SignColors) : Manager {
   }
 
   init {
+    start()
+  }
+
+  override fun start() {
     when {
       plugin.pluginConfig.getConfigVersion() == 0 -> {
         plugin.logger.info(
           "No config version code found! Making a backup of all old files now.",
         )
-        setup()
+        doBackup()
       }
       CONFIG_VERSION > plugin.pluginConfig.getConfigVersion() as Int -> {
         plugin.logger.info(
           "Old config version found! Making a backup of the old config now.",
         )
-        setup()
+        doBackup()
       }
       else -> plugin.logger.info("Config is up to date.")
     }
   }
 
-  override fun setup() {
+  private fun doBackup() {
     val dataFolder = plugin.dataFolder
     val backupZipName = "backup-${System.currentTimeMillis()}.zip"
     val fos = FileOutputStream(File(dataFolder, backupZipName))
