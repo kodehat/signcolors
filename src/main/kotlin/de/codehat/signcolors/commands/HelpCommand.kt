@@ -54,6 +54,8 @@ class HelpCommand(plugin: SignColors) : Command(plugin) {
             plugin.getTranslation()?.t(TranslationConfigKey.PARAMETER_PLAYER)
           }&c] &c[&e${
             plugin.getTranslation()?.t(TranslationConfigKey.PARAMETER_AMOUNT)
+          }&c] &c[&e${
+            plugin.getTranslation()?.t(TranslationConfigKey.PARAMETER_SIGN_MATERIAL)
           }&c]"
         } else {
           ""

@@ -69,6 +69,10 @@ class PluginConfig(plugin: SignColors) :
     return cfgData?.getDouble(PluginConfigKey.BUY_SIGN_PRICE.toString())
   }
 
+  fun getBuySignSignType(): String? {
+    return cfgData?.getString(PluginConfigKey.BUY_SIGN_SIGN_TYPE.toString())
+  }
+
   fun getBuySignBlockedFirstLines(): List<String>? {
     return cfgData?.getStringList(PluginConfigKey.BUY_SIGN_BLOCKED_FIRST_LINES.toString())
   }

@@ -24,6 +24,7 @@ import de.codehat.signcolors.util.SoundUtil
 import de.codehat.signcolors.util.color
 import de.codehat.signcolors.util.hasPermission
 import org.bukkit.ChatColor
+import org.bukkit.Material
 import org.bukkit.block.Sign
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -63,7 +64,8 @@ class PlayerListener(private val plugin: SignColors) : Listener {
     if (event.clickedBlock!!.state is Sign) {
       val clickedSign = event.clickedBlock!!.state as Sign
       val indicatorLine = clickedSign.getTargetSide(player).getLine(0)
-      val dataLine = clickedSign.getTargetSide(player).getLine(2)
+      val typeLine = clickedSign.getTargetSide(player).getLine(1)
+      val amountPriceLine = clickedSign.getTargetSide(player).getLine(2)
 
       if (indicatorLine == SignListener.SPECIAL_SIGN_INDICATOR.color()) {
         if (player.hasPermission(Permissions.BUY_SIGN_USE)) {
@@ -75,13 +77,26 @@ class PlayerListener(private val plugin: SignColors) : Listener {
           }
 
           // [0] = sign amount, [1] = sign price for the specified amount
-          val signData = ChatColor.stripColor(dataLine)!!.split(":")
+          val amountPriceData = ChatColor.stripColor(amountPriceLine)!!.split(":")
+          var typeData = typeLine
+
+          var signMaterial: Material?
 
           // Check if written types are valid for Int and Double
           if (
-            signData[0].trim().toIntOrNull() == null ||
-            signData[1].trim().toDoubleOrNull() == null
+            amountPriceData[0].trim().toIntOrNull() == null ||
+            amountPriceData[1].trim().toDoubleOrNull() == null
           ) {
+            plugin.sendLogoMessage(
+              player,
+              TranslationConfigKey.ERROR_BUYSIGN_PLAYER_INCORRECT,
+            )
+            event.isCancelled = true
+            return
+          }
+          try {
+            signMaterial = Material.valueOf(typeData)
+          } catch (e: IllegalArgumentException) {
             plugin.sendLogoMessage(
               player,
               TranslationConfigKey.ERROR_BUYSIGN_PLAYER_INCORRECT,
@@ -91,8 +106,8 @@ class PlayerListener(private val plugin: SignColors) : Listener {
           }
 
           // Retrieve sign amount and price
-          val signAmount = signData[0].trim().toInt()
-          val signPrice = signData[1].trim().toDouble()
+          val signAmount = amountPriceData[0].trim().toInt()
+          val signPrice = amountPriceData[1].trim().toDouble()
 
           // Check if the player has enough money to buy signs
           if (plugin.isVaultAvailable().second!!.getBalance(player) < signPrice) {
@@ -110,7 +125,7 @@ class PlayerListener(private val plugin: SignColors) : Listener {
           plugin.isVaultAvailable().second!!.withdrawPlayer(player, signPrice)
 
           // Copy the colored sign stack and set the defined amount
-          val stackForPlayer = ItemStack(plugin.coloredSignManager.coloredSignStack)
+          val stackForPlayer = ItemStack(plugin.coloredSignManager.coloredSignStacks[signMaterial]!!)
           stackForPlayer.amount = signAmount
 
           // Add the signs to the player's inventory and update it

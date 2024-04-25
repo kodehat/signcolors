@@ -19,6 +19,7 @@ package de.codehat.signcolors.listener
 
 import de.codehat.signcolors.SignColors
 import de.codehat.signcolors.permission.Permissions
+import de.codehat.signcolors.util.SignUtil
 import de.codehat.signcolors.util.hasPermission
 import org.bukkit.GameMode
 import org.bukkit.Material
@@ -56,11 +57,14 @@ class BlockListener(private val plugin: SignColors) : Listener {
     val block = event.block
 
     if (
-      plugin.coloredSignManager.craftingEnabled && block.type.name.endsWith("_SIGN") && plugin.modelManager.signLocationDao.exists(block)
+      plugin.coloredSignManager.craftingEnabled &&
+      SignUtil.getAllSignMaterials().contains(
+        block.type,
+      ) && plugin.modelManager.signLocationDao.exists(block)
     ) {
       block.type = Material.AIR
       if (player.gameMode == GameMode.SURVIVAL) {
-        val droppedStack = ItemStack(plugin.coloredSignManager.coloredSignStack)
+        val droppedStack = ItemStack(plugin.coloredSignManager.coloredSignStacks[block.type]!!)
         droppedStack.amount = 1
         block.world.dropItemNaturally(block.location, droppedStack)
       }

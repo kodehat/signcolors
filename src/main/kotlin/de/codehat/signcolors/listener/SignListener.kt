@@ -94,12 +94,13 @@ class SignListener(private val plugin: SignColors) : Listener {
       event: SignChangeEvent,
       amount: Int,
       price: Double,
+      signType: Material,
     ) {
       with(event) {
         setLine(SIGN_LINE_FIRST_INDEX, SPECIAL_SIGN_INDICATOR.color())
         setLine(
           SIGN_LINE_SECOND_INDEX,
-          plugin.getTranslation()?.t(TranslationConfigKey.BUYSIGN_LINE_TWO),
+          signType.name,
         )
         setLine(SIGN_LINE_THIRD_INDEX, "&8$amount : $price".color())
         setLine(
@@ -117,7 +118,7 @@ class SignListener(private val plugin: SignColors) : Listener {
     val block = event.block
     val itemInMainHand = player.inventory.itemInMainHand
 
-    if (plugin.coloredSignManager.craftingEnabled == true) {
+    if (plugin.coloredSignManager.craftingEnabled) {
       if (!player.hasPermission(Permissions.BYPASS_CRAFTING)) {
         if (itemInMainHand.type == Material.AIR) {
           if (plugin.fixSignPlayers.contains(player)) {
@@ -148,12 +149,16 @@ class SignListener(private val plugin: SignColors) : Listener {
 
     if (event.getLine(0).equals(SPECIAL_SIGN_LINE, true)) {
       if (player.hasPermission(Permissions.BUY_SIGN_CREATE)) {
-        val dataLine = event.getLine(1)
+        val amountPriceLine = event.getLine(1)
+        val typeLine = event.getLine(2)
+        var signAmount = plugin.pluginConfig.getBuySignAmount()!!
+        var signPrice = plugin.pluginConfig.getBuySignPrice()!!
+        var signType = Material.valueOf(plugin.pluginConfig.getBuySignSignType()!!)
         // Check if line 1 isn't empty and contains the sign amount and the price split with
         // ":"
-        if (dataLine!!.isNotEmpty() && dataLine.contains(":")) {
+        if (amountPriceLine!!.isNotEmpty() && amountPriceLine.contains(":")) {
           // [0] = sign amount, [1] = sign price for the specified amount
-          val signData = dataLine.split(":")
+          val signData = amountPriceLine.split(":")
 
           // Check if written types are valid for Int and Double
           if (signData[0].toIntOrNull() == null || signData[1].toDoubleOrNull() == null) {
@@ -166,11 +171,10 @@ class SignListener(private val plugin: SignColors) : Listener {
           }
 
           // Retrieve sign amount and price
-          val signAmount = signData[0].toInt()
-          val signPrice = signData[1].toDouble()
+          signAmount = signData[0].toInt()
+          signPrice = signData[1].toDouble()
 
-          // Return and show warning if sign amount or price is lower than zero or equal
-          // zero
+          // Return and show warning if sign amount or price is lower than zero or equal zero.
           if (signAmount <= 0 || signPrice <= 0) {
             plugin.sendLogoMessage(
               player,
@@ -179,19 +183,23 @@ class SignListener(private val plugin: SignColors) : Listener {
             event.isCancelled = true
             return
           }
+        }
 
-          // Apply lines on special sign
-          applyLinesOnSpecialSign(plugin, event, signAmount, signPrice)
-        } else { // Apply lines on special sign with default values
-          with(plugin.pluginConfig) {
-            applyLinesOnSpecialSign(
-              plugin,
-              event,
-              getBuySignAmount()!!,
-              getBuySignPrice()!!,
+        if (typeLine!!.isNotEmpty()) {
+          try {
+            signType = Material.valueOf(typeLine)
+          } catch (e: IllegalArgumentException) {
+            plugin.sendLogoMessage(
+              player,
+              TranslationConfigKey.ERROR_BUYSIGN_INVALID_SIGN_TYPE,
             )
+            event.isCancelled = true
+            return
           }
         }
+
+        // Apply lines on special sign
+        applyLinesOnSpecialSign(plugin, event, signAmount, signPrice, signType)
 
         // Play the appropriate sound
         SoundUtil.playPlayerSound(plugin, "buySign.creationSound", player)

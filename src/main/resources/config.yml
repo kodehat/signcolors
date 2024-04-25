@@ -26,7 +26,9 @@ crafting:
   recipeType: shaped
 
   # Kind of sign that is returned from crafting.
-  signType: 'OAK_SIGN'
+  # If you choose "ANY_SIGN" here and in the ingredients section,
+  # then the type of the sign depends on the sign that is put in the crafting table.
+  signType: 'ANY_SIGN'
 
   # Amount of colored signs received by using the crafting recipe.
   amount: 1
@@ -55,13 +57,13 @@ crafting:
     B: 'INK_SAC:2'
     C: 'INK_SAC:4'
     D: 'INK_SAC:11'
-    S: 'OAK_SIGN'
+    S: 'ANY_SIGN'
 
   # ONLY taken into account if "recipes.type" is set to "shaped"!
   shape:
-    - 'A B'
-    - ' S '
-    - 'C D'
+  - 'A B'
+  - ' S '
+  - 'C D'
 
 # "Buy" sign ([SC]) section.
 buySign:
@@ -71,6 +73,9 @@ buySign:
 
   # Default price on buy signs.
   price: 100.0
+
+  # Default sign type that is given by buy signs.
+  signType: 'OAK_SIGN'
 
   # Prevents players to create clickable signs like the
   # plugin's buy sign or Essential's buy sign.

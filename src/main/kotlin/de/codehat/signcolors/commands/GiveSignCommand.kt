@@ -21,15 +21,17 @@ import de.codehat.signcolors.SignColors
 import de.codehat.signcolors.command.Command
 import de.codehat.signcolors.configs.TranslationConfigKey
 import de.codehat.signcolors.permission.Permissions
+import de.codehat.signcolors.util.SignUtil
 import de.codehat.signcolors.util.color
 import de.codehat.signcolors.util.hasPermission
 import org.bukkit.Bukkit
+import org.bukkit.Material
 import org.bukkit.command.CommandSender
 
 class GiveSignCommand(plugin: SignColors) : Command(plugin) {
   companion object {
     private const val MIN_ARGS = 1
-    private const val MAX_ARGS = 3
+    private const val MAX_ARGS = 4
     private const val MIN_SIGN_AMOUNT = 1
     private const val MAX_SIGN_AMOUNT = 16
   }
@@ -52,6 +54,8 @@ class GiveSignCommand(plugin: SignColors) : Command(plugin) {
           plugin.getTranslation()?.t(TranslationConfigKey.PARAMETER_PLAYER)
         }&c] &c[&e${
           plugin.getTranslation()?.t(TranslationConfigKey.PARAMETER_AMOUNT)
+        }&c] &c[&e${
+          plugin.getTranslation()?.t(TranslationConfigKey.PARAMETER_SIGN_MATERIAL)
         }&c]".color(),
       )
       return
@@ -78,9 +82,16 @@ class GiveSignCommand(plugin: SignColors) : Command(plugin) {
       plugin.sendLogoMessage(sender, TranslationConfigKey.ERROR_GIVE_AMOUNT_INVALID)
       return
     }
-
     val signAmount = signAmountString.toInt()
-    val playerStack = plugin.coloredSignManager.coloredSignStack
+
+    val signMaterialName = args[3]
+    if (!SignUtil.getAllSignMaterials().map { it.name.uppercase() }.contains(signMaterialName.uppercase())) {
+      plugin.sendLogoMessage(sender, TranslationConfigKey.ERROR_SIGN_MATERIAL_INVALID)
+      return
+    }
+    val signMaterial = Material.valueOf(signMaterialName)
+
+    val playerStack = plugin.coloredSignManager.coloredSignStacks[signMaterial]!!
     playerStack.amount = signAmount
     player.inventory.addItem(playerStack)
 

@@ -12,19 +12,6 @@ commands:
     usage: /<command> <name>
     description: Shows basic details about the plugin.
     aliases: [ signcolors ]
-  help:
-    usage: /sc help
-    description: Lists all available commands.
-  reload:
-    usage: /sc reload
-    description: Reloads the plugin's configuration file.
-  give:
-    usage: /sc give <player> <amount>
-    description: Gives a player a specific amount of colored signs.
-  colorcodes:
-    usage: /sc colorcodes
-    description: Lists all color and formatting codes.
-    aliases: [ cc ]
 
 permissions:
   signcolors.*:

@@ -18,6 +18,7 @@
 package de.codehat.signcolors.command
 
 import de.codehat.signcolors.permission.Permissions
+import de.codehat.signcolors.util.SignUtil
 import de.codehat.signcolors.util.hasPermission
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
@@ -54,11 +55,24 @@ class TabCompletion : TabCompleter {
       args[1].isNotEmpty() &&
       args[0].equals(CommandManager.CMD_GIVE_SIGN, true)
     ) {
-      Bukkit.getServer()
-        .onlinePlayers
-        .filter { it.name.startsWith(args[1]) }
-        .forEach { completions.add(it.name) }
+      val playerNames =
+        Bukkit.getServer()
+          .onlinePlayers
+          .map { it.name }
+
+      StringUtil.copyPartialMatches(args[1], playerNames, completions)
+    } else if (
+      args.size == 4 &&
+      args[3].isNotEmpty() &&
+      args[2].isNotEmpty() &&
+      args[1].isNotEmpty() &&
+      args[0].equals(CommandManager.CMD_GIVE_SIGN, true)
+    ) {
+      val signMaterials = SignUtil.getAllSignMaterials().map { it.name }
+
+      StringUtil.copyPartialMatches(args[3], signMaterials, completions)
     }
+
     completions.sort()
     return completions
   }

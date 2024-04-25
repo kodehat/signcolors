@@ -20,6 +20,7 @@ package de.codehat.signcolors.managers
 import de.codehat.signcolors.SignColors
 import de.codehat.signcolors.configs.TranslationConfigKey
 import de.codehat.signcolors.manager.Manager
+import de.codehat.signcolors.util.SignUtil
 import de.codehat.signcolors.util.color
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -28,11 +29,11 @@ import org.bukkit.inventory.ShapedRecipe
 import org.bukkit.inventory.ShapelessRecipe
 
 class ColoredSignManager(plugin: SignColors) : Manager(plugin) {
-  private val namespacedKey = NamespacedKey(plugin, plugin.description.name)
+  private lateinit var namespacedKeys: Map<Material, NamespacedKey>
 
   internal var craftingEnabled = false
     private set
-  internal lateinit var coloredSignStack: ItemStack
+  internal lateinit var coloredSignStacks: Map<Material, ItemStack>
     private set
 
   companion object {
@@ -42,6 +43,8 @@ class ColoredSignManager(plugin: SignColors) : Manager(plugin) {
     private const val SHAPE_SIZE_ONE = 1
     private const val SHAPE_SIZE_TWO = 2
     private const val SHAPE_SIZE_THREE = 3
+
+    private const val MATERIAL_ANY_SIGN = "ANY_SIGN"
   }
 
   init {
@@ -49,8 +52,9 @@ class ColoredSignManager(plugin: SignColors) : Manager(plugin) {
   }
 
   override fun start() {
+    namespacedKeys = getNamespacedKeys()
     craftingEnabled = plugin.pluginConfig.getCraftingEnabled()!!
-    coloredSignStack = getColoredSignStack()
+    coloredSignStacks = getColoredSignStacks()
     // Check if crafting colored signs is enabled
     if (craftingEnabled) {
       // Check if recipe type is set to 'shapeless'
@@ -70,7 +74,7 @@ class ColoredSignManager(plugin: SignColors) : Manager(plugin) {
   }
 
   override fun stop() {
-    removeRecipe()
+    removeRecipes()
   }
 
   private fun addShapelessRecipe() {
@@ -85,9 +89,22 @@ class ColoredSignManager(plugin: SignColors) : Manager(plugin) {
       plugin.logger.warning("Please change it or you won't be able to craft colored signs!")
       return
     }
-    val recipeStack = ItemStack(coloredSignStack)
-    recipeStack.amount = plugin.pluginConfig.getCraftingAmount() ?: 1
-    val shapelessRecipe = ShapelessRecipe(namespacedKey, recipeStack)
+    if (ingredients.contains(MATERIAL_ANY_SIGN)) {
+      SignUtil.getAllSignMaterials().forEach { signMaterial ->
+        addShapelessRecipe(ingredients, signMaterial)
+      }
+    } else {
+      addShapelessRecipe(ingredients, Material.valueOf(plugin.pluginConfig.getCraftingSignType()!!))
+    }
+  }
+
+  private fun addShapelessRecipe(
+    ingredients: List<String>,
+    signMaterial: Material,
+  ) {
+    val recipeStack = coloredSignStacks[signMaterial]
+    recipeStack!!.amount = plugin.pluginConfig.getCraftingAmount() ?: 1
+    val shapelessRecipe = ShapelessRecipe(namespacedKeys[signMaterial]!!, recipeStack)
 
     ingredients.forEach {
       if (it.contains(":")) {
@@ -95,8 +112,10 @@ class ColoredSignManager(plugin: SignColors) : Manager(plugin) {
         val material = Material.getMaterial(ingredientData[0])
         @Suppress("DEPRECATION")
         shapelessRecipe.addIngredient(material!!, ingredientData[1].toInt())
+      } else if (it == MATERIAL_ANY_SIGN) {
+        shapelessRecipe.addIngredient(signMaterial)
       } else {
-        Material.getMaterial(it).apply { shapelessRecipe.addIngredient(this!!) }
+        shapelessRecipe.addIngredient(Material.getMaterial(it)!!)
       }
     }
     plugin.server.addRecipe(shapelessRecipe)
@@ -111,9 +130,28 @@ class ColoredSignManager(plugin: SignColors) : Manager(plugin) {
         return
       }
     }
-    val recipeStack = ItemStack(coloredSignStack)
-    recipeStack.amount = plugin.pluginConfig.getCraftingAmount() ?: 1
-    val shapedRecipe = ShapedRecipe(namespacedKey, recipeStack)
+    val ingredients =
+      plugin.pluginConfig
+        .getCraftingIngredients()
+        ?.getValues(false)
+        ?.values
+        ?.filterIsInstance<String>()
+    if (ingredients!!.contains(MATERIAL_ANY_SIGN)) {
+      SignUtil.getAllSignMaterials().forEach { signMaterial ->
+        addShapedRecipe(shapes, signMaterial)
+      }
+    } else {
+      addShapedRecipe(shapes, Material.valueOf(plugin.pluginConfig.getCraftingSignType()!!))
+    }
+  }
+
+  private fun addShapedRecipe(
+    shapes: List<String>,
+    signMaterial: Material,
+  ) {
+    val recipeStack = coloredSignStacks[signMaterial]
+    recipeStack!!.amount = plugin.pluginConfig.getCraftingAmount() ?: 1
+    val shapedRecipe = ShapedRecipe(namespacedKeys[signMaterial]!!, recipeStack)
 
     when (shapes.size) {
       SHAPE_SIZE_ONE -> shapedRecipe.shape(shapes[0])
@@ -136,6 +174,8 @@ class ColoredSignManager(plugin: SignColors) : Manager(plugin) {
         val material = Material.getMaterial(ingredientData[0])
         @Suppress("DEPRECATION")
         shapedRecipe.setIngredient(it.toString()[0], material!!, ingredientData[1].toInt())
+      } else if (value == MATERIAL_ANY_SIGN) {
+        shapedRecipe.setIngredient(it.toString()[0], signMaterial)
       } else {
         Material.getMaterial(value).apply {
           shapedRecipe.setIngredient(it.toString()[0], this!!)
@@ -145,13 +185,28 @@ class ColoredSignManager(plugin: SignColors) : Manager(plugin) {
     plugin.server.addRecipe(shapedRecipe)
   }
 
-  internal fun removeRecipe() {
-    plugin.server.removeRecipe(namespacedKey)
+  private fun removeRecipes() {
+    namespacedKeys.values.forEach(plugin.server::removeRecipe)
   }
 
-  private fun getColoredSignStack(amount: Int = 1): ItemStack {
-    val signType = Material.valueOf(plugin.pluginConfig.getCraftingSignType()!!)
-    val signStack = ItemStack(signType, amount)
+  private fun getNamespacedKeys(): Map<Material, NamespacedKey> {
+    return SignUtil.getAllSignMaterials()
+      .groupBy({ it }, { NamespacedKey(plugin, "sign-${it.name}") })
+      .mapValues { it.value.single() }
+  }
+
+  private fun getColoredSignStacks(amount: Int = 1): Map<Material, ItemStack> {
+    return SignUtil.getAllSignMaterials()
+      .map { getColoredSignStack(it, amount) }
+      .groupBy { it.type }
+      .mapValues { it.value.single() }
+  }
+
+  private fun getColoredSignStack(
+    material: Material,
+    amount: Int = 1,
+  ): ItemStack {
+    val signStack = ItemStack(material, amount)
     val signStackMeta = signStack.itemMeta
     val signStackLore =
       arrayListOf((plugin.getTranslation()?.t(TranslationConfigKey.BUYSIGN_LORE))?.color())

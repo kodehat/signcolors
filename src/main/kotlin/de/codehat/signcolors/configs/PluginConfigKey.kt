@@ -33,6 +33,7 @@ enum class PluginConfigKey(private val key: String) {
   // "Buy" sign:
   BUY_SIGN_AMOUNT("buySign.amount"),
   BUY_SIGN_PRICE("buySign.price"),
+  BUY_SIGN_SIGN_TYPE("buySign.signType"),
   BUY_SIGN_BLOCKED_FIRST_LINES("buySign.blockedFirstLines"),
   BUY_SIGN_CREATION_SOUND_ENABLED("buySign.creationSound.enabled"),
   BUY_SIGN_CREATION_SOUND_TYPE("buySign.creationSound.type"),
