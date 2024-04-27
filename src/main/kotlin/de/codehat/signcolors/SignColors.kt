@@ -21,7 +21,7 @@ import com.j256.ormlite.logger.Level
 import com.j256.ormlite.logger.Logger
 import de.codehat.signcolors.command.CommandManager
 import de.codehat.signcolors.command.TabCompletion
-import de.codehat.signcolors.commands.ColorcodesCommand
+import de.codehat.signcolors.commands.CodesCommand
 import de.codehat.signcolors.commands.GiveSignCommand
 import de.codehat.signcolors.commands.HelpCommand
 import de.codehat.signcolors.commands.InfoCommand
@@ -160,7 +160,7 @@ class SignColors : JavaPlugin() {
       registerCommand(CommandManager.CMD_INFO, InfoCommand(this@SignColors))
       registerCommand(CommandManager.CMD_HELP, HelpCommand(this@SignColors))
       registerCommand(CommandManager.CMD_GIVE_SIGN, GiveSignCommand(this@SignColors))
-      registerCommand(CommandManager.CMD_COLOR_CODES, ColorcodesCommand(this@SignColors))
+      registerCommand(CommandManager.CMD_CODES, CodesCommand(this@SignColors))
       registerCommand(CommandManager.CMD_RELOAD, ReloadCommand(this@SignColors))
     }
     with(getCommand(CommandManager.CMD_PREFIX)) {

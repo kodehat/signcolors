@@ -61,7 +61,7 @@ class HelpCommand(plugin: SignColors) : Command(plugin) {
           ""
         }
       }&r
-            ${if (sender.hasPermission(Permissions.CMD_COLOR_CODES)) "| &7&l- &r&6/sc &ecolorcodes" else ""}&r
+            ${if (sender.hasPermission(Permissions.CMD_CODES)) "| &7&l- &r&6/sc &ecodes" else ""}&r
             """
         .trimMargin(),
     )

@@ -25,14 +25,14 @@ import de.codehat.signcolors.util.hasPermission
 import org.bukkit.ChatColor
 import org.bukkit.command.CommandSender
 
-class ColorcodesCommand(plugin: SignColors) : Command(plugin) {
+class CodesCommand(plugin: SignColors) : Command(plugin) {
   override fun onCommand(
     sender: CommandSender,
     command: org.bukkit.command.Command,
     label: String,
     args: Array<out String>,
   ) {
-    if (!sender.hasPermission(Permissions.CMD_COLOR_CODES)) {
+    if (!sender.hasPermission(Permissions.CMD_CODES)) {
       plugin.sendLogoMessage(sender, TranslationConfigKey.ERROR_PERMISSION_MISSING)
       return
     }

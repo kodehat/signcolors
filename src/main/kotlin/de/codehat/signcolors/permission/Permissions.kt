@@ -27,7 +27,7 @@ enum class Permissions(private var permission: String) {
   CMD_INFO("signcolors.command.info"),
   CMD_HELP("signcolors.command.help"),
   CMD_RELOAD("signcolors.command.reload"),
-  CMD_COLOR_CODES("signcolors.command.colorcodes"),
+  CMD_CODES("signcolors.command.codes"),
   CMD_GIVE("signcolors.command.give"),
   BUY_SIGN_CREATE("signcolors.buysign.create"),
   BUY_SIGN_USE("signcolors.buysign.use"),

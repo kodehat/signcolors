@@ -31,7 +31,7 @@ permissions:
       signcolors.command.info: true
       signcolors.command.help: true
       signcolors.command.reload: true
-      signcolors.command.colorcodes: true
+      signcolors.command.codes: true
       signcolors.command.give: true
   signcolors.buysign.*:
     description: Allows you to create and use buy signs.
@@ -77,8 +77,8 @@ permissions:
     description: Allows you to view the help page.
   signcolors.command.reload:
     description: Allows you to reload the config.yml.
-  signcolors.command.colorcodes:
-    description: Allows you to use the color codes command.
+  signcolors.command.codes:
+    description: Allows you to use the codes command.
   signcolors.command.give:
     description: Allows you to use the give command.
   signcolors.buysign.create:

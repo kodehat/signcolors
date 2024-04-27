@@ -30,7 +30,7 @@ class CommandManager(private val plugin: SignColors) : CommandExecutor {
     const val CMD_INFO = ""
     const val CMD_HELP = "help"
     const val CMD_RELOAD = "reload"
-    const val CMD_COLOR_CODES = "colorcodes"
+    const val CMD_CODES = "codes"
     const val CMD_GIVE_SIGN = "givesign"
   }
 

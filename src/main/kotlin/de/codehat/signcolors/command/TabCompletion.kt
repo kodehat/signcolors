@@ -42,8 +42,8 @@ class TabCompletion : TabCompleter {
       if (sender.hasPermission(Permissions.CMD_RELOAD)) {
         commands.add(CommandManager.CMD_RELOAD)
       }
-      if (sender.hasPermission(Permissions.CMD_COLOR_CODES)) {
-        commands.add(CommandManager.CMD_COLOR_CODES)
+      if (sender.hasPermission(Permissions.CMD_CODES)) {
+        commands.add(CommandManager.CMD_CODES)
       }
       if (sender.hasPermission(Permissions.CMD_GIVE)) {
         commands.add(CommandManager.CMD_GIVE_SIGN)
