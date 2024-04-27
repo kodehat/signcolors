@@ -25,6 +25,7 @@ import de.codehat.signcolors.util.color
 import de.codehat.signcolors.util.hasPermission
 import org.bukkit.ChatColor
 import org.bukkit.Material
+import org.bukkit.block.Sign
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -107,6 +108,9 @@ class SignListener(private val plugin: SignColors) : Listener {
           SIGN_LINE_LAST_INDEX,
           plugin.getTranslation()?.t(TranslationConfigKey.BUYSIGN_LINE_FOUR),
         )
+        val signState = block.state as Sign
+        signState.isWaxed = true
+        signState.update(true)
       }
     }
   }

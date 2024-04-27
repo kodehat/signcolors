@@ -22,6 +22,7 @@ import de.codehat.signcolors.configs.TranslationConfigKey
 import de.codehat.signcolors.manager.Manager
 import de.codehat.signcolors.util.SignUtil
 import de.codehat.signcolors.util.color
+import de.codehat.signcolors.util.debug
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
@@ -92,6 +93,7 @@ class ColoredSignManager(plugin: SignColors) : Manager(plugin) {
     if (ingredients.contains(MATERIAL_ANY_SIGN)) {
       SignUtil.getAllSignMaterials().forEach { signMaterial ->
         addShapelessRecipe(ingredients, signMaterial)
+        plugin.logger.debug(plugin, "Adding recipe for ${signMaterial.name}")
       }
     } else {
       addShapelessRecipe(ingredients, Material.valueOf(plugin.pluginConfig.getCraftingSignType()!!))
@@ -107,12 +109,7 @@ class ColoredSignManager(plugin: SignColors) : Manager(plugin) {
     val shapelessRecipe = ShapelessRecipe(namespacedKeys[signMaterial]!!, recipeStack)
 
     ingredients.forEach {
-      if (it.contains(":")) {
-        val ingredientData = it.split(":")
-        val material = Material.getMaterial(ingredientData[0])
-        @Suppress("DEPRECATION")
-        shapelessRecipe.addIngredient(material!!, ingredientData[1].toInt())
-      } else if (it == MATERIAL_ANY_SIGN) {
+      if (it == MATERIAL_ANY_SIGN) {
         shapelessRecipe.addIngredient(signMaterial)
       } else {
         shapelessRecipe.addIngredient(Material.getMaterial(it)!!)
@@ -139,6 +136,7 @@ class ColoredSignManager(plugin: SignColors) : Manager(plugin) {
     if (ingredients!!.contains(MATERIAL_ANY_SIGN)) {
       SignUtil.getAllSignMaterials().forEach { signMaterial ->
         addShapedRecipe(shapes, signMaterial)
+        plugin.logger.debug(plugin, "Adding recipe for ${signMaterial.name}")
       }
     } else {
       addShapedRecipe(shapes, Material.valueOf(plugin.pluginConfig.getCraftingSignType()!!))
@@ -169,12 +167,7 @@ class ColoredSignManager(plugin: SignColors) : Manager(plugin) {
 
     ingredientsSection!!.getKeys(false).forEach {
       val value = ingredientsSection[it].toString()
-      if (value.contains(":")) {
-        val ingredientData = value.split(":")
-        val material = Material.getMaterial(ingredientData[0])
-        @Suppress("DEPRECATION")
-        shapedRecipe.setIngredient(it.toString()[0], material!!, ingredientData[1].toInt())
-      } else if (value == MATERIAL_ANY_SIGN) {
+      if (value == MATERIAL_ANY_SIGN) {
         shapedRecipe.setIngredient(it.toString()[0], signMaterial)
       } else {
         Material.getMaterial(value).apply {

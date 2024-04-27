@@ -37,11 +37,8 @@ crafting:
   # your recipe and give them a letter as a variable name.
   # E.g. S: 'OAK_SIGN'
   # Hint: Use 'ANY_SIGN' for to make it work for any kind of sign.
-  # You can use data values as well.
-  # E.g. T: 'WOOL:9'
-  # This would represent cyan wool.
   # Generally the ingredients pattern is:
-  # VARIABLE_LETTER: "MATERIAL_NAME:DATA_VALUE"
+  # VARIABLE_LETTER: "MATERIAL_NAME"
   # The "crafting.shape" represents the workbench and only works
   # if "crafting.recipeType" is set to "shaped". Each line
   # in the list equals a line at the workbench. Here you
@@ -53,10 +50,10 @@ crafting:
   # If "crafting.recipeType" is set to "shapeless", the order
   # and assigned variable names don't matter!
   ingredients:
-    A: 'INK_SAC:1'
-    B: 'INK_SAC:2'
-    C: 'INK_SAC:4'
-    D: 'INK_SAC:11'
+    A: 'RED_DYE'
+    B: 'GREEN_DYE'
+    C: 'BLUE_DYE'
+    D: 'YELLOW_DYE'
     S: 'ANY_SIGN'
 
   # ONLY taken into account if "recipes.type" is set to "shaped"!

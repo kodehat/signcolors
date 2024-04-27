@@ -41,7 +41,7 @@ class HelpCommand(plugin: SignColors) : Command(plugin) {
       """
             |${plugin.getTranslation()?.t(TranslationConfigKey.TAG)} ${
         plugin.getTranslation()?.t(TranslationConfigKey.COMMAND_HELP_PAGE)
-      }
+      }&r
             | &c[] ${plugin.getTranslation()?.t(TranslationConfigKey.PARAMETER_REQUIRED)}, &7<> ${
         plugin.getTranslation()?.t(TranslationConfigKey.PARAMETER_OPTIONAL)
       }&r

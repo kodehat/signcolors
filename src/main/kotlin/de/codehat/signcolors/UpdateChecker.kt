@@ -19,7 +19,7 @@ package de.codehat.signcolors
 
 import org.bukkit.Bukkit
 import java.io.IOException
-import java.net.URL
+import java.net.URI
 import java.util.Scanner
 import java.util.function.Consumer
 import java.util.logging.Level
@@ -31,7 +31,8 @@ class UpdateChecker(val plugin: SignColors, private val resourceID: String) {
         plugin,
         Runnable {
           try {
-            URL("https://api.spigotmc.org/legacy/update.php?resource=$resourceID/~")
+            URI("https://api.spigotmc.org/legacy/update.php?resource=$resourceID/~")
+              .toURL()
               .openStream()
               .use {
                 val scanner = Scanner(it)

@@ -55,6 +55,7 @@ class TabCompletion : TabCompleter {
       args[1].isNotEmpty() &&
       args[0].equals(CommandManager.CMD_GIVE_SIGN, true)
     ) {
+      // TODO: Add all player names if arg is empty.
       val playerNames =
         Bukkit.getServer()
           .onlinePlayers
@@ -68,6 +69,7 @@ class TabCompletion : TabCompleter {
       args[1].isNotEmpty() &&
       args[0].equals(CommandManager.CMD_GIVE_SIGN, true)
     ) {
+      // TODO: Add all sign material names if arg is empty.
       val signMaterials = SignUtil.getAllSignMaterials().map { it.name }
 
       StringUtil.copyPartialMatches(args[3], signMaterials, completions)

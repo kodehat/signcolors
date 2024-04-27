@@ -5,12 +5,12 @@ website: https://signcolors.codehat.de
 softdepend: [ Vault ]
 description: SignColors is a Spigot plugin that brings colors and formatting to signs.
 version: 2.0.0
-api-version: 1.19
+api-version: 1.20
 
 commands:
   sc:
-    usage: /<command> <name>
-    description: Shows basic details about the plugin.
+    usage: /<command> <subcommand> [optional parameters]
+    description: Main command of the "SignColors" plugin.
     aliases: [ signcolors ]
 
 permissions:
