@@ -1,0 +1,17 @@
+{
+  "name": "SignColors-Docs",
+  "version": "1.0.0",
+  "description": "Documentation for SignColors",
+  "main": "index.js",
+  "repository": "https://github.com/Pixelhash/SignColors.git",
+  "author": "Pixelhash <dev@codehat.de>",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "vuepress": "^0.14.8"
+  },
+  "scripts": {
+      "docs:dev": "vuepress dev docs",
+      "docs:build": "vuepress build docs"
+  }
+}
