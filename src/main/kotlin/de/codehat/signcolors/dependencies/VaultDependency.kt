@@ -34,8 +34,6 @@ class VaultDependency(plugin: JavaPlugin) : Dependency(plugin) {
     if (plugin.server.pluginManager.getPlugin("Vault") == null) {
       return
     }
-    val rsp: RegisteredServiceProvider<Economy> =
-      plugin.server.servicesManager.getRegistration(Economy::class.java) ?: return
-    economy = rsp.provider
+    economy = plugin.server.servicesManager.getRegistration(Economy::class.java)?.provider
   }
 }

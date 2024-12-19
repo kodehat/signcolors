@@ -151,63 +151,61 @@ class SignListener(private val plugin: SignColors) : Listener {
   fun onSpecialSignCreate(event: SignChangeEvent) {
     val player = event.player
 
-    if (event.getLine(0).equals(SPECIAL_SIGN_LINE, true)) {
-      if (player.hasPermission(Permissions.BUY_SIGN_CREATE)) {
-        val amountPriceLine = event.getLine(1)
-        val typeLine = event.getLine(2)
-        var signAmount = plugin.pluginConfig.getBuySignAmount()!!
-        var signPrice = plugin.pluginConfig.getBuySignPrice()!!
-        var signType = Material.valueOf(plugin.pluginConfig.getBuySignSignType()!!)
-        // Check if line 1 isn't empty and contains the sign amount and the price split with
-        // ":"
-        if (amountPriceLine!!.isNotEmpty() && amountPriceLine.contains(":")) {
-          // [0] = sign amount, [1] = sign price for the specified amount
-          val signData = amountPriceLine.split(":")
+    if (event.getLine(0).equals(SPECIAL_SIGN_LINE, true) && player.hasPermission(Permissions.BUY_SIGN_CREATE)) {
+      val amountPriceLine = event.getLine(1)
+      val typeLine = event.getLine(2)
+      var signAmount = plugin.pluginConfig.getBuySignAmount()!!
+      var signPrice = plugin.pluginConfig.getBuySignPrice()!!
+      var signType = Material.valueOf(plugin.pluginConfig.getBuySignSignType()!!)
+      // Check if line 1 isn't empty and contains the sign amount and the price split with
+      // ":"
+      if (amountPriceLine!!.isNotEmpty() && amountPriceLine.contains(":")) {
+        // [0] = sign amount, [1] = sign price for the specified amount
+        val signData = amountPriceLine.split(":")
 
-          // Check if written types are valid for Int and Double
-          if (signData[0].toIntOrNull() == null || signData[1].toDoubleOrNull() == null) {
-            plugin.sendLogoMessage(
-              player,
-              TranslationConfigKey.ERROR_BUYSIGN_FORMAT_INCORRECT,
-            )
-            event.isCancelled = true
-            return
-          }
-
-          // Retrieve sign amount and price
-          signAmount = signData[0].toInt()
-          signPrice = signData[1].toDouble()
-
-          // Return and show warning if sign amount or price is lower than zero or equal zero.
-          if (signAmount <= 0 || signPrice <= 0) {
-            plugin.sendLogoMessage(
-              player,
-              TranslationConfigKey.ERROR_BUYSIGN_AMOUNT_OR_PRICE_TOO_LOW,
-            )
-            event.isCancelled = true
-            return
-          }
+        // Check if written types are valid for Int and Double
+        if (signData[0].toIntOrNull() == null || signData[1].toDoubleOrNull() == null) {
+          plugin.sendLogoMessage(
+            player,
+            TranslationConfigKey.ERROR_BUYSIGN_FORMAT_INCORRECT,
+          )
+          event.isCancelled = true
+          return
         }
 
-        if (typeLine!!.isNotEmpty()) {
-          try {
-            signType = Material.valueOf(typeLine)
-          } catch (e: IllegalArgumentException) {
-            plugin.sendLogoMessage(
-              player,
-              TranslationConfigKey.ERROR_BUYSIGN_INVALID_SIGN_TYPE,
-            )
-            event.isCancelled = true
-            return
-          }
+        // Retrieve sign amount and price
+        signAmount = signData[0].toInt()
+        signPrice = signData[1].toDouble()
+
+        // Return and show warning if sign amount or price is lower than zero or equal zero.
+        if (signAmount <= 0 || signPrice <= 0) {
+          plugin.sendLogoMessage(
+            player,
+            TranslationConfigKey.ERROR_BUYSIGN_AMOUNT_OR_PRICE_TOO_LOW,
+          )
+          event.isCancelled = true
+          return
         }
-
-        // Apply lines on special sign
-        applyLinesOnSpecialSign(plugin, event, signAmount, signPrice, signType)
-
-        // Play the appropriate sound
-        SoundUtil.playPlayerSound(plugin, "buySign.creationSound", player)
       }
+
+      if (typeLine!!.isNotEmpty()) {
+        try {
+          signType = Material.valueOf(typeLine)
+        } catch (e: IllegalArgumentException) {
+          plugin.sendLogoMessage(
+            player,
+            TranslationConfigKey.ERROR_BUYSIGN_INVALID_SIGN_TYPE,
+          )
+          event.isCancelled = true
+          return
+        }
+      }
+
+      // Apply lines on special sign
+      applyLinesOnSpecialSign(plugin, event, signAmount, signPrice, signType)
+
+      // Play the appropriate sound
+      SoundUtil.playPlayerSound(plugin, "buySign.creationSound", player)
     }
   }
 

@@ -212,11 +212,4 @@ class SignColors : JavaPlugin() {
   ) {
     sendLogoMessage(commandSender, getTranslation()?.t(translationConfigKey, *params)!!)
   }
-
-  // 	private fun enableErrorReporting() {
-  // 		if (config.getBoolean(ConfigKey.OTHER_ERROR_REPORTING.toString())) {
-  // 			Sentry.init(SENTRY_DSN)
-  // 			logger.info("Error reporting has been enabled.")
-  // 		}
-  // 	}
 }

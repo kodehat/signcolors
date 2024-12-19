@@ -38,15 +38,12 @@ class BlockListener(private val plugin: SignColors) : Listener {
 
     if (
       plugin.coloredSignManager.craftingEnabled == true &&
-      !player.hasPermission(Permissions.BYPASS_CRAFTING)
+      !player.hasPermission(Permissions.BYPASS_CRAFTING) &&
+      itemInMainHand.amount == 1 &&
+      itemInMainHand.type.name.endsWith("_SIGN") &&
+      itemInMainHand.itemMeta!!.hasLore()
     ) {
-      if (
-        itemInMainHand.amount == 1 &&
-        itemInMainHand.type.name.endsWith("_SIGN") &&
-        itemInMainHand.itemMeta!!.hasLore()
-      ) {
-        plugin.fixSignPlayers.add(player)
-      }
+      plugin.fixSignPlayers.add(player)
     }
   }
 
