@@ -1,2 +1,0 @@
-# Redirect default Netlify subdomain to primary domain
-http://signcolors-codehat.netlify.com/* http://signcolors.codehat.de/:splat 301!
