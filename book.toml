@@ -1,0 +1,6 @@
+[book]
+authors = ["kodehat"]
+language = "en"
+multilingual = false
+src = "docs"
+title = "SignColors"

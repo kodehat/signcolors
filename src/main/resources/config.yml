@@ -4,7 +4,7 @@
 # open a pull request at the plugin's GitHub repository.
 language: 'en_US'
 
-# The character in front of the hex code e.g. &6 (= GOLD).
+# The character in front of the hex code (e.g. '&6' becomes 'gold').
 prefixCharacter: '&'
 
 # Crafting settings section.

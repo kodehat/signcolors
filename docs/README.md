@@ -1,59 +1,23 @@
-SignColors [![Build Status](https://travis-ci.org/Pixelhash/SignColors.svg?branch=master)](https://travis-ci.org/Pixelhash/SignColors) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/442f22a3808944618356795f97c1810a)](https://www.codacy.com/app/Pixelhash/SignColors?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Pixelhash/SignColors&amp;utm_campaign=Badge_Grade)
-==========
+# Introduction
 
-Repository of the SignColors plugin.
+![The SignColors Logo](images/signcolors_logo.png)
 
-## Development Builds
+SignColors is a Spigot plugin that allows all players on the server (or people with permissions)
+to add colored text to signs.
+Simply use the `&` character (this is configurable) followed by a hexidecimal digit (`0-f`)
+to give the rest of the line a color and/or a format.
 
-**NOTE!:**
-Development builds for SignColors can be found at the Jenkins server below. These builds may be unstable and may cause errors. Use them at your own risk!
-Link: [https://ci.codehat.de/job/SignColors/](https://ci.codehat.de/job/SignColors/ "SignColors Development Builds")
+## Features
 
-## Commands
-
-For `/sc` you can alternatively use `/signcolors`
-
-- `/sc` - Shows information about SignColors.
-- `/sc help` - Shows a list of commands.
-- `/sc reload` - Reloads the config.yml.
-- `/sc givesign [player] [amount]` - Give a player colored signs.
-- `/sc colorcodes` - Shows you a color/format codes list.
-- `/sc upgrade` - Upgrades the old database format from version 0.7.1 and earlier to the new database format of version 1.0.0 and later.
-
-## Permissions
-
-- `signcolors.*` - Access to all features.
-- `signcolors.color.[color/format]` - Allows you to write with `[color/format]` on signs. For example `singcolors.color.6` = *GOLD*
-- `signcolors.colors` - Allows you to write with **all** colors on signs.
-- `signcolors.sign.create` - Allows you to create a [SignColors] sign.
-- `signcolors.sign.use` - Allows you to use a [SignColors] sign.
-- `signcolors.info` - Allows you to see the SignColors info.
-- `signcolors.help` - Allows you to see the `/sc` help page.
-- `signcolors.reload` - Allows you to reload the config.yml.
-- `signcolors.updatemsg` - Shows you the update message, if an update is available.
-- `signcolors.craftsign.bypass` - Allows you to write colors on a normal sign, even if signcrafting is true.
-- `signcolors.listcodes` - Allows you to see the color/format codes list.
-- `signcolors.givesign` - Allows you to use the `/sc givesign` command.
-- `signcolors.blockedfirstlines.bypass` - Allows you to bypass the blocked first lines.
-- `signcolors.upgrade` - Allows you to execute the `/sc upgrade` command.
-
-## Add your own language
-
-To add your own language, you can copy the `EN.yml` in the `languages` folder and name it like
-your language. For example `GB.yml` and change its content as you like. Then change the `language` key
-in the `config.yml` to your language file code. In the example above it would be `GB`.
-
-## Plugin at SpigotMC
-
-[http://www.spigotmc.org/resources/signcolors.6135/](http://www.spigotmc.org/resources/signcolors.6135/ "SignColors on SpigotMC")
-
-## Status for v1.2.0
-
- * Add a `/sc migrate` command, to migrate from MySQL to SQLite and vice versa.
- * Add a `/sc dbstatus` command, which shows current database size.
-
- Make suggestions either here or at Spigot.
-
-## License
-
-This project is licensed under GPLv3.
+- Players can add colors/formats to signs.
+- Permissions per color/format.
+- Use your own color symbol instead of `&`.
+- Possibility to craft colored signs (recipe and type are configurable).
+- Introduces a special sign (so called `[SC]` sign) that allows players to buy signs where colors/formats are possible (requires [Vault](https://www.spigotmc.org/resources/vault.34315/)).
+  - If this feature is enabled, you can only write colors/formats on an specific crafted/bought sign.
+  - Players get crafted colored signs back, if they destroy them.
+  - Database of placed colored signs is supported via SQLite or MySQL.
+  - Certain first lines on signs can be blocked (like `&1[Buy]` from Essentials) to avoid unwanted abuse.
+- Automatically checks for updates (configurable).
+- English and German translations provided and additional can be added manually.
+- May send metrics (configurable).
