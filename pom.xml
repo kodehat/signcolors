@@ -101,7 +101,7 @@
             <configuration>
               <kotlin>
                 <licenseHeader>
-                  <file>${basedir}/license-header.txt</file>
+                  <file>${basedir}/config/spotless-header.txt</file>
                 </licenseHeader>
                 <ktlint/>
               </kotlin>

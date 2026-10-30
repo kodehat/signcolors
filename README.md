@@ -13,19 +13,6 @@
 <br />
 
 <div align="center">
-  <!-- Spigot version -->
-  <a href="https://www.spigotmc.org/resources/signcolors.6135">
-    <img src="https://img.shields.io/badge/spigot-v1.2.0-orange.svg?style=flat-square"
-      alt="Spigot version" />
-  </a>
-  <!-- Build Status -->
-  <a href="https://travis-ci.org/choojs/choo">
-    <img src="https://img.shields.io/travis/kodehat/SignColors/master.svg?style=flat-square"
-      alt="Build Status" />
-  </a>
-</div>
-
-<div align="center">
   <h3>
     <a href="https://signcolors.codehat.de">
       Website
@@ -48,7 +35,6 @@
 ## Table of Contents
 
 - [Features](#features)
-- [Screenshots](#screenshots)
 - [Installation](#installation)
 - [Commands](#commands)
 - [Permissions](#permissions)
@@ -68,25 +54,6 @@
 3. Start the server and stop it right after finish loading.
 4. Change the settings in `plugins/SignColors/config.yml` to your likings.
 5. Start the server again and have fun!
-
-## Screenshots
-
-<details>
-  <summary>Click to view screenshots</summary>
-
-  #### Color and formatting codes
-
-  ![ColorAndFormattingCodes](https://static.codehat.de/pictures/signcolors/color_preview.png "Color and formatting codes")
-  
-  #### How to create a special sign
-
-  ![HowToSpecialSign](https://static.codehat.de/pictures/signcolors/sign_howto.png "Creation of a special sign")
-
-  #### Look of a special sign
-  
-  ![LookOfSpeicalSign](https://static.codehat.de/pictures/signcolors/sign_after.png "Look of special sign")
-
-</details>
 
 ## Commands
 
