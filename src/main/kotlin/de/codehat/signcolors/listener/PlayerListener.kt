@@ -69,61 +69,48 @@ class PlayerListener(
             return
           }
 
-          // [0] = sign amount, [1] = sign price for the specified amount
           val amountPriceData = ChatColor.stripColor(amountPriceLine)!!.split(":")
-          var typeData = typeLine
-
-          var signMaterial: Material?
-
-          // Check if written types are valid for Int and Double
+          val signAmount = amountPriceData.getOrNull(0)?.trim()?.toIntOrNull()
+          val signPrice = amountPriceData.getOrNull(1)?.trim()?.toDoubleOrNull()
+          val signMaterial = Material.getMaterial(typeLine)
+          val template = plugin.coloredSignManager.coloredSignStacks[signMaterial]
           if (
-            amountPriceData[0].trim().toIntOrNull() == null ||
-            amountPriceData[1].trim().toDoubleOrNull() == null
+            amountPriceData.size != 2 || signAmount == null || signAmount <= 0 ||
+            signPrice == null || !signPrice.isFinite() || signPrice <= 0 || template == null
           ) {
-            plugin.sendLogoMessage(
-              player,
-              TranslationConfigKey.ERROR_BUYSIGN_PLAYER_INCORRECT,
-            )
-            event.isCancelled = true
-            return
-          }
-          try {
-            signMaterial = Material.valueOf(typeData)
-          } catch (e: IllegalArgumentException) {
-            plugin.sendLogoMessage(
-              player,
-              TranslationConfigKey.ERROR_BUYSIGN_PLAYER_INCORRECT,
-            )
+            plugin.sendLogoMessage(player, TranslationConfigKey.ERROR_BUYSIGN_PLAYER_INCORRECT)
             event.isCancelled = true
             return
           }
 
-          // Retrieve sign amount and price
-          val signAmount = amountPriceData[0].trim().toInt()
-          val signPrice = amountPriceData[1].trim().toDouble()
-
-          // Check if the player has enough money to buy signs
-          if (plugin.isVaultAvailable().second!!.getBalance(player) < signPrice) {
+          val economy = plugin.isVaultAvailable().second!!
+          if (economy.getBalance(player) < signPrice) {
             plugin.sendLogoMessage(player, TranslationConfigKey.ERROR_NOT_ENOUGH_MONEY)
             return
           }
 
-          // Check if the inventory of the player isn't full
-          if (player.inventory.firstEmpty() == -1) {
+          val stackLimit = minOf(template.maxStackSize, player.inventory.maxStackSize)
+          val capacity = player.inventory.storageContents.sumOf { stack ->
+            when {
+              stack == null || stack.type == Material.AIR -> stackLimit.toLong()
+              stack.isSimilar(template) -> (stackLimit - stack.amount).coerceAtLeast(0).toLong()
+              else -> 0L
+            }
+          }
+          if (capacity < signAmount.toLong()) {
             plugin.sendLogoMessage(player, TranslationConfigKey.ERROR_NOT_ENOUGH_SPACE)
             return
           }
 
-          // Withdraw the costs for the signs
-          plugin.isVaultAvailable().second!!.withdrawPlayer(player, signPrice)
+          if (!economy.withdrawPlayer(player, signPrice).transactionSuccess()) {
+            plugin.sendLogoMessage(player, "&cThe payment failed. Please contact an administrator.".color())
+            return
+          }
 
-          // Copy the colored sign stack and set the defined amount
-          val stackForPlayer = ItemStack(plugin.coloredSignManager.coloredSignStacks[signMaterial]!!)
-          stackForPlayer.amount = signAmount
-
-          // Add the signs to the player's inventory and update it
-          player.inventory.addItem(stackForPlayer)
-          // player.updateInventory()
+          val stackForPlayer = ItemStack(template).apply { amount = signAmount }
+          player.inventory.addItem(stackForPlayer).values.forEach { leftover ->
+            player.world.dropItemNaturally(player.location, leftover)
+          }
 
           // Play the appropriate sound
           SoundUtil.playPlayerSound(plugin, "buySign.receivingSound", player)
