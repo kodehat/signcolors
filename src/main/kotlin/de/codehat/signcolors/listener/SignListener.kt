@@ -110,15 +110,12 @@ class SignListener(
           SIGN_LINE_LAST_INDEX,
           plugin.getTranslation()?.t(TranslationConfigKey.BUYSIGN_LINE_FOUR),
         )
-        val signState = block.state as Sign
-        signState.isWaxed = true
-        signState.update(true)
       }
     }
   }
 
   @Suppress("unused")
-  @EventHandler
+  @EventHandler(ignoreCancelled = true)
   fun onApplyColorOnSign(event: SignChangeEvent) {
     val player = event.player
     val sign = event.block.state as? Sign
@@ -132,7 +129,7 @@ class SignListener(
   }
 
   @Suppress("unused")
-  @EventHandler
+  @EventHandler(ignoreCancelled = true)
   fun onSpecialSignCreate(event: SignChangeEvent) {
     val player = event.player
 
@@ -189,13 +186,19 @@ class SignListener(
       // Apply lines on special sign
       applyLinesOnSpecialSign(plugin, event, signAmount, signPrice, signType)
 
-      // Play the appropriate sound
-      SoundUtil.playPlayerSound(plugin, "buySign.creationSound", player)
+      // Wait until all listeners have had a chance to cancel the sign change.
+      plugin.server.scheduler.runTask(plugin, Runnable {
+        if (event.isCancelled) return@Runnable
+        val sign = event.block.state as? Sign ?: return@Runnable
+        if (sign.getSide(event.side).getLine(0) != SPECIAL_SIGN_INDICATOR.color()) return@Runnable
+        sign.isWaxed = true
+        if (sign.update()) SoundUtil.playPlayerSound(plugin, "buySign.creationSound", player)
+      })
     }
   }
 
   @Suppress("unused")
-  @EventHandler(priority = EventPriority.HIGH)
+  @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
   fun checkFirstLineOnSpecialSignCreation(event: SignChangeEvent) {
     val player = event.player
     val firstLine =

@@ -27,6 +27,7 @@ import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.block.Sign
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
@@ -48,11 +49,16 @@ class PlayerListener(
   }
 
   @Suppress("unused")
-  @EventHandler
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   fun onPlayerUseSpecialSign(event: PlayerInteractEvent) {
-    val player = event.player
+    if (event.action != Action.RIGHT_CLICK_BLOCK || event.clickedBlock?.state !is Sign) return
+    plugin.server.scheduler.runTask(plugin, Runnable {
+      if (!event.isCancelled && event.player.isOnline) processSpecialSign(event)
+    })
+  }
 
-    if (event.action != Action.RIGHT_CLICK_BLOCK) return
+  private fun processSpecialSign(event: PlayerInteractEvent) {
+    val player = event.player
 
     if (event.clickedBlock!!.state is Sign) {
       val clickedSign = event.clickedBlock!!.state as Sign
@@ -65,7 +71,6 @@ class PlayerListener(
           // Check if Vault is installed
           if (!plugin.isVaultAvailable().first) {
             plugin.sendLogoMessage(player, TranslationConfigKey.ERROR_VAULT_MISSING)
-            event.isCancelled = true
             return
           }
 
@@ -79,7 +84,6 @@ class PlayerListener(
             signPrice == null || !signPrice.isFinite() || signPrice <= 0 || template == null
           ) {
             plugin.sendLogoMessage(player, TranslationConfigKey.ERROR_BUYSIGN_PLAYER_INCORRECT)
-            event.isCancelled = true
             return
           }
 
