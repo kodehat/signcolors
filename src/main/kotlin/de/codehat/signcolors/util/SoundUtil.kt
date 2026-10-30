@@ -18,8 +18,11 @@
 package de.codehat.signcolors.util
 
 import de.codehat.signcolors.SignColors
+import org.bukkit.NamespacedKey
+import org.bukkit.Registry
 import org.bukkit.Sound
 import org.bukkit.entity.Player
+import java.util.Locale
 
 class SoundUtil {
   companion object {
@@ -32,14 +35,16 @@ class SoundUtil {
         return
       }
 
-      val sound: Sound?
-      try {
-        sound =
-          Sound.valueOf(
-            plugin.pluginConfig.getConfigurationData()?.getString("$configPath.type")!!,
-          )
-      } catch (e: IllegalArgumentException) {
-        ErrorUtil.report(plugin, e)
+      val soundName = plugin.pluginConfig.getConfigurationData()?.getString("$configPath.type")
+      val soundKey = soundName?.lowercase(Locale.ROOT)?.let(NamespacedKey::fromString)
+      val sound = soundKey?.let(Registry.SOUNDS::get) ?: soundName?.let { name ->
+        try {
+          Sound::class.java.getField(name).get(null) as? Sound
+        } catch (_: ReflectiveOperationException) {
+          null
+        }
+      }
+      if (sound == null) {
         with(plugin.logger) {
           warning("The value for the sound at '$configPath.type' doesn't exist.")
           warning("Please set it to a valid type or no sound is played!")
