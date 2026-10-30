@@ -57,29 +57,29 @@ class SignListener(
           continue
         }
 
-        val colorLine = event.getLine(line)!!.split(colorCharacter)
-        var newLine = ""
-        if (colorLine.isNotEmpty()) newLine = colorLine[0]
-        colorLine.forEach {
-          if (it == colorLine[0]) return@forEach
-          if (it.isEmpty() || ALL_COLOR_CODES.indexOf(it.lowercase()[0]) == -1) {
-            newLine += colorCharacter + it
-            return@forEach
-          }
-          val color = ALL_COLOR_CODES.indexOf(it.lowercase()[0])
-          if (color == -1 || !checkColorPermissions(player, color)) {
-            newLine += colorCharacter + it
-          } else {
-            val newPartialLine = colorCharacter + it
-            newLine +=
-              ChatColor.translateAlternateColorCodes(
-                colorCharacter[0],
-                newPartialLine,
-              )
-          }
-        }
-        event.setLine(line, newLine)
+        event.setLine(line, colorSignLine(event.getLine(line)!!, colorCharacter) { color ->
+          checkColorPermissions(player, color)
+        })
       }
+    }
+
+    internal fun colorSignLine(
+      line: String,
+      colorCharacter: String,
+      hasPermission: (Int) -> Boolean,
+    ): String {
+      val parts = line.split(colorCharacter)
+      val result = StringBuilder(parts.first())
+      for (part in parts.drop(1)) {
+        val color = part.firstOrNull()?.lowercaseChar()?.let(ALL_COLOR_CODES::indexOf) ?: -1
+        val segment = colorCharacter + part
+        if (color >= 0 && hasPermission(color)) {
+          result.append(ChatColor.translateAlternateColorCodes(colorCharacter[0], segment))
+        } else {
+          result.append(segment)
+        }
+      }
+      return result.toString()
     }
 
     private fun checkColorPermissions(
