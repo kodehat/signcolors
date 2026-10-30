@@ -26,6 +26,7 @@ import de.codehat.signcolors.util.hasPermission
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.block.Sign
+import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -53,7 +54,7 @@ class PlayerListener(
   fun onPlayerUseSpecialSign(event: PlayerInteractEvent) {
     if (event.action != Action.RIGHT_CLICK_BLOCK || event.clickedBlock?.state !is Sign) return
     plugin.server.scheduler.runTask(plugin, Runnable {
-      if (!event.isCancelled && event.player.isOnline) processSpecialSign(event)
+      if (event.useInteractedBlock() != Event.Result.DENY && event.player.isOnline) processSpecialSign(event)
     })
   }
 
