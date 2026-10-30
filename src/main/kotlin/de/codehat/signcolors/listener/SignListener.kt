@@ -86,10 +86,12 @@ class SignListener(
       player: Player,
       color: Int,
     ): Boolean {
+      return hasColorPermission(color) { player.hasPermission(it) }
+    }
+
+    internal fun hasColorPermission(color: Int, hasPermission: (String) -> Boolean): Boolean {
       val colorChar = ALL_COLOR_CODES[color]
-      return (color == 0) ||
-        player.hasPermission(Permissions.color(colorChar)) ||
-        player.hasPermission(Permissions.formatting(colorChar))
+      return hasPermission(Permissions.color(colorChar)) || hasPermission(Permissions.formatting(colorChar))
     }
 
     private fun applyLinesOnSpecialSign(

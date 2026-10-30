@@ -34,6 +34,16 @@ class SignColorParsingTest {
   }
 
   @Test
+  fun blackRequiresPermission() {
+    assertEquals("&0Black", SignListener.colorSignLine("&0Black", "&") { code ->
+      SignListener.hasColorPermission(code) { false }
+    })
+    assertEquals("§0Black", SignListener.colorSignLine("&0Black", "&") { code ->
+      SignListener.hasColorPermission(code) { it == "signcolors.color.0" }
+    })
+  }
+
+  @Test
   fun translatesOnlyPermittedCodes() {
     assertEquals("§aGreen §lBold", color("&AGreen &lBold"))
     assertEquals("&aGreen &lBold", color("&aGreen &lBold", permitted = false))
