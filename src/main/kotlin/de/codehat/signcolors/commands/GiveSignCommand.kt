@@ -86,8 +86,8 @@ class GiveSignCommand(
     }
     val signAmount = signAmountString.toInt()
 
-    val signMaterialName = args[3]
-    if (!SignUtil.getAllSignMaterials().map { it.name.uppercase() }.contains(signMaterialName.uppercase())) {
+    val signMaterialName = args[3].uppercase(java.util.Locale.ROOT)
+    if (!SignUtil.getAllSignMaterials().any { it.name == signMaterialName }) {
       plugin.sendLogoMessage(sender, TranslationConfigKey.ERROR_SIGN_MATERIAL_INVALID)
       return
     }
