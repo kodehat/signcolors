@@ -94,6 +94,19 @@ class SignListener(
       return hasPermission(Permissions.color(colorChar)) || hasPermission(Permissions.formatting(colorChar))
     }
 
+    internal fun parseBuySignAmountPrice(
+      line: String,
+      defaultAmount: Int?,
+      defaultPrice: Double?,
+    ): Pair<Int, Double>? {
+      val parts = if (line.isBlank()) null else line.split(":")
+      if (parts != null && parts.size != 2) return null
+      val amount = if (parts == null) defaultAmount else parts[0].trim().toIntOrNull()
+      val price = if (parts == null) defaultPrice else parts[1].trim().toDoubleOrNull()
+      if (amount == null || amount <= 0 || price == null || !price.isFinite() || price <= 0) return null
+      return amount to price
+    }
+
     private fun applyLinesOnSpecialSign(
       plugin: SignColors,
       event: SignChangeEvent,
@@ -136,53 +149,25 @@ class SignListener(
     val player = event.player
 
     if (event.getLine(0).equals(SPECIAL_SIGN_LINE, true) && player.hasPermission(Permissions.BUY_SIGN_CREATE)) {
-      val amountPriceLine = event.getLine(1)
-      val typeLine = event.getLine(2)
-      var signAmount = plugin.pluginConfig.getBuySignAmount()!!
-      var signPrice = plugin.pluginConfig.getBuySignPrice()!!
-      var signType = Material.valueOf(plugin.pluginConfig.getBuySignSignType()!!)
-      // Check if line 1 isn't empty and contains the sign amount and the price split with
-      // ":"
-      if (amountPriceLine!!.isNotEmpty() && amountPriceLine.contains(":")) {
-        // [0] = sign amount, [1] = sign price for the specified amount
-        val signData = amountPriceLine.split(":")
-
-        // Check if written types are valid for Int and Double
-        if (signData[0].toIntOrNull() == null || signData[1].toDoubleOrNull() == null) {
-          plugin.sendLogoMessage(
-            player,
-            TranslationConfigKey.ERROR_BUYSIGN_FORMAT_INCORRECT,
-          )
-          event.isCancelled = true
-          return
-        }
-
-        // Retrieve sign amount and price
-        signAmount = signData[0].toInt()
-        signPrice = signData[1].toDouble()
-
-        // Return and show warning if sign amount or price is lower than zero or equal zero.
-        if (signAmount <= 0 || signPrice <= 0) {
-          plugin.sendLogoMessage(
-            player,
-            TranslationConfigKey.ERROR_BUYSIGN_AMOUNT_OR_PRICE_TOO_LOW,
-          )
-          event.isCancelled = true
-          return
-        }
+      val amountPrice = parseBuySignAmountPrice(
+        event.getLine(1).orEmpty(),
+        plugin.pluginConfig.getBuySignAmount(),
+        plugin.pluginConfig.getBuySignPrice(),
+      )
+      if (amountPrice == null) {
+        plugin.sendLogoMessage(player, TranslationConfigKey.ERROR_BUYSIGN_FORMAT_INCORRECT)
+        event.isCancelled = true
+        return
       }
-
-      if (typeLine!!.isNotEmpty()) {
-        try {
-          signType = Material.valueOf(typeLine)
-        } catch (e: IllegalArgumentException) {
-          plugin.sendLogoMessage(
-            player,
-            TranslationConfigKey.ERROR_BUYSIGN_INVALID_SIGN_TYPE,
-          )
-          event.isCancelled = true
-          return
-        }
+      val (signAmount, signPrice) = amountPrice
+      val typeName = event.getLine(2).orEmpty().trim().ifEmpty {
+        plugin.pluginConfig.getBuySignSignType().orEmpty()
+      }
+      val signType = Material.getMaterial(typeName)
+      if (signType == null || signType !in plugin.coloredSignManager.coloredSignStacks) {
+        plugin.sendLogoMessage(player, TranslationConfigKey.ERROR_BUYSIGN_INVALID_SIGN_TYPE)
+        event.isCancelled = true
+        return
       }
 
       // Apply lines on special sign
