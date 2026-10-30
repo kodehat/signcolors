@@ -17,7 +17,9 @@
  */
 package de.codehat.signcolors.configs
 
-enum class PluginConfigKey(private val key: String) {
+enum class PluginConfigKey(
+  private val key: String,
+) {
   // Basics:
   LANGUAGE("language"),
   PREFIX_CHARACTER("prefixCharacter"),

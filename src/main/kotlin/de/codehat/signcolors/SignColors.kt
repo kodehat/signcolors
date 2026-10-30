@@ -102,7 +102,8 @@ class SignColors : JavaPlugin() {
 
   internal fun loadTranslations() {
     PROVIDED_LANGUAGES.forEach(this::loadTranslation)
-    Files.list(dataFolder.toPath().resolve("translations"))
+    Files
+      .list(dataFolder.toPath().resolve("translations"))
       .filter { it.fileName.toString().endsWith(".properties") }
       .map { it.fileName.toString().replace(".properties", "") }
       .filter { !PROVIDED_LANGUAGES.contains(it) }
@@ -115,9 +116,7 @@ class SignColors : JavaPlugin() {
     logger.info("Loaded translations for language '$language'.")
   }
 
-  internal fun getTranslation(): TranslationConfig? {
-    return translationConfigs[pluginConfig.getLanguage()]
-  }
+  internal fun getTranslation(): TranslationConfig? = translationConfigs[pluginConfig.getLanguage()]
 
   private fun loadDependencies() {
     logger.info("Looking for available dependencies...")

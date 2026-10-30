@@ -56,11 +56,7 @@ abstract class AbstractConfig<T : IFileConfiguration<V>, V, K>(
     load(true)
   }
 
-  override fun getFileName(): String {
-    return file.name.substring(0, file.name.lastIndexOf("."))
-  }
+  override fun getFileName(): String = file.name.substring(0, file.name.lastIndexOf("."))
 
-  override fun getConfigurationData(): V? {
-    return cfgData
-  }
+  override fun getConfigurationData(): V? = cfgData
 }

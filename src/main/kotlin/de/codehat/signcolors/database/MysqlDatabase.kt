@@ -17,7 +17,9 @@
  */
 package de.codehat.signcolors.database
 
-class MysqlDatabase(connectionString: String) : Database(connectionString) {
+class MysqlDatabase(
+  connectionString: String,
+) : Database(connectionString) {
   companion object {
     // Pattern is HOSTNAME -> PORT -> DATABASE -> USER -> PASSWORD
     private const val MYSQL_JDBC_CONNECTION_STRING =
@@ -29,8 +31,8 @@ class MysqlDatabase(connectionString: String) : Database(connectionString) {
       database: String?,
       user: String?,
       password: String?,
-    ): String {
-      return String.format(
+    ): String =
+      String.format(
         MYSQL_JDBC_CONNECTION_STRING,
         hostname,
         port,
@@ -38,6 +40,5 @@ class MysqlDatabase(connectionString: String) : Database(connectionString) {
         user,
         password,
       )
-    }
   }
 }

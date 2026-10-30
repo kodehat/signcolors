@@ -24,8 +24,10 @@ import de.codehat.signcolors.util.color
 import java.io.File
 import java.util.Properties
 
-class TranslationConfig(plugin: SignColors, language: String? = "en_US") :
-  AbstractConfig<PropertiesFileConfiguration, Properties, TranslationConfigKey>(
+class TranslationConfig(
+  plugin: SignColors,
+  language: String? = "en_US",
+) : AbstractConfig<PropertiesFileConfiguration, Properties, TranslationConfigKey>(
     plugin,
     "translations" + File.separator + "$language.properties",
     PropertiesFileConfiguration(),
@@ -33,7 +35,5 @@ class TranslationConfig(plugin: SignColors, language: String? = "en_US") :
   fun t(
     key: TranslationConfigKey,
     vararg params: Any,
-  ): String {
-    return cfgData?.getProperty(key.toString())!!.format(*params).color()
-  }
+  ): String = cfgData?.getProperty(key.toString())!!.format(*params).color()
 }

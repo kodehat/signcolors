@@ -24,9 +24,13 @@ import java.util.Scanner
 import java.util.function.Consumer
 import java.util.logging.Level
 
-class UpdateChecker(val plugin: SignColors, private val resourceID: String) {
+class UpdateChecker(
+  val plugin: SignColors,
+  private val resourceID: String,
+) {
   fun getVersion(consumer: Consumer<String>) {
-    Bukkit.getScheduler()
+    Bukkit
+      .getScheduler()
       .runTaskAsynchronously(
         plugin,
         Runnable {

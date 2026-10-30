@@ -19,6 +19,4 @@ package de.codehat.signcolors.util
 
 import org.bukkit.ChatColor
 
-fun String.color(): String {
-  return ChatColor.translateAlternateColorCodes('&', this)
-}
+fun String.color(): String = ChatColor.translateAlternateColorCodes('&', this)

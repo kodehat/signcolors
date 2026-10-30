@@ -21,7 +21,9 @@ import com.j256.ormlite.jdbc.JdbcConnectionSource
 import com.j256.ormlite.table.TableUtils
 import de.codehat.signcolors.database.model.SignLocation
 
-abstract class Database(connectionString: String) {
+abstract class Database(
+  connectionString: String,
+) {
   var connectionSource: JdbcConnectionSource
     private set
 

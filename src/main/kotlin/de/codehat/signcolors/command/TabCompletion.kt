@@ -57,7 +57,8 @@ class TabCompletion : TabCompleter {
     ) {
       // TODO: Add all player names if arg is empty.
       val playerNames =
-        Bukkit.getServer()
+        Bukkit
+          .getServer()
           .onlinePlayers
           .map { it.name }
 

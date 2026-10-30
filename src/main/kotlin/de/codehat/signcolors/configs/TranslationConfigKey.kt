@@ -17,7 +17,9 @@
  */
 package de.codehat.signcolors.configs
 
-enum class TranslationConfigKey(private val key: String) {
+enum class TranslationConfigKey(
+  private val key: String,
+) {
   TAG("tag"),
   ERROR_PERMISSION_MISSING("error.permission.missing"),
   ERROR_COMMAND_UNKNOWN("error.command.unknown"),

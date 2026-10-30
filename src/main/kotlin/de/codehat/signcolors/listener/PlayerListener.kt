@@ -34,7 +34,9 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.ItemStack
 
-class PlayerListener(private val plugin: SignColors) : Listener {
+class PlayerListener(
+  private val plugin: SignColors,
+) : Listener {
   @Suppress("unused")
   @EventHandler
   fun onPlayerJoinShowUpdateMessage(event: PlayerJoinEvent) {

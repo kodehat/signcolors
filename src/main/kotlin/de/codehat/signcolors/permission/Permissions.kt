@@ -17,7 +17,9 @@
  */
 package de.codehat.signcolors.permission
 
-enum class Permissions(private var permission: String) {
+enum class Permissions(
+  private var permission: String,
+) {
   ALL("signcolors.*"),
   CMD_ALL("signcolors.command.*"),
   BUY_SIGN_ALL("signcolors.buysign.*"),
@@ -39,12 +41,8 @@ enum class Permissions(private var permission: String) {
   override fun toString() = permission
 
   companion object {
-    fun color(colorCode: Char): String {
-      return "signcolors.color.$colorCode"
-    }
+    fun color(colorCode: Char): String = "signcolors.color.$colorCode"
 
-    fun formatting(formattingCode: Char): String {
-      return "signcolors.formatting.$formattingCode"
-    }
+    fun formatting(formattingCode: Char): String = "signcolors.formatting.$formattingCode"
   }
 }

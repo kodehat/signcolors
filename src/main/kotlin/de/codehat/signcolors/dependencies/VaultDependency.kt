@@ -22,7 +22,9 @@ import net.milkbowl.vault.economy.Economy
 import org.bukkit.plugin.RegisteredServiceProvider
 import org.bukkit.plugin.java.JavaPlugin
 
-class VaultDependency(plugin: JavaPlugin) : Dependency(plugin) {
+class VaultDependency(
+  plugin: JavaPlugin,
+) : Dependency(plugin) {
   var economy: Economy? = null
     private set
 
@@ -34,6 +36,9 @@ class VaultDependency(plugin: JavaPlugin) : Dependency(plugin) {
     if (plugin.server.pluginManager.getPlugin("Vault") == null) {
       return
     }
-    economy = plugin.server.servicesManager.getRegistration(Economy::class.java)?.provider
+    economy =
+      plugin.server.servicesManager
+        .getRegistration(Economy::class.java)
+        ?.provider
   }
 }

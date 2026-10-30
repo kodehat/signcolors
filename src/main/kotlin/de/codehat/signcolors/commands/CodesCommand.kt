@@ -25,7 +25,9 @@ import de.codehat.signcolors.util.hasPermission
 import org.bukkit.ChatColor
 import org.bukkit.command.CommandSender
 
-class CodesCommand(plugin: SignColors) : Command(plugin) {
+class CodesCommand(
+  plugin: SignColors,
+) : Command(plugin) {
   override fun onCommand(
     sender: CommandSender,
     command: org.bukkit.command.Command,

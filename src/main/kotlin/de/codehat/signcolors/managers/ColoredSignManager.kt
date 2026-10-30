@@ -29,7 +29,9 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.ShapedRecipe
 import org.bukkit.inventory.ShapelessRecipe
 
-class ColoredSignManager(plugin: SignColors) : Manager(plugin) {
+class ColoredSignManager(
+  plugin: SignColors,
+) : Manager(plugin) {
   private lateinit var namespacedKeys: Map<Material, NamespacedKey>
 
   internal var craftingEnabled = false
@@ -61,15 +63,22 @@ class ColoredSignManager(plugin: SignColors) : Manager(plugin) {
       // Check if recipe type is set to 'shapeless'
       val recipeType = plugin.pluginConfig.getCraftingRecipeType()
       when (recipeType) {
-        "shapeless" -> addShapelessRecipe()
-        "shaped" -> addShapedRecipe()
-        else ->
+        "shapeless" -> {
+          addShapelessRecipe()
+        }
+
+        "shaped" -> {
+          addShapedRecipe()
+        }
+
+        else -> {
           with(plugin.logger) {
             warning(
               "Unknown config value for 'recipes.type'! Possible values are: 'shaped' and 'shapeless'.",
             )
             warning("Please change it or you won't be able to craft colored signs!")
           }
+        }
       }
     }
   }
@@ -152,9 +161,18 @@ class ColoredSignManager(plugin: SignColors) : Manager(plugin) {
     val shapedRecipe = ShapedRecipe(namespacedKeys[signMaterial]!!, recipeStack)
 
     when (shapes.size) {
-      SHAPE_SIZE_ONE -> shapedRecipe.shape(shapes[0])
-      SHAPE_SIZE_TWO -> shapedRecipe.shape(shapes[0], shapes[1])
-      SHAPE_SIZE_THREE -> shapedRecipe.shape(shapes[0], shapes[1], shapes[2])
+      SHAPE_SIZE_ONE -> {
+        shapedRecipe.shape(shapes[0])
+      }
+
+      SHAPE_SIZE_TWO -> {
+        shapedRecipe.shape(shapes[0], shapes[1])
+      }
+
+      SHAPE_SIZE_THREE -> {
+        shapedRecipe.shape(shapes[0], shapes[1], shapes[2])
+      }
+
       else -> {
         with(plugin.logger) {
           warning("You defined too many or not enough recipe shapes.")
@@ -182,18 +200,18 @@ class ColoredSignManager(plugin: SignColors) : Manager(plugin) {
     namespacedKeys.values.forEach(plugin.server::removeRecipe)
   }
 
-  private fun getNamespacedKeys(): Map<Material, NamespacedKey> {
-    return SignUtil.getAllSignMaterials()
+  private fun getNamespacedKeys(): Map<Material, NamespacedKey> =
+    SignUtil
+      .getAllSignMaterials()
       .groupBy({ it }, { NamespacedKey(plugin, "sign-${it.name}") })
       .mapValues { it.value.single() }
-  }
 
-  private fun getColoredSignStacks(amount: Int = 1): Map<Material, ItemStack> {
-    return SignUtil.getAllSignMaterials()
+  private fun getColoredSignStacks(amount: Int = 1): Map<Material, ItemStack> =
+    SignUtil
+      .getAllSignMaterials()
       .map { getColoredSignStack(it, amount) }
       .groupBy { it.type }
       .mapValues { it.value.single() }
-  }
 
   private fun getColoredSignStack(
     material: Material,

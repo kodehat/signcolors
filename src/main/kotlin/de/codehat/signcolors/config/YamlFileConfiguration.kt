@@ -21,9 +21,7 @@ import org.bukkit.configuration.file.YamlConfiguration
 import java.io.File
 
 class YamlFileConfiguration : IFileConfiguration<YamlConfiguration> {
-  override fun load(file: File): YamlConfiguration {
-    return YamlConfiguration.loadConfiguration(file)
-  }
+  override fun load(file: File): YamlConfiguration = YamlConfiguration.loadConfiguration(file)
 
   override fun save(
     configuration: YamlConfiguration,

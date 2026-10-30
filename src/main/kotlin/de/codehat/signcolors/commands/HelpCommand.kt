@@ -24,7 +24,9 @@ import de.codehat.signcolors.permission.Permissions
 import de.codehat.signcolors.util.hasPermission
 import org.bukkit.command.CommandSender
 
-class HelpCommand(plugin: SignColors) : Command(plugin) {
+class HelpCommand(
+  plugin: SignColors,
+) : Command(plugin) {
   override fun onCommand(
     sender: CommandSender,
     command: org.bukkit.command.Command,
@@ -62,8 +64,7 @@ class HelpCommand(plugin: SignColors) : Command(plugin) {
         }
       }&r
             ${if (sender.hasPermission(Permissions.CMD_CODES)) "| &7&l- &r&6/sc &ecodes" else ""}&r
-            """
-        .trimMargin(),
+      """.trimMargin(),
     )
   }
 }

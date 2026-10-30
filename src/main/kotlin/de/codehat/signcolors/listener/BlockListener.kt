@@ -29,7 +29,9 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.inventory.ItemStack
 
-class BlockListener(private val plugin: SignColors) : Listener {
+class BlockListener(
+  private val plugin: SignColors,
+) : Listener {
   @Suppress("unused")
   @EventHandler
   fun onPlacingOneSign(event: BlockPlaceEvent) {

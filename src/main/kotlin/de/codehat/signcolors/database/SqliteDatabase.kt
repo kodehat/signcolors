@@ -17,13 +17,13 @@
  */
 package de.codehat.signcolors.database
 
-class SqliteDatabase(connectionString: String) : Database(connectionString) {
+class SqliteDatabase(
+  connectionString: String,
+) : Database(connectionString) {
   companion object {
     // Pattern is DATABASE_FILE_PATH
     private const val SQLITE_JDBC_CONNECTION_STRING = "jdbc:sqlite:%s"
 
-    fun createConnectionString(databaseFilePath: String): String {
-      return String.format(SQLITE_JDBC_CONNECTION_STRING, databaseFilePath)
-    }
+    fun createConnectionString(databaseFilePath: String): String = String.format(SQLITE_JDBC_CONNECTION_STRING, databaseFilePath)
   }
 }

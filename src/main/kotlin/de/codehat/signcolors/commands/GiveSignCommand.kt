@@ -28,7 +28,9 @@ import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.command.CommandSender
 
-class GiveSignCommand(plugin: SignColors) : Command(plugin) {
+class GiveSignCommand(
+  plugin: SignColors,
+) : Command(plugin) {
   companion object {
     private const val MIN_ARGS = 1
     private const val MAX_ARGS = 4

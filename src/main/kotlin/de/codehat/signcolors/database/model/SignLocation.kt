@@ -45,7 +45,5 @@ class SignLocation() {
     this.z = z
   }
 
-  override fun toString(): String {
-    return "SL{$world#$x#$y#$z}"
-  }
+  override fun toString(): String = "SL{$world#$x#$y#$z}"
 }

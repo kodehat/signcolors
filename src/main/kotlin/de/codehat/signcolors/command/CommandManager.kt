@@ -22,7 +22,9 @@ import de.codehat.signcolors.configs.TranslationConfigKey
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 
-class CommandManager(private val plugin: SignColors) : CommandExecutor {
+class CommandManager(
+  private val plugin: SignColors,
+) : CommandExecutor {
   private val commands: MutableMap<String, Command> = mutableMapOf()
 
   companion object {
@@ -41,11 +43,17 @@ class CommandManager(private val plugin: SignColors) : CommandExecutor {
     args: Array<out String>,
   ): Boolean {
     when {
-      args.isEmpty() -> commands[""]?.onCommand(sender, command, label, args)
-      commands.containsKey(args[0]) ->
-        commands[args[0]]?.onCommand(sender, command, label, args)
+      args.isEmpty() -> {
+        commands[""]?.onCommand(sender, command, label, args)
+      }
 
-      else -> plugin.sendLogoMessage(sender, TranslationConfigKey.ERROR_COMMAND_UNKNOWN)
+      commands.containsKey(args[0]) -> {
+        commands[args[0]]?.onCommand(sender, command, label, args)
+      }
+
+      else -> {
+        plugin.sendLogoMessage(sender, TranslationConfigKey.ERROR_COMMAND_UNKNOWN)
+      }
     }
     return true
   }
@@ -53,7 +61,5 @@ class CommandManager(private val plugin: SignColors) : CommandExecutor {
   fun registerCommand(
     command: String,
     commandObject: Command,
-  ): Boolean {
-    return commands.put(command, commandObject) == null
-  }
+  ): Boolean = commands.put(command, commandObject) == null
 }

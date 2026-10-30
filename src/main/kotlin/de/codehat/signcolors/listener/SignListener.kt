@@ -32,7 +32,9 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.SignChangeEvent
 
-class SignListener(private val plugin: SignColors) : Listener {
+class SignListener(
+  private val plugin: SignColors,
+) : Listener {
   companion object {
     private const val ALL_COLOR_CODES = "0123456789abcdefklmnor"
     private const val SPECIAL_SIGN_LINE = "[SignColors]"
