@@ -17,8 +17,6 @@
  */
 package de.codehat.signcolors
 
-import com.j256.ormlite.logger.Level
-import com.j256.ormlite.logger.Logger
 import de.codehat.signcolors.command.CommandManager
 import de.codehat.signcolors.command.TabCompletion
 import de.codehat.signcolors.commands.CodesCommand
@@ -35,11 +33,9 @@ import de.codehat.signcolors.listener.PlayerListener
 import de.codehat.signcolors.listener.SignListener
 import de.codehat.signcolors.managers.BackupOldFilesManager
 import de.codehat.signcolors.managers.ColoredSignManager
-import de.codehat.signcolors.managers.DatabaseManager
-import de.codehat.signcolors.managers.ModelManager
+import de.codehat.signcolors.util.ColoredSignMarker
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.command.CommandSender
-import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import java.nio.file.Files
 
@@ -52,15 +48,12 @@ class SignColors : JavaPlugin() {
 
   private var vaultDependency: VaultDependency? = null
 
-  internal lateinit var databaseManager: DatabaseManager
-
-  internal lateinit var modelManager: ModelManager
+  internal val coloredSignMarker = ColoredSignMarker(this)
 
   lateinit var coloredSignManager: ColoredSignManager
 
   private val commandManager = CommandManager(this)
 
-  internal val fixSignPlayers = mutableListOf<Player>()
   internal var updateAvailablePair: Pair<Boolean, String> = Pair(false, "")
 
   companion object {
@@ -69,13 +62,11 @@ class SignColors : JavaPlugin() {
   }
 
   override fun onEnable() {
-    Logger.setGlobalLogLevel(Level.WARNING)
     loadConfig()
     checkAndDoBackup()
     pluginConfig.reload() // Must reload if backup has been made.
     loadTranslations()
     loadDependencies()
-    loadDatabase()
     loadManagers()
     registerCommands()
     registerListener()
@@ -85,8 +76,6 @@ class SignColors : JavaPlugin() {
   }
 
   override fun onDisable() {
-    databaseManager.stop()
-    modelManager.stop()
     coloredSignManager.stop()
 
     logger.info("v${description.version} has been disabled.")
@@ -145,13 +134,8 @@ class SignColors : JavaPlugin() {
     }
   }
 
-  private fun loadDatabase() {
-    databaseManager = DatabaseManager(this)
-  }
-
   private fun loadManagers() {
     coloredSignManager = ColoredSignManager(this)
-    modelManager = ModelManager(this)
   }
 
   private fun registerCommands() {

@@ -41,8 +41,6 @@ class ReloadCommand(
     with(plugin) {
       pluginConfig.reload()
       loadTranslations()
-      databaseManager.reload()
-      modelManager.reload()
       coloredSignManager.reload()
     }
 

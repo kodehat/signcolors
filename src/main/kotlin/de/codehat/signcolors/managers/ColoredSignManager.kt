@@ -229,6 +229,7 @@ class ColoredSignManager(
       this?.lore = signStackLore
     }
     signStack.itemMeta = signStackMeta
+    plugin.coloredSignMarker.mark(signStack)
 
     return signStack
   }

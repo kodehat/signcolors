@@ -59,7 +59,7 @@
 - **shiny:** apply colors and formatting on signs
 - **"no" java:** completely written in Kotlin
 - **restrict features:** high diversity of permissions
-- **storage:** full MySQL and SQLite support out of the box
+- **storage:** colored sign identity is stored in Minecraft item and block data
 
 ## Installation
 

@@ -18,57 +18,30 @@
 package de.codehat.signcolors.listener
 
 import de.codehat.signcolors.SignColors
-import de.codehat.signcolors.permission.Permissions
-import de.codehat.signcolors.util.SignUtil
-import de.codehat.signcolors.util.hasPermission
-import org.bukkit.GameMode
-import org.bukkit.Material
+import org.bukkit.block.Sign
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
-import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.event.block.BlockDropItemEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.inventory.ItemStack
 
-class BlockListener(
-  private val plugin: SignColors,
-) : Listener {
-  @Suppress("unused")
-  @EventHandler
-  fun onPlacingOneSign(event: BlockPlaceEvent) {
-    val player = event.player
-    val itemInMainHand = player.inventory.itemInMainHand
-
-    if (
-      plugin.coloredSignManager.craftingEnabled == true &&
-      !player.hasPermission(Permissions.BYPASS_CRAFTING) &&
-      itemInMainHand.amount == 1 &&
-      itemInMainHand.type.name.endsWith("_SIGN") &&
-      itemInMainHand.itemMeta!!.hasLore()
-    ) {
-      plugin.fixSignPlayers.add(player)
-    }
+class BlockListener(private val plugin: SignColors) : Listener {
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  fun onPlaceColoredSign(event: BlockPlaceEvent) {
+    if (!plugin.coloredSignMarker.isMarked(event.itemInHand)) return
+    val sign = event.blockPlaced.state as? Sign ?: return
+    plugin.coloredSignMarker.mark(sign)
+    sign.update()
   }
 
-  @Suppress("unused")
-  @EventHandler
-  fun onBreakColoredSign(event: BlockBreakEvent) {
-    val player = event.player
-    val block = event.block
-
-    if (
-      plugin.coloredSignManager.craftingEnabled &&
-      SignUtil.getAllSignMaterials().contains(
-        block.type,
-      ) && plugin.modelManager.signLocationDao.exists(block)
-    ) {
-      block.type = Material.AIR
-      if (player.gameMode == GameMode.SURVIVAL) {
-        val droppedStack = ItemStack(plugin.coloredSignManager.coloredSignStacks[block.type]!!)
-        droppedStack.amount = 1
-        block.world.dropItemNaturally(block.location, droppedStack)
-      }
-      plugin.modelManager.signLocationDao.delete(block)
-      event.isCancelled = true
+  @EventHandler(ignoreCancelled = true)
+  fun onDropColoredSign(event: BlockDropItemEvent) {
+    val sign = event.blockState as? Sign ?: return
+    if (!plugin.coloredSignMarker.isMarked(sign)) return
+    for (drop in event.items) {
+      val stack = plugin.coloredSignManager.coloredSignStacks[drop.itemStack.type] ?: continue
+      drop.itemStack = ItemStack(stack).apply { amount = drop.itemStack.amount }
     }
   }
 }

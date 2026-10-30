@@ -121,29 +121,12 @@ class SignListener(
   @EventHandler
   fun onApplyColorOnSign(event: SignChangeEvent) {
     val player = event.player
-    val block = event.block
-    val itemInMainHand = player.inventory.itemInMainHand
-
-    if (plugin.coloredSignManager.craftingEnabled) {
-      if (!player.hasPermission(Permissions.BYPASS_CRAFTING)) {
-        if (itemInMainHand.type == Material.AIR) {
-          if (plugin.fixSignPlayers.contains(player)) {
-            plugin.fixSignPlayers.remove(player)
-            applyColorsOnSign(plugin.pluginConfig.getPrefixCharacter(), event, player)
-            plugin.modelManager.signLocationDao.create(block)
-          }
-        } else {
-          if (itemInMainHand.itemMeta!!.hasLore()) {
-            // Not checking if present cause not relevant yet
-            plugin.fixSignPlayers.remove(player)
-            applyColorsOnSign(plugin.pluginConfig.getPrefixCharacter(), event, player)
-            plugin.modelManager.signLocationDao.create(block)
-          }
-        }
-      } else {
-        applyColorsOnSign(plugin.pluginConfig.getPrefixCharacter(), event, player)
-      }
-    } else {
+    val sign = event.block.state as? Sign
+    if (
+      !plugin.coloredSignManager.craftingEnabled ||
+      player.hasPermission(Permissions.BYPASS_CRAFTING) ||
+      (sign != null && plugin.coloredSignMarker.isMarked(sign))
+    ) {
       applyColorsOnSign(plugin.pluginConfig.getPrefixCharacter(), event, player)
     }
   }

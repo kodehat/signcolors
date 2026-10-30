@@ -70,18 +70,6 @@ class PluginConfig(
 
   fun getBuySignReceivingSoundPitch(): Double? = cfgData?.getDouble(PluginConfigKey.BUY_SIGN_RECEIVING_SOUND_PITCH.toString())
 
-  fun getDatabaseType(): String? = cfgData?.getString(PluginConfigKey.DATABASE_TYPE.toString())
-
-  fun getDatabaseHost(): String? = cfgData?.getString(PluginConfigKey.DATABASE_HOST.toString())
-
-  fun getDatabaseName(): String? = cfgData?.getString(PluginConfigKey.DATABASE_NAME.toString())
-
-  fun getDatabasePort(): Int? = cfgData?.getInt(PluginConfigKey.DATABASE_PORT.toString())
-
-  fun getDatabaseUser(): String? = cfgData?.getString(PluginConfigKey.DATABASE_USER.toString())
-
-  fun getDatabasePassword(): String? = cfgData?.getString(PluginConfigKey.DATABASE_PASSWORD.toString())
-
   fun getUpdateCheck(): Boolean? = cfgData?.getBoolean(PluginConfigKey.OTHER_UPDATE_CHECK.toString())
 
   fun getErrorReporting(): Boolean? = cfgData?.getBoolean(PluginConfigKey.OTHER_ERROR_REPORTING.toString())

@@ -46,14 +46,6 @@ enum class PluginConfigKey(
   BUY_SIGN_RECEIVING_SOUND_VOLUME("buySign.receivingSound.volume"),
   BUY_SIGN_RECEIVING_SOUND_PITCH("buySign.receivingSound.pitch"),
 
-  // Database:
-  DATABASE_TYPE("database.type"),
-  DATABASE_HOST("database.host"),
-  DATABASE_PORT("database.port"),
-  DATABASE_NAME("database.name"),
-  DATABASE_USER("database.user"),
-  DATABASE_PASSWORD("database.password"),
-
   // Other:
   OTHER_UPDATE_CHECK("other.updateCheck"),
   OTHER_ERROR_REPORTING("other.errorReporting"),

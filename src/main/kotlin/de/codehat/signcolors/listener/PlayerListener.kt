@@ -31,7 +31,6 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
-import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.ItemStack
 
 class PlayerListener(
@@ -46,14 +45,6 @@ class PlayerListener(
       val version = plugin.updateAvailablePair.second
       plugin.sendLogoMessage(player, TranslationConfigKey.VERSION_NEW_AVAILABLE, version)
     }
-  }
-
-  @Suppress("unused")
-  @EventHandler
-  fun onPlayerLeaveRemoveFromFixPlayers(event: PlayerQuitEvent) {
-    val player = event.player
-
-    plugin.fixSignPlayers.remove(player) // Return value is ignorable
   }
 
   @Suppress("unused")
