@@ -35,10 +35,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-0d5c9781.js";
+            window.path_to_searchindex_js = "searchindex-83dc4c44.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-ef3b61bb.js"></script>
+        <script src="toc-77ff322c.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -181,20 +181,21 @@
 <tr><th>Permission</th><th>Description</th></tr>
 </thead>
 <tbody>
-<tr><td><code>signcolors.all</code></td><td>Access to <strong>all</strong> features and command</td></tr>
-<tr><td><code>signcolors.command.all</code></td><td>Access to <strong>all</strong> commands</td></tr>
-<tr><td><code>signcolors.specialsign.all</code></td><td>Use and create special <code>[SC]</code> signs</td></tr>
-<tr><td><code>signcolors.color.all</code></td><td>Apply <strong>all</strong> colors on signs</td></tr>
-<tr><td><code>signcolors.formatting.all</code></td><td>Apply <strong>all</strong> formatting options on signs</td></tr>
+<tr><td><code>signcolors.*</code></td><td>Access to all features; granted to operators by default</td></tr>
+<tr><td><code>signcolors.command.*</code></td><td>Access to all commands</td></tr>
+<tr><td><code>signcolors.buysign.*</code></td><td>Create and use <code>[SC]</code> buy signs</td></tr>
+<tr><td><code>signcolors.color.*</code></td><td>Apply all colors on signs</td></tr>
+<tr><td><code>signcolors.formatting.*</code></td><td>Apply all formatting options on signs</td></tr>
+<tr><td><code>signcolors.bypass.*</code></td><td>Bypass the crafting requirement and blocked first lines</td></tr>
 <tr><td><code>signcolors.command.info</code></td><td>Access to <code>/sc</code></td></tr>
 <tr><td><code>signcolors.command.help</code></td><td>Access to <code>/sc help</code></td></tr>
 <tr><td><code>signcolors.command.reload</code></td><td>Access to <code>/sc reload</code></td></tr>
-<tr><td><code>signcolors.command.givesign</code></td><td>Access to <code>/sc givesign</code></td></tr>
-<tr><td><code>signcolors.command.colorcodes</code></td><td>Access to <code>/sc colorcodes</code></td></tr>
-<tr><td><code>signcolors.specialsign.create</code></td><td>Create <code>[SC]</code> special signs</td></tr>
-<tr><td><code>signcolors.specialsign.use</code></td><td>Use <code>[SC]</code> special signs</td></tr>
-<tr><td><code>signcolors.signcrafting.bypass</code></td><td>Apply colors and formatting on normal signs, although <code>sign_crafting</code> is activated</td></tr>
-<tr><td><code>signcolors.blockedfirstlines.bypass</code></td><td>Bypass blocked sign lines</td></tr>
+<tr><td><code>signcolors.command.give</code></td><td>Access to <code>/sc givesign</code></td></tr>
+<tr><td><code>signcolors.command.codes</code></td><td>Access to <code>/sc codes</code></td></tr>
+<tr><td><code>signcolors.buysign.create</code></td><td>Create <code>[SC]</code> buy signs</td></tr>
+<tr><td><code>signcolors.buysign.use</code></td><td>Use <code>[SC]</code> buy signs</td></tr>
+<tr><td><code>signcolors.bypass.crafting</code></td><td>Apply codes to ordinary signs when crafting is required</td></tr>
+<tr><td><code>signcolors.bypass.blockedfirstlines</code></td><td>Bypass blocked sign lines</td></tr>
 <tr><td><code>signcolors.updatemessage</code></td><td>Get a notification when joining, as soon as an update is available</td></tr>
 <tr><td><code>signcolors.color.0</code></td><td>Access to <em>BLACK</em> color: <code>&amp;0</code></td></tr>
 <tr><td><code>signcolors.color.1</code></td><td>Access to <em>DARK BLUE</em> color: <code>&amp;1</code></td></tr>

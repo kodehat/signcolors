@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-0d5c9781.js";
+            window.path_to_searchindex_js = "searchindex-83dc4c44.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-ef3b61bb.js"></script>
+        <script src="toc-77ff322c.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -177,32 +177,23 @@
                     <main>
                         <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
 <p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/signcolors_logo.png" alt="The SignColors Logo"><span class="img-wrapper"><img src="images/signcolors_logo.png" alt="The SignColors Logo"></span></label></p>
-<p>SignColors is a Spigot plugin that allows all players on the server (or people with permissions)
-to add colored text to signs.
-Simply use the <code>&amp;</code> character (this is configurable) followed by a hexidecimal digit (<code>0-f</code>)
-to give the rest of the line a color and/or a format.</p>
+<p>SignColors is a Spigot plugin that lets players with the appropriate permissions add colors and formatting to signs. Write the configurable prefix (default <code>&amp;</code>) followed by a color or formatting code, such as <code>&amp;a</code> or <code>&amp;l</code>.</p>
 <h2 id="features"><a class="header" href="#features">Features</a></h2>
 <ul>
 <li>Players can add colors/formats to signs.</li>
 <li>Permissions per color/format.</li>
 <li>Use your own color symbol instead of <code>&amp;</code>.</li>
 <li>Possibility to craft colored signs (recipe and type are configurable).</li>
-<li>Introduces a special sign (so called <code>[SC]</code> sign) that allows players to buy signs where colors/formats are possible (requires <a href="https://www.spigotmc.org/resources/vault.34315/">Vault</a>).
-<ul>
-<li>If this feature is enabled, you can only write colors/formats on an specific crafted/bought sign.</li>
-<li>Players get crafted colored signs back, if they destroy them.</li>
-<li>Colored sign identity is stored in Minecraft item and block data.</li>
-<li>Certain first lines on signs can be blocked (like <code>&amp;1[Buy]</code> from Essentials) to avoid unwanted abuse.</li>
-</ul>
-</li>
+<li>Optional crafted-sign requirement; players can also obtain colored signs from <code>[SC]</code> buy signs or a command.</li>
+<li>Buy signs require <a href="https://www.spigotmc.org/resources/vault.34315/">Vault</a> and a compatible economy provider.</li>
+<li>Colored sign identity is stored in Minecraft item and block data; marked signs retain their identity when dropped through normal block drops.</li>
+<li>Configurable blocked first lines can help prevent imitation of special signs.</li>
 <li>Automatically checks for updates (configurable).</li>
 <li>English and German translations provided and additional can be added manually.</li>
-<li>May send metrics (configurable).</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="installation"><a class="header" href="#installation">Installation</a></h1>
-<p>This guide take you through the initial setup (installation) of the plugin.
-Estimated time: 10-20 Minutes</p>
+<p>This guide covers the initial installation and setup.</p>
 <h2 id="download"><a class="header" href="#download">Download</a></h2>
 <div class="warning">
 Make sure to download the correct version of the plugin, fitting the version of the server!
@@ -211,58 +202,139 @@ Make sure to download the correct version of the plugin, fitting the version of 
 <p>Download the plugin’s JAR file <a href="https://www.spigotmc.org/resources/signcolors.6135/history">here</a>.
 Put it into the <code>plugins</code> directory of the server.</p>
 <h2 id="server-start"><a class="header" href="#server-start">Server Start</a></h2>
-<p>Start the server. After it has finishing loading, you should find a <code>SignColors</code> folder in the <code>plugins</code> directory.</p>
+<p>Start the server. Once it has finished loading, you should find a <code>SignColors</code> folder in the <code>plugins</code> directory.</p>
 <h2 id="configure"><a class="header" href="#configure">Configure</a></h2>
-<p>You can now configure the plugin to your liking by modifying the <code>config.yml</code>.
-Don’t forget to either reload the plugin or restart server.</p>
-<p>FINISHED</p>
+<p>Edit <code>plugins/SignColors/config.yml</code> as needed, then use <code>/sc reload</code> or restart the server. See <a href="#configuration">Configuration</a> for the available settings.</p>
+<p>To use buy signs, install Vault and a compatible economy provider. Vault is optional for other features.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="configuration"><a class="header" href="#configuration">Configuration</a></h1>
+<p>After the first server start, edit <code>plugins/SignColors/config.yml</code>. Apply changes with <code>/sc reload</code> (requires <code>signcolors.command.reload</code>) or restart the server. See <a href="#languages">Languages</a> for translation files.</p>
+<h2 id="general-settings"><a class="header" href="#general-settings">General settings</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Setting</th><th>Default</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td><code>language</code></td><td><code>en_US</code></td><td>Translation file name without <code>.properties</code>; <code>en_US</code> and <code>de_DE</code> are included.</td></tr>
+<tr><td><code>prefixCharacter</code></td><td><code>&amp;</code></td><td>Prefix used before a color or formatting code, for example <code>&amp;a</code>. Use one character.</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="crafting"><a class="header" href="#crafting">Crafting</a></h2>
+<p><code>crafting.enabled</code> defaults to <code>true</code>. When enabled, players need a colored sign to apply codes unless they have <code>signcolors.bypass.crafting</code>. Colored signs can be crafted, bought from an <code>[SC]</code> sign, or given with <code>/sc givesign</code>. When disabled, codes can be applied to ordinary signs; color and formatting permissions still apply.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Setting</th><th>Default</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td><code>crafting.recipeType</code></td><td><code>shaped</code></td><td><code>shaped</code> or <code>shapeless</code>.</td></tr>
+<tr><td><code>crafting.signType</code></td><td><code>ANY_SIGN</code></td><td>Result sign material when the recipe uses a specific sign ingredient.</td></tr>
+<tr><td><code>crafting.amount</code></td><td><code>1</code></td><td>Number of colored signs produced by the recipe.</td></tr>
+<tr><td><code>crafting.ingredients</code></td><td>See example below</td><td>Maps ingredient letters to Bukkit material names. <code>ANY_SIGN</code> makes recipes for supported sign types and returns the corresponding type.</td></tr>
+<tr><td><code>crafting.shape</code></td><td>See example below</td><td>Up to three rows for a shaped recipe; spaces represent empty slots. Not used for shapeless recipes.</td></tr>
+</tbody>
+</table>
+</div>
+<p>The default recipe surrounds a sign with four dyes:</p>
+<pre><code class="language-yaml">crafting:
+  enabled: true
+  recipeType: shaped
+  signType: 'ANY_SIGN'
+  amount: 1
+  ingredients:
+    A: 'RED_DYE'
+    B: 'GREEN_DYE'
+    C: 'BLUE_DYE'
+    D: 'YELLOW_DYE'
+    S: 'ANY_SIGN'
+  shape:
+    - 'A B'
+    - ' S '
+    - 'C D'
+</code></pre>
+<p>For a shapeless recipe, list the ingredients under distinct keys; their letters and <code>shape</code> do not determine positions. Bukkit permits at most nine ingredients. If no ingredient is <code>ANY_SIGN</code>, set <code>crafting.signType</code> to a supported sign material such as <code>OAK_SIGN</code>.</p>
+<p>Colored sign identity is saved in item and block data, not an external database. Signs and items created before the marker-based version are not automatically migrated.</p>
+<h2 id="buy-signs"><a class="header" href="#buy-signs">Buy signs</a></h2>
+<p>Buy signs require Vault and a Vault-compatible economy provider to make purchases. Their creation and use also require separate <a href="#permissions">permissions</a>. The <a href="#creating-a-buy-sign">usage guide</a> explains how to create one.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Setting</th><th>Default</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td><code>buySign.amount</code></td><td><code>10</code></td><td>Default number of colored signs sold. Must be positive.</td></tr>
+<tr><td><code>buySign.price</code></td><td><code>100.0</code></td><td>Default price. Must be positive and finite.</td></tr>
+<tr><td><code>buySign.signType</code></td><td><code>OAK_SIGN</code></td><td>Default supported sign item material.</td></tr>
+<tr><td><code>buySign.blockedFirstLines</code></td><td><code>['&amp;6[&amp;3SC&amp;6]', '&amp;1[Buy]']</code></td><td>Exact first lines blocked unless the player has <code>signcolors.bypass.blockedfirstlines</code>. Entries use <code>&amp;</code> for color codes.</td></tr>
+<tr><td><code>buySign.creationSound.enabled</code></td><td><code>true</code></td><td>Play a sound after creating a buy sign.</td></tr>
+<tr><td><code>buySign.creationSound.type</code></td><td><code>BLOCK_ANVIL_USE</code></td><td>Bukkit sound constant or namespaced sound key.</td></tr>
+<tr><td><code>buySign.creationSound.volume</code> / <code>pitch</code></td><td><code>1.0</code> / <code>1.0</code></td><td>Creation sound volume and pitch.</td></tr>
+<tr><td><code>buySign.receivingSound.enabled</code></td><td><code>true</code></td><td>Play a sound after a purchase.</td></tr>
+<tr><td><code>buySign.receivingSound.type</code></td><td><code>ENTITY_PLAYER_LEVELUP</code></td><td>Bukkit sound constant or namespaced sound key.</td></tr>
+<tr><td><code>buySign.receivingSound.volume</code> / <code>pitch</code></td><td><code>1.0</code> / <code>1.0</code></td><td>Purchase sound volume and pitch.</td></tr>
+</tbody>
+</table>
+</div>
+<p>Blocked lines are compared after trimming and normalizing applied color codes to <code>&amp;</code>. A player with <code>signcolors.buysign.create</code> can create the plugin’s <code>[SC]</code> indicator. Test other blocked entries with the permissions and prefix used on your server.</p>
+<h2 id="other-settings"><a class="header" href="#other-settings">Other settings</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Setting</th><th>Default</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td><code>other.updateCheck</code></td><td><code>true</code></td><td>Check for plugin updates on startup.</td></tr>
+<tr><td><code>other.errorReporting</code></td><td><code>false</code></td><td>Enable the plugin’s error-reporting path; the current implementation logs errors rather than sending them to an external service.</td></tr>
+<tr><td><code>other.debug</code></td><td><code>false</code></td><td>Enable more verbose log messages.</td></tr>
+<tr><td><code>other.configVersion</code></td><td><code>7</code></td><td>Internal configuration version; do not change it manually.</td></tr>
+</tbody>
+</table>
+</div>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="usage"><a class="header" href="#usage">Usage</a></h1>
-<p>This page provides useful information on how to use the plugin’s features.</p>
-<h2 id="how-to-add-colorsformats-to-signs"><a class="header" href="#how-to-add-colorsformats-to-signs">How to add colors/formats to signs?</a></h2>
-<p>To create a colored/formatted sign, write the colorcode (default is: <code>&amp;</code>) and one of the following characters
-(<code>0, 1, 2 ,3, 4, 5, 6, 7, 8, 9, a, b, c, d, e, f, k, l, m, n, o, r</code>) in front of your text.
-Of course you can write more than one color in one line.</p>
-<p>The image below demonstrates all possible colors and formats:</p>
-<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/colors_and_formats_preview.png" alt="All possible colors and formats"><span class="img-wrapper"><img src="images/colors_and_formats_preview.png" alt="All possible colors and formats"></span></label></p>
-<h2 id="how-to-create-a-sc-sign"><a class="header" href="#how-to-create-a-sc-sign">How to create a <code>[SC]</code> sign?</a></h2>
-<p>Create a sign with the following content:</p>
+<h2 id="adding-colors-and-formatting"><a class="header" href="#adding-colors-and-formatting">Adding colors and formatting</a></h2>
+<p>Write the configured prefix (default <code>&amp;</code>) followed by a code before the text, for example <code>&amp;aHello &amp;lworld</code>. You can use multiple codes per line. See <a href="#permissions">Permissions</a> for the available codes and their permission nodes, or use <code>/sc codes</code> to display them in game.</p>
+<p>When <code>crafting.enabled</code> is <code>true</code> (the default), use a colored sign obtained from the recipe, a buy sign, or <code>/sc givesign</code>. Players with <code>signcolors.bypass.crafting</code> can use ordinary signs. When crafting is disabled, ordinary signs work for everyone who has the relevant color or formatting permissions.</p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/colors_and_formats_preview.png" alt="Color and formatting preview"><span class="img-wrapper"><img src="images/colors_and_formats_preview.png" alt="Color and formatting preview"></span></label></p>
+<h2 id="creating-a-buy-sign"><a class="header" href="#creating-a-buy-sign">Creating a buy sign</a></h2>
+<p>A player with <code>signcolors.buysign.create</code> can create a sign with these lines:</p>
 <div class="table-wrapper">
 <table>
 <thead>
-<tr><th>Line</th><th>Text</th></tr>
+<tr><th>Line</th><th>Content</th></tr>
 </thead>
 <tbody>
-<tr><td>1. (required)</td><td><code>[SignColors]</code></td></tr>
-<tr><td>2. (optional)</td><td><code>&lt;amount&gt; : &lt;price&gt;</code></td></tr>
+<tr><td>1</td><td><code>[SignColors]</code></td></tr>
+<tr><td>2</td><td>Optional: <code>&lt;amount&gt;:&lt;price&gt;</code>, for example <code>10:100.0</code></td></tr>
+<tr><td>3</td><td>Optional: supported sign material, for example <code>OAK_SIGN</code></td></tr>
+<tr><td>4</td><td>Ignored; the plugin fills this line.</td></tr>
 </tbody>
 </table>
 </div>
-<p>Replace <code>&lt;amount&gt;</code> and <code>&lt;price&gt;</code> with your values.
-If you leave them out, the default values from config will be used.
-The rest is created automatically. An example sign could look like this:</p>
-<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/sc_sign_before.png" alt="Example of a [SC] sign before placing it"><span class="img-wrapper"><img src="images/sc_sign_before.png" alt="Example of a [SC] sign before placing it"></span></label></p>
-<p>After placing the sign, it will look like this:</p>
-<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/sc_sign_after.png" alt="Example of a [SC] sign after placing it"><span class="img-wrapper"><img src="images/sc_sign_after.png" alt="Example of a [SC] sign after placing it"></span></label></p>
-<p>Now players can right click on the sign and will get <strong>10</strong> colored signs for <strong>100 $</strong>.</p>
+<p>Leave line 2 or 3 blank to use its configured default. The amount must be a positive integer, and the price must be positive and finite. The plugin formats and waxes the completed sign.</p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/sc_sign_before.png" alt="Buy sign before creation"><span class="img-wrapper"><img src="images/sc_sign_before.png" alt="Buy sign before creation"></span></label>
+<label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/sc_sign_after.png" alt="Buy sign after creation"><span class="img-wrapper"><img src="images/sc_sign_after.png" alt="Buy sign after creation"></span></label></p>
+<p>Players with <code>signcolors.buysign.use</code> can right-click it to buy colored signs. Purchases require Vault and a compatible economy provider. The configured amount, price, and material can differ from the examples above.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="commands"><a class="header" href="#commands">Commands</a></h1>
-<p>You can also use <code>/signcolors</code> instead of <code>/sc</code>.</p>
-<p><code>[ ]</code>: <strong>required</strong> argument, <code>&lt; &gt;</code>: <em>optional</em> argument</p>
+<p><code>/signcolors</code> is an alias for <code>/sc</code>. Arguments in brackets are required.</p>
 <div class="table-wrapper">
 <table>
 <thead>
-<tr><th>Command</th><th style="text-align: center">Permission</th><th>Description</th></tr>
+<tr><th>Command</th><th>Permission</th><th>Description</th></tr>
 </thead>
 <tbody>
-<tr><td><code>/sc</code></td><td style="text-align: center"><code>signcolors.command.info</code></td><td>Get some information about the plugin like the plugin’s version</td></tr>
-<tr><td><code>/sc help</code></td><td style="text-align: center"><code>signcolors.command.help</code></td><td>List all available commands</td></tr>
-<tr><td><code>/sc reload</code></td><td style="text-align: center"><code>signcolors.command.reload</code></td><td>Reload the plugin’s configuration file</td></tr>
-<tr><td><code>/sc givesign [player] [amount]</code></td><td style="text-align: center"><code>signcolors.command.givesign</code></td><td>Give a <em>player</em> a specific <em>amount</em> of colored signs</td></tr>
-<tr><td><code>/sc colorcodes</code></td><td style="text-align: center"><code>signcolors.command.colorcodes</code></td><td>List all color and formatting codes</td></tr>
+<tr><td><code>/sc</code></td><td><code>signcolors.command.info</code></td><td>Show plugin information.</td></tr>
+<tr><td><code>/sc help</code></td><td><code>signcolors.command.help</code></td><td>List commands available to you.</td></tr>
+<tr><td><code>/sc reload</code></td><td><code>signcolors.command.reload</code></td><td>Reload configuration, translations, and recipes.</td></tr>
+<tr><td><code>/sc givesign [player] [amount] [sign_material]</code></td><td><code>signcolors.command.give</code></td><td>Give an online player 1–16 colored signs of a supported material, such as <code>OAK_SIGN</code>. Material names are case-insensitive.</td></tr>
+<tr><td><code>/sc codes</code></td><td><code>signcolors.command.codes</code></td><td>Display color and formatting codes.</td></tr>
 </tbody>
 </table>
 </div>
+<p>For example: <code>/sc givesign Alex 4 OAK_SIGN</code>.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="permissions"><a class="header" href="#permissions">Permissions</a></h1>
 <div class="table-wrapper">
@@ -271,20 +343,21 @@ The rest is created automatically. An example sign could look like this:</p>
 <tr><th>Permission</th><th>Description</th></tr>
 </thead>
 <tbody>
-<tr><td><code>signcolors.all</code></td><td>Access to <strong>all</strong> features and command</td></tr>
-<tr><td><code>signcolors.command.all</code></td><td>Access to <strong>all</strong> commands</td></tr>
-<tr><td><code>signcolors.specialsign.all</code></td><td>Use and create special <code>[SC]</code> signs</td></tr>
-<tr><td><code>signcolors.color.all</code></td><td>Apply <strong>all</strong> colors on signs</td></tr>
-<tr><td><code>signcolors.formatting.all</code></td><td>Apply <strong>all</strong> formatting options on signs</td></tr>
+<tr><td><code>signcolors.*</code></td><td>Access to all features; granted to operators by default</td></tr>
+<tr><td><code>signcolors.command.*</code></td><td>Access to all commands</td></tr>
+<tr><td><code>signcolors.buysign.*</code></td><td>Create and use <code>[SC]</code> buy signs</td></tr>
+<tr><td><code>signcolors.color.*</code></td><td>Apply all colors on signs</td></tr>
+<tr><td><code>signcolors.formatting.*</code></td><td>Apply all formatting options on signs</td></tr>
+<tr><td><code>signcolors.bypass.*</code></td><td>Bypass the crafting requirement and blocked first lines</td></tr>
 <tr><td><code>signcolors.command.info</code></td><td>Access to <code>/sc</code></td></tr>
 <tr><td><code>signcolors.command.help</code></td><td>Access to <code>/sc help</code></td></tr>
 <tr><td><code>signcolors.command.reload</code></td><td>Access to <code>/sc reload</code></td></tr>
-<tr><td><code>signcolors.command.givesign</code></td><td>Access to <code>/sc givesign</code></td></tr>
-<tr><td><code>signcolors.command.colorcodes</code></td><td>Access to <code>/sc colorcodes</code></td></tr>
-<tr><td><code>signcolors.specialsign.create</code></td><td>Create <code>[SC]</code> special signs</td></tr>
-<tr><td><code>signcolors.specialsign.use</code></td><td>Use <code>[SC]</code> special signs</td></tr>
-<tr><td><code>signcolors.signcrafting.bypass</code></td><td>Apply colors and formatting on normal signs, although <code>sign_crafting</code> is activated</td></tr>
-<tr><td><code>signcolors.blockedfirstlines.bypass</code></td><td>Bypass blocked sign lines</td></tr>
+<tr><td><code>signcolors.command.give</code></td><td>Access to <code>/sc givesign</code></td></tr>
+<tr><td><code>signcolors.command.codes</code></td><td>Access to <code>/sc codes</code></td></tr>
+<tr><td><code>signcolors.buysign.create</code></td><td>Create <code>[SC]</code> buy signs</td></tr>
+<tr><td><code>signcolors.buysign.use</code></td><td>Use <code>[SC]</code> buy signs</td></tr>
+<tr><td><code>signcolors.bypass.crafting</code></td><td>Apply codes to ordinary signs when crafting is required</td></tr>
+<tr><td><code>signcolors.bypass.blockedfirstlines</code></td><td>Bypass blocked sign lines</td></tr>
 <tr><td><code>signcolors.updatemessage</code></td><td>Get a notification when joining, as soon as an update is available</td></tr>
 <tr><td><code>signcolors.color.0</code></td><td>Access to <em>BLACK</em> color: <code>&amp;0</code></td></tr>
 <tr><td><code>signcolors.color.1</code></td><td>Access to <em>DARK BLUE</em> color: <code>&amp;1</code></td></tr>

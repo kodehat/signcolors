@@ -35,10 +35,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-0d5c9781.js";
+            window.path_to_searchindex_js = "searchindex-83dc4c44.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-ef3b61bb.js"></script>
+        <script src="toc-77ff322c.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -176,27 +176,19 @@
                     <main>
                         <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
 <p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/signcolors_logo.png" alt="The SignColors Logo"><span class="img-wrapper"><img src="images/signcolors_logo.png" alt="The SignColors Logo"></span></label></p>
-<p>SignColors is a Spigot plugin that allows all players on the server (or people with permissions)
-to add colored text to signs.
-Simply use the <code>&amp;</code> character (this is configurable) followed by a hexidecimal digit (<code>0-f</code>)
-to give the rest of the line a color and/or a format.</p>
+<p>SignColors is a Spigot plugin that lets players with the appropriate permissions add colors and formatting to signs. Write the configurable prefix (default <code>&amp;</code>) followed by a color or formatting code, such as <code>&amp;a</code> or <code>&amp;l</code>.</p>
 <h2 id="features"><a class="header" href="#features">Features</a></h2>
 <ul>
 <li>Players can add colors/formats to signs.</li>
 <li>Permissions per color/format.</li>
 <li>Use your own color symbol instead of <code>&amp;</code>.</li>
 <li>Possibility to craft colored signs (recipe and type are configurable).</li>
-<li>Introduces a special sign (so called <code>[SC]</code> sign) that allows players to buy signs where colors/formats are possible (requires <a href="https://www.spigotmc.org/resources/vault.34315/">Vault</a>).
-<ul>
-<li>If this feature is enabled, you can only write colors/formats on an specific crafted/bought sign.</li>
-<li>Players get crafted colored signs back, if they destroy them.</li>
-<li>Colored sign identity is stored in Minecraft item and block data.</li>
-<li>Certain first lines on signs can be blocked (like <code>&amp;1[Buy]</code> from Essentials) to avoid unwanted abuse.</li>
-</ul>
-</li>
+<li>Optional crafted-sign requirement; players can also obtain colored signs from <code>[SC]</code> buy signs or a command.</li>
+<li>Buy signs require <a href="https://www.spigotmc.org/resources/vault.34315/">Vault</a> and a compatible economy provider.</li>
+<li>Colored sign identity is stored in Minecraft item and block data; marked signs retain their identity when dropped through normal block drops.</li>
+<li>Configurable blocked first lines can help prevent imitation of special signs.</li>
 <li>Automatically checks for updates (configurable).</li>
 <li>English and German translations provided and additional can be added manually.</li>
-<li>May send metrics (configurable).</li>
 </ul>
 
                     </main>
