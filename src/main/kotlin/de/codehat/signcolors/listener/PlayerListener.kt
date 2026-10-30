@@ -53,9 +53,12 @@ class PlayerListener(
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   fun onPlayerUseSpecialSign(event: PlayerInteractEvent) {
     if (event.action != Action.RIGHT_CLICK_BLOCK || event.clickedBlock?.state !is Sign) return
-    plugin.server.scheduler.runTask(plugin, Runnable {
-      if (event.useInteractedBlock() != Event.Result.DENY && event.player.isOnline) processSpecialSign(event)
-    })
+    plugin.server.scheduler.runTask(
+      plugin,
+      Runnable {
+        if (event.useInteractedBlock() != Event.Result.DENY && event.player.isOnline) processSpecialSign(event)
+      },
+    )
   }
 
   private fun processSpecialSign(event: PlayerInteractEvent) {
@@ -95,13 +98,14 @@ class PlayerListener(
           }
 
           val stackLimit = minOf(template.maxStackSize, player.inventory.maxStackSize)
-          val capacity = player.inventory.storageContents.sumOf { stack ->
-            when {
-              stack == null || stack.type == Material.AIR -> stackLimit.toLong()
-              stack.isSimilar(template) -> (stackLimit - stack.amount).coerceAtLeast(0).toLong()
-              else -> 0L
+          val capacity =
+            player.inventory.storageContents.sumOf { stack ->
+              when {
+                stack == null || stack.type == Material.AIR -> stackLimit.toLong()
+                stack.isSimilar(template) -> (stackLimit - stack.amount).coerceAtLeast(0).toLong()
+                else -> 0L
+              }
             }
-          }
           if (capacity < signAmount.toLong()) {
             plugin.sendLogoMessage(player, TranslationConfigKey.ERROR_NOT_ENOUGH_SPACE)
             return

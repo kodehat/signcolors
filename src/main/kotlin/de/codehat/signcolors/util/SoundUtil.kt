@@ -37,13 +37,14 @@ class SoundUtil {
 
       val soundName = plugin.pluginConfig.getConfigurationData()?.getString("$configPath.type")
       val soundKey = soundName?.lowercase(Locale.ROOT)?.let(NamespacedKey::fromString)
-      val sound = soundKey?.let(Registry.SOUNDS::get) ?: soundName?.let { name ->
-        try {
-          Sound::class.java.getField(name).get(null) as? Sound
-        } catch (_: ReflectiveOperationException) {
-          null
+      val sound =
+        soundKey?.let(Registry.SOUNDS::get) ?: soundName?.let { name ->
+          try {
+            Sound::class.java.getField(name).get(null) as? Sound
+          } catch (_: ReflectiveOperationException) {
+            null
+          }
         }
-      }
       if (sound == null) {
         with(plugin.logger) {
           warning("The value for the sound at '$configPath.type' doesn't exist.")

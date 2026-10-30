@@ -57,9 +57,12 @@ class SignListener(
           continue
         }
 
-        event.setLine(line, colorSignLine(event.getLine(line)!!, colorCharacter) { color ->
-          checkColorPermissions(player, color)
-        })
+        event.setLine(
+          line,
+          colorSignLine(event.getLine(line)!!, colorCharacter) { color ->
+            checkColorPermissions(player, color)
+          },
+        )
       }
     }
 
@@ -85,11 +88,12 @@ class SignListener(
     private fun checkColorPermissions(
       player: Player,
       color: Int,
-    ): Boolean {
-      return hasColorPermission(color) { player.hasPermission(it) }
-    }
+    ): Boolean = hasColorPermission(color) { player.hasPermission(it) }
 
-    internal fun hasColorPermission(color: Int, hasPermission: (String) -> Boolean): Boolean {
+    internal fun hasColorPermission(
+      color: Int,
+      hasPermission: (String) -> Boolean,
+    ): Boolean {
       val colorChar = ALL_COLOR_CODES[color]
       return hasPermission(Permissions.color(colorChar)) || hasPermission(Permissions.formatting(colorChar))
     }
@@ -149,20 +153,22 @@ class SignListener(
     val player = event.player
 
     if (event.getLine(0).equals(SPECIAL_SIGN_LINE, true) && player.hasPermission(Permissions.BUY_SIGN_CREATE)) {
-      val amountPrice = parseBuySignAmountPrice(
-        event.getLine(1).orEmpty(),
-        plugin.pluginConfig.getBuySignAmount(),
-        plugin.pluginConfig.getBuySignPrice(),
-      )
+      val amountPrice =
+        parseBuySignAmountPrice(
+          event.getLine(1).orEmpty(),
+          plugin.pluginConfig.getBuySignAmount(),
+          plugin.pluginConfig.getBuySignPrice(),
+        )
       if (amountPrice == null) {
         plugin.sendLogoMessage(player, TranslationConfigKey.ERROR_BUYSIGN_FORMAT_INCORRECT)
         event.isCancelled = true
         return
       }
       val (signAmount, signPrice) = amountPrice
-      val typeName = event.getLine(2).orEmpty().trim().ifEmpty {
-        plugin.pluginConfig.getBuySignSignType().orEmpty()
-      }
+      val typeName =
+        event.getLine(2).orEmpty().trim().ifEmpty {
+          plugin.pluginConfig.getBuySignSignType().orEmpty()
+        }
       val signType = Material.getMaterial(typeName)
       if (signType == null || signType !in plugin.coloredSignManager.coloredSignStacks) {
         plugin.sendLogoMessage(player, TranslationConfigKey.ERROR_BUYSIGN_INVALID_SIGN_TYPE)
@@ -174,13 +180,16 @@ class SignListener(
       applyLinesOnSpecialSign(plugin, event, signAmount, signPrice, signType)
 
       // Wait until all listeners have had a chance to cancel the sign change.
-      plugin.server.scheduler.runTask(plugin, Runnable {
-        if (event.isCancelled) return@Runnable
-        val sign = event.block.state as? Sign ?: return@Runnable
-        if (sign.getSide(event.side).getLine(0) != SPECIAL_SIGN_INDICATOR.color()) return@Runnable
-        sign.isWaxed = true
-        if (sign.update()) SoundUtil.playPlayerSound(plugin, "buySign.creationSound", player)
-      })
+      plugin.server.scheduler.runTask(
+        plugin,
+        Runnable {
+          if (event.isCancelled) return@Runnable
+          val sign = event.block.state as? Sign ?: return@Runnable
+          if (sign.getSide(event.side).getLine(0) != SPECIAL_SIGN_INDICATOR.color()) return@Runnable
+          sign.isWaxed = true
+          if (sign.update()) SoundUtil.playPlayerSound(plugin, "buySign.creationSound", player)
+        },
+      )
     }
   }
 

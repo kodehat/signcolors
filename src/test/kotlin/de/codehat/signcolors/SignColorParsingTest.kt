@@ -22,8 +22,10 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class SignColorParsingTest {
-  private fun color(line: String, permitted: Boolean = true): String =
-    SignListener.colorSignLine(line, "&") { permitted }
+  private fun color(
+    line: String,
+    permitted: Boolean = true,
+  ): String = SignListener.colorSignLine(line, "&") { permitted }
 
   @Test
   fun preservesRepeatedTextAndPrefixes() {
@@ -35,12 +37,18 @@ class SignColorParsingTest {
 
   @Test
   fun blackRequiresPermission() {
-    assertEquals("&0Black", SignListener.colorSignLine("&0Black", "&") { code ->
-      SignListener.hasColorPermission(code) { false }
-    })
-    assertEquals("§0Black", SignListener.colorSignLine("&0Black", "&") { code ->
-      SignListener.hasColorPermission(code) { it == "signcolors.color.0" }
-    })
+    assertEquals(
+      "&0Black",
+      SignListener.colorSignLine("&0Black", "&") { code ->
+        SignListener.hasColorPermission(code) { false }
+      },
+    )
+    assertEquals(
+      "§0Black",
+      SignListener.colorSignLine("&0Black", "&") { code ->
+        SignListener.hasColorPermission(code) { it == "signcolors.color.0" }
+      },
+    )
   }
 
   @Test

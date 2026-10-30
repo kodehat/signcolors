@@ -23,7 +23,9 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.Plugin
 
-class ColoredSignMarker(plugin: Plugin) {
+class ColoredSignMarker(
+  plugin: Plugin,
+) {
   private val key = NamespacedKey(plugin, "colored_sign")
 
   fun mark(item: ItemStack) {
@@ -32,13 +34,11 @@ class ColoredSignMarker(plugin: Plugin) {
     item.itemMeta = meta
   }
 
-  fun isMarked(item: ItemStack): Boolean =
-    item.itemMeta?.persistentDataContainer?.get(key, PersistentDataType.BYTE) == 1.toByte()
+  fun isMarked(item: ItemStack): Boolean = item.itemMeta?.persistentDataContainer?.get(key, PersistentDataType.BYTE) == 1.toByte()
 
   fun mark(sign: Sign) {
     sign.persistentDataContainer.set(key, PersistentDataType.BYTE, 1.toByte())
   }
 
-  fun isMarked(sign: Sign): Boolean =
-    sign.persistentDataContainer.get(key, PersistentDataType.BYTE) == 1.toByte()
+  fun isMarked(sign: Sign): Boolean = sign.persistentDataContainer.get(key, PersistentDataType.BYTE) == 1.toByte()
 }

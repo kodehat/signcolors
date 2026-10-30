@@ -26,7 +26,9 @@ import org.bukkit.event.block.BlockDropItemEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.inventory.ItemStack
 
-class BlockListener(private val plugin: SignColors) : Listener {
+class BlockListener(
+  private val plugin: SignColors,
+) : Listener {
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   fun onPlaceColoredSign(event: BlockPlaceEvent) {
     if (!plugin.coloredSignMarker.isMarked(event.itemInHand)) return
