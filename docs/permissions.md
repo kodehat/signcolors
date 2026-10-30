@@ -2,20 +2,21 @@
 
 | Permission | Description |
 | --- | --- |
-| `signcolors.all` | Access to **all** features and command |
-| `signcolors.command.all` | Access to **all** commands |
-| `signcolors.specialsign.all` | Use and create special `[SC]` signs |
-| `signcolors.color.all` | Apply **all** colors on signs |
-| `signcolors.formatting.all` | Apply **all** formatting options on signs |
+| `signcolors.*` | Access to all features; granted to operators by default |
+| `signcolors.command.*` | Access to all commands |
+| `signcolors.buysign.*` | Create and use `[SC]` buy signs |
+| `signcolors.color.*` | Apply all colors on signs |
+| `signcolors.formatting.*` | Apply all formatting options on signs |
+| `signcolors.bypass.*` | Bypass the crafting requirement and blocked first lines |
 | `signcolors.command.info` | Access to `/sc` |
 | `signcolors.command.help` | Access to `/sc help` |
 | `signcolors.command.reload` | Access to `/sc reload` |
-| `signcolors.command.givesign` | Access to `/sc givesign` |
-| `signcolors.command.colorcodes` | Access to `/sc colorcodes` |
-| `signcolors.specialsign.create` | Create `[SC]` special signs |
-| `signcolors.specialsign.use` | Use `[SC]` special signs |
-| `signcolors.signcrafting.bypass` | Apply colors and formatting on normal signs, although `sign_crafting` is activated |
-| `signcolors.blockedfirstlines.bypass` | Bypass blocked sign lines |
+| `signcolors.command.give` | Access to `/sc givesign` |
+| `signcolors.command.codes` | Access to `/sc codes` |
+| `signcolors.buysign.create` | Create `[SC]` buy signs |
+| `signcolors.buysign.use` | Use `[SC]` buy signs |
+| `signcolors.bypass.crafting` | Apply codes to ordinary signs when crafting is required |
+| `signcolors.bypass.blockedfirstlines` | Bypass blocked sign lines |
 | `signcolors.updatemessage` | Get a notification when joining, as soon as an update is available |
 | `signcolors.color.0` | Access to *BLACK* color: `&0` |
 | `signcolors.color.1` | Access to *DARK BLUE* color: `&1` |

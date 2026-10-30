@@ -5,7 +5,7 @@
 # Guide
 
 - [Installation](./installation.md)
-- [Configuration]()
+- [Configuration](./configuration.md)
 - [Usage](./usage.md)
 - [Commands](./commands.md)
 - [Permissions](./permissions.md)

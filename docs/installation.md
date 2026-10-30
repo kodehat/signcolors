@@ -1,7 +1,6 @@
 # Installation
 
-This guide take you through the initial setup (installation) of the plugin.
-Estimated time: 10-20 Minutes
+This guide covers the initial installation and setup.
 
 ## Download
 
@@ -14,11 +13,10 @@ Put it into the `plugins` directory of the server.
 
 ## Server Start
 
-Start the server. After it has finishing loading, you should find a `SignColors` folder in the `plugins` directory.
+Start the server. Once it has finished loading, you should find a `SignColors` folder in the `plugins` directory.
 
 ## Configure
 
-You can now configure the plugin to your liking by modifying the `config.yml`.
-Don't forget to either reload the plugin or restart server.
+Edit `plugins/SignColors/config.yml` as needed, then use `/sc reload` or restart the server. See [Configuration](configuration.md) for the available settings.
 
-FINISHED
+To use buy signs, install Vault and a compatible economy provider. Vault is optional for other features.

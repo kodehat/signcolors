@@ -1,34 +1,27 @@
 # Usage
 
-This page provides useful information on how to use the plugin's features.
+## Adding colors and formatting
 
-## How to add colors/formats to signs?
+Write the configured prefix (default `&`) followed by a code before the text, for example `&aHello &lworld`. You can use multiple codes per line. See [Permissions](permissions.md) for the available codes and their permission nodes, or use `/sc codes` to display them in game.
 
-To create a colored/formatted sign, write the colorcode (default is: `&`) and one of the following characters
-(`0, 1, 2 ,3, 4, 5, 6, 7, 8, 9, a, b, c, d, e, f, k, l, m, n, o, r`) in front of your text.
-Of course you can write more than one color in one line.
+When `crafting.enabled` is `true` (the default), use a colored sign obtained from the recipe, a buy sign, or `/sc givesign`. Players with `signcolors.bypass.crafting` can use ordinary signs. When crafting is disabled, ordinary signs work for everyone who has the relevant color or formatting permissions.
 
-The image below demonstrates all possible colors and formats:
+![Color and formatting preview](images/colors_and_formats_preview.png)
 
-![All possible colors and formats](images/colors_and_formats_preview.png)
+## Creating a buy sign
 
-## How to create a `[SC]` sign?
+A player with `signcolors.buysign.create` can create a sign with these lines:
 
-Create a sign with the following content:
+| Line | Content |
+| --- | --- |
+| 1 | `[SignColors]` |
+| 2 | Optional: `<amount>:<price>`, for example `10:100.0` |
+| 3 | Optional: supported sign material, for example `OAK_SIGN` |
+| 4 | Ignored; the plugin fills this line. |
 
-| Line          | Text                 |
-|---------------|----------------------|
-| 1. (required) | `[SignColors]`       |
-| 2. (optional) | `<amount> : <price>` |
+Leave line 2 or 3 blank to use its configured default. The amount must be a positive integer, and the price must be positive and finite. The plugin formats and waxes the completed sign.
 
-Replace `<amount>` and `<price>` with your values.
-If you leave them out, the default values from config will be used.
-The rest is created automatically. An example sign could look like this:
+![Buy sign before creation](images/sc_sign_before.png)
+![Buy sign after creation](images/sc_sign_after.png)
 
-![Example of a [SC] sign before placing it](images/sc_sign_before.png)
-
-After placing the sign, it will look like this:
-
-![Example of a [SC] sign after placing it](images/sc_sign_after.png)
-
-Now players can right click on the sign and will get **10** colored signs for **100 $**.
+Players with `signcolors.buysign.use` can right-click it to buy colored signs. Purchases require Vault and a compatible economy provider. The configured amount, price, and material can differ from the examples above.
