@@ -95,17 +95,22 @@ class SignColors : JavaPlugin() {
   private fun loadDependencies() {
     logger.info("Looking for available dependencies...")
 
-    // Find and load Vault.
+    if (!server.pluginManager.isPluginEnabled("Vault")) {
+      logger.warning("Vault is missing or disabled. Economy features have been disabled.")
+      return
+    }
+
     try {
       vaultDependency = VaultDependency(this)
     } catch (e: NoClassDefFoundError) {
-      // Drop error silently.
+      logger.warning("Vault is enabled, but its economy API could not be loaded: ${e.message}")
+      return
     }
 
     if (isVaultAvailable().first) {
-      logger.info("Vault found and loaded.")
+      logger.info("Vault and an economy provider found and loaded.")
     } else {
-      logger.warning("Vault is missing! Economy features have been disabled.")
+      logger.warning("Vault is enabled, but no economy provider is registered. Economy features have been disabled.")
     }
   }
 
