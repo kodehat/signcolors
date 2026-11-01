@@ -102,5 +102,9 @@ class CodesCommand(
         ChatColor.RESET,
     )
     plugin.sendColoredMessage(sender, "&6+----------------+")
+    sender.sendMessage(
+      plugin.getTranslation()?.tOrNull(TranslationConfigKey.COLOR_CODES_ORDER_HINT)
+        ?: "${ChatColor.GRAY}Use color codes before formatting codes; colors reset formatting.",
+    )
   }
 }

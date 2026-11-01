@@ -16,6 +16,7 @@ enum class TranslationConfigKey(
   PARAMETER_SIGN_MATERIAL("parameter.sign-material"),
   COLOR_CODES_COLORS("color.codes.colors"),
   COLOR_CODES_FORMATS("color.codes.formats"),
+  COLOR_CODES_ORDER_HINT("color.codes.order-hint"),
   INFO_AUTHOR("info.author"),
   INFO_VERSION("info.version"),
   COMMAND_HELP("command.help"),

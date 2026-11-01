@@ -27,5 +27,10 @@ class TranslationConfig(
   fun t(
     key: TranslationConfigKey,
     vararg params: Any,
-  ): String = translation(cfgData!!, key)!!.format(*params).color()
+  ): String = tOrNull(key, *params)!!
+
+  fun tOrNull(
+    key: TranslationConfigKey,
+    vararg params: Any,
+  ): String? = cfgData?.let { translation(it, key) }?.format(*params)?.color()
 }
