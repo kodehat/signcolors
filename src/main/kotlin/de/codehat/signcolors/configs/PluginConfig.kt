@@ -19,6 +19,8 @@ class PluginConfig(
 
   fun getPrefixCharacter(): String = cfgData?.getString(PluginConfigKey.PREFIX_CHARACTER.toString()) ?: "&"
 
+  fun isEditableSignColorsEnabled(): Boolean = cfgData?.getBoolean("other.editableSignColors", true) ?: true
+
   fun getCraftingEnabled(): Boolean? = cfgData?.getBoolean(PluginConfigKey.CRAFTING_ENABLED.toString())
 
   fun getCraftingRecipeType(): String? = cfgData?.getString(PluginConfigKey.CRAFTING_RECIPE_TYPE.toString())

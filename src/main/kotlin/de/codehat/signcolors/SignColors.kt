@@ -38,6 +38,7 @@ class SignColors : JavaPlugin() {
   lateinit var coloredSignManager: ColoredSignManager
 
   private val commandManager = CommandManager(this)
+  private val signListener = SignListener(this)
 
   internal var updateAvailablePair: Pair<Boolean, String> = Pair(false, "")
 
@@ -61,6 +62,7 @@ class SignColors : JavaPlugin() {
   }
 
   override fun onDisable() {
+    signListener.restoreAllSignViews()
     coloredSignManager.stop()
 
     logger.info("v${description.version} has been disabled.")
@@ -145,7 +147,7 @@ class SignColors : JavaPlugin() {
   private fun registerListener() {
     with(server.pluginManager) {
       registerEvents(BlockListener(this@SignColors), this@SignColors)
-      registerEvents(SignListener(this@SignColors), this@SignColors)
+      registerEvents(signListener, this@SignColors)
       registerEvents(PlayerListener(this@SignColors), this@SignColors)
     }
   }

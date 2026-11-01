@@ -68,6 +68,7 @@ Blocked lines are compared after trimming and normalizing applied color codes to
 
 | Setting | Default | Description |
 | --- | --- | --- |
+| `other.editableSignColors` | `true` | Show existing color and formatting codes when editing a sign. Restart after changing this setting. |
 | `other.updateCheck` | `true` | Check for plugin updates on startup. |
 | `other.errorReporting` | `false` | Enable the plugin's error-reporting path; the current implementation logs errors rather than sending them to an external service. |
 | `other.debug` | `false` | Enable more verbose log messages. |

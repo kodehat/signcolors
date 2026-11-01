@@ -37,6 +37,23 @@ class SignColorParsingTest {
   }
 
   @Test
+  fun reconstructsEditableLegacyCodes() {
+    assertEquals("&aGreen &lBold", SignListener.editableSignLine("§aGreen §lBold", "&"))
+    assertEquals("!AUpper !rReset", SignListener.editableSignLine("§AUpper §rReset", "!"))
+    assertEquals("literal §z and &a", SignListener.editableSignLine("literal §z and &a", "&"))
+  }
+
+  @Test
+  fun editableFormattingRequiresAllPermissions() {
+    val lines = arrayOf("§aGreen", "§lBold", "plain", "")
+    assertEquals(true, SignListener.canEditFormatting(lines) { true })
+    assertEquals(false, SignListener.canEditFormatting(lines) { it != 10 })
+    assertEquals(false, SignListener.canEditFormatting(lines) { it != 17 })
+    assertEquals(true, SignListener.canEditFormatting(arrayOf("plain §z")) { false })
+    assertEquals(false, SignListener.canEditFormatting(arrayOf("§x§a§b§c§d§e§fHex")) { true })
+  }
+
+  @Test
   fun translatesOnlyPermittedCodes() {
     assertEquals("§aGreen §lBold", color("&AGreen &lBold"))
     assertEquals("&aGreen &lBold", color("&aGreen &lBold", permitted = false))

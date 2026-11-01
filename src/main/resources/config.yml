@@ -115,6 +115,9 @@ buySign:
 # Other settings section.
 other:
 
+  # Show existing color and formatting codes when editing a sign.
+  editableSignColors: true
+
   # Should the plugin check if an update is available?
   updateCheck: true
 

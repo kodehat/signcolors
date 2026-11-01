@@ -9,19 +9,33 @@ import de.codehat.signcolors.util.SoundUtil
 import de.codehat.signcolors.util.color
 import de.codehat.signcolors.util.hasPermission
 import org.bukkit.ChatColor
+import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.Sign
+import org.bukkit.block.sign.Side
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.SignChangeEvent
+import org.bukkit.event.player.PlayerChangedWorldEvent
+import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.event.player.PlayerSignOpenEvent
+import java.util.UUID
 
 class SignListener(
   private val plugin: SignColors,
 ) : Listener {
+  private class EditableSignView(
+    val location: Location,
+    val side: Side,
+  )
+
+  private val editableSignViews = mutableMapOf<UUID, EditableSignView>()
+
   companion object {
     private const val ALL_COLOR_CODES = "0123456789abcdefklmnor"
+    private val LEGACY_CODE = Regex("§([0-9a-fk-or])", RegexOption.IGNORE_CASE)
     private const val SPECIAL_SIGN_LINE = "[SignColors]"
     const val SPECIAL_SIGN_INDICATOR = "&6[&3SC&6]"
     private const val SIGN_LINE_FIRST_INDEX = 0
@@ -70,6 +84,26 @@ class SignListener(
       return result.toString()
     }
 
+    internal fun editableSignLine(
+      line: String,
+      prefix: String,
+    ): String =
+      LEGACY_CODE.replace(line) { match ->
+        prefix + match.groupValues[1]
+      }
+
+    internal fun canEditFormatting(
+      lines: Array<String>,
+      hasPermission: (Int) -> Boolean,
+    ): Boolean =
+      lines.all { line ->
+        // Hex colors cannot be round-tripped by the legacy code parser.
+        !line.contains("§x", ignoreCase = true) &&
+          LEGACY_CODE.findAll(line).all { match ->
+            hasPermission(ALL_COLOR_CODES.indexOf(match.groupValues[1][0].lowercaseChar()))
+          }
+      }
+
     private fun checkColorPermissions(
       player: Player,
       color: Int,
@@ -115,6 +149,83 @@ class SignListener(
           plugin.getTranslation()?.t(TranslationConfigKey.BUYSIGN_LINE_FOUR),
         )
       }
+    }
+  }
+
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  fun onSignOpen(event: PlayerSignOpenEvent) {
+    val player = event.player
+    editableSignViews.remove(player.uniqueId)?.let { restoreSignView(player, it.location) }
+    if (!plugin.pluginConfig.isEditableSignColorsEnabled()) return
+    val sign = event.sign
+    if (sign.isWaxed || (
+        plugin.coloredSignManager.craftingEnabled &&
+          !player.hasPermission(Permissions.BYPASS_CRAFTING) &&
+          !plugin.coloredSignMarker.isMarked(sign)
+      )
+    ) {
+      return
+    }
+
+    val side = sign.getSide(event.side)
+    val lines = side.lines
+    // Do not turn existing formatting into codes the player cannot apply again.
+    if (!canEditFormatting(lines) { checkColorPermissions(player, it) }) return
+    val editable = lines.map { editableSignLine(it, plugin.pluginConfig.getPrefixCharacter()) }
+    if (editable == lines.toList()) return
+
+    // Obtain an independent snapshot; do not mutate the sign attached to the event.
+    val location = sign.location
+    val clientSign = location.block.state as? Sign ?: return
+    editable.forEachIndexed { index, line -> clientSign.getSide(event.side).setLine(index, line) }
+    player.sendBlockUpdate(location, clientSign)
+    editableSignViews[player.uniqueId] = EditableSignView(location, event.side)
+  }
+
+  @EventHandler(priority = EventPriority.MONITOR)
+  fun onEditableSignChange(event: SignChangeEvent) {
+    val view = editableSignViews[event.player.uniqueId] ?: return
+    if (event.block.location != view.location || event.side != view.side) return
+    plugin.server.scheduler.runTask(
+      plugin,
+      Runnable {
+        if (editableSignViews[event.player.uniqueId] === view) {
+          editableSignViews.remove(event.player.uniqueId)
+          restoreSignView(event.player, view.location)
+        }
+      },
+    )
+  }
+
+  @EventHandler
+  fun onPlayerQuit(event: PlayerQuitEvent) {
+    editableSignViews.remove(event.player.uniqueId)
+  }
+
+  @EventHandler
+  fun onPlayerChangedWorld(event: PlayerChangedWorldEvent) {
+    editableSignViews.remove(event.player.uniqueId)
+  }
+
+  fun restoreAllSignViews() {
+    editableSignViews.forEach { (id, view) ->
+      plugin.server.getPlayer(id)?.let { restoreSignView(it, view.location) }
+    }
+    editableSignViews.clear()
+  }
+
+  private fun restoreSignView(
+    player: Player,
+    location: Location,
+  ) {
+    if (!player.isOnline || player.world != location.world) return
+    val world = location.world ?: return
+    if (!world.isChunkLoaded(location.blockX shr 4, location.blockZ shr 4)) return
+    val state = location.block.state
+    if (state is Sign) {
+      player.sendBlockUpdate(location, state)
+    } else {
+      player.sendBlockChange(location, state.blockData)
     }
   }
 
