@@ -37,6 +37,26 @@ class SignColorParsingTest {
   }
 
   @Test
+  fun colorAndFormattingPermissionsAreSeparate() {
+    val codes = "0123456789abcdefklmnor"
+    for ((index, code) in codes.withIndex()) {
+      val isColor = index < 16
+      assertEquals(isColor, SignListener.hasColorPermission(index) { it.startsWith("signcolors.color.") }, "$code color wildcard")
+      assertEquals(
+        !isColor,
+        SignListener.hasColorPermission(index) { it.startsWith("signcolors.formatting.") },
+        "$code formatting wildcard",
+      )
+    }
+    assertEquals(
+      "§aGreen &lBold",
+      SignListener.colorSignLine("&aGreen &lBold", "&") { index ->
+        SignListener.hasColorPermission(index) { it.startsWith("signcolors.color.") }
+      },
+    )
+  }
+
+  @Test
   fun reconstructsEditableLegacyCodes() {
     assertEquals("&aGreen &lBold", SignListener.editableSignLine("§aGreen §lBold", "&"))
     assertEquals("!AUpper !rReset", SignListener.editableSignLine("§AUpper §rReset", "!"))

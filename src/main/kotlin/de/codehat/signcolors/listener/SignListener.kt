@@ -114,7 +114,11 @@ class SignListener(
       hasPermission: (String) -> Boolean,
     ): Boolean {
       val colorChar = ALL_COLOR_CODES[color]
-      return hasPermission(Permissions.color(colorChar)) || hasPermission(Permissions.formatting(colorChar))
+      return if (colorChar in '0'..'9' || colorChar in 'a'..'f') {
+        hasPermission(Permissions.color(colorChar))
+      } else {
+        hasPermission(Permissions.formatting(colorChar))
+      }
     }
 
     internal fun parseBuySignAmountPrice(
