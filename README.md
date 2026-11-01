@@ -10,8 +10,6 @@
   A Spigot plugin to let your players use colors on signs
 </div>
 
-<br />
-
 <div align="center">
   <h3>
     <a href="https://signcolors.codehat.de">
