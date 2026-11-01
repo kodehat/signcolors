@@ -90,7 +90,7 @@ class GiveSignCommand(
     )
 
     plugin.sendLogoMessage(
-      sender,
+      player,
       TranslationConfigKey.GIVE_TARGET_SUCCESS,
       signAmount,
       sender.name,
