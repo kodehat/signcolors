@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-07740749.js";
+            window.path_to_searchindex_js = "searchindex-673a845c.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-77ff322c.js"></script>
@@ -176,6 +176,7 @@
                     <main>
                         <h1 id="configuration"><a class="header" href="#configuration">Configuration</a></h1>
 <p>After the first server start, edit <code>plugins/SignColors/config.yml</code>. Apply changes with <code>/sc reload</code> (requires <code>signcolors.command.reload</code>) or restart the server. See <a href="languages.html">Languages</a> for translation files.</p>
+<p>When the configuration version is outdated, SignColors backs up <code>config.yml</code> to a <code>config.yml.v&lt;version&gt;-*.bak</code> file and replaces it with the default configuration on startup. Restore custom settings from the backup as needed. Other files are not included in this backup; see <a href="languages.html">Languages</a> for translation updates.</p>
 <h2 id="general-settings"><a class="header" href="#general-settings">General settings</a></h2>
 <div class="table-wrapper">
 <table>
@@ -188,6 +189,7 @@
 </tbody>
 </table>
 </div>
+<p>On color-enabled signs, escape the prefix with a backslash to display it literally: <code>\&amp;a</code> displays <code>&amp;a</code>. Use <code>\\</code> for a literal backslash. If the configured prefix is a backslash, use <code>/</code> as the escape character instead (for example, <code>/\a</code> displays <code>\a</code> and <code>//</code> displays <code>/</code>).</p>
 <h2 id="crafting"><a class="header" href="#crafting">Crafting</a></h2>
 <p><code>crafting.enabled</code> defaults to <code>true</code>. When enabled, players need a colored sign to apply codes unless they have <code>signcolors.bypass.crafting</code>. Colored signs can be crafted, bought from an <code>[SC]</code> sign, or given with <code>/sc givesign</code>. When disabled, codes can be applied to ordinary signs; color and formatting permissions still apply.</p>
 <div class="table-wrapper">
@@ -252,11 +254,11 @@
 <tr><th>Setting</th><th>Default</th><th>Description</th></tr>
 </thead>
 <tbody>
-<tr><td><code>other.editableSignColors</code></td><td><code>true</code></td><td>Show existing color and formatting codes when editing a sign. Restart after changing this setting.</td></tr>
+<tr><td><code>other.editableSignColors</code></td><td><code>true</code></td><td>Show existing color and formatting codes when editing a sign.</td></tr>
 <tr><td><code>other.updateCheck</code></td><td><code>true</code></td><td>Check for plugin updates on startup.</td></tr>
 <tr><td><code>other.errorReporting</code></td><td><code>false</code></td><td>Enable the plugin’s error-reporting path; the current implementation logs errors rather than sending them to an external service.</td></tr>
 <tr><td><code>other.debug</code></td><td><code>false</code></td><td>Enable more verbose log messages.</td></tr>
-<tr><td><code>other.configVersion</code></td><td><code>7</code></td><td>Internal configuration version; do not change it manually.</td></tr>
+<tr><td><code>other.configVersion</code></td><td><code>8</code></td><td>Internal configuration version; do not change it manually.</td></tr>
 </tbody>
 </table>
 </div>

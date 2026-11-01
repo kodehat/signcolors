@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-07740749.js";
+            window.path_to_searchindex_js = "searchindex-673a845c.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-77ff322c.js"></script>
@@ -189,19 +189,18 @@
 <li>Colored sign identity is stored in Minecraft item and block data; marked signs retain their identity when dropped through normal block drops.</li>
 <li>Configurable blocked first lines can help prevent imitation of special signs.</li>
 <li>Automatically checks for updates (configurable).</li>
-<li>English and German translations provided and additional can be added manually.</li>
+<li>English and German translations are included; additional languages can be added manually.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="installation"><a class="header" href="#installation">Installation</a></h1>
-<p>This guide covers the initial installation and setup.</p>
+<p>This guide covers the initial installation and setup. The current build targets Spigot 26.3 and requires Java 25.</p>
 <h2 id="download"><a class="header" href="#download">Download</a></h2>
 <div class="warning">
-Make sure to download the correct version of the plugin, fitting the version of the server!
+Download a plugin version compatible with your server version.
 </div>
 
-<p>Download the plugin’s JAR file <a href="https://www.spigotmc.org/resources/signcolors.6135/history">here</a>.
-Put it into the <code>plugins</code> directory of the server.</p>
-<h2 id="server-start"><a class="header" href="#server-start">Server Start</a></h2>
+<p>Download the plugin JAR from <a href="https://www.spigotmc.org/resources/signcolors.6135/history">SpigotMC</a> or <a href="https://github.com/kodehat/signcolors/releases">GitHub Releases</a>. Put it in the server’s <code>plugins</code> directory.</p>
+<h2 id="start-the-server"><a class="header" href="#start-the-server">Start the server</a></h2>
 <p>Start the server. Once it has finished loading, you should find a <code>SignColors</code> folder in the <code>plugins</code> directory.</p>
 <h2 id="configure"><a class="header" href="#configure">Configure</a></h2>
 <p>Edit <code>plugins/SignColors/config.yml</code> as needed, then use <code>/sc reload</code> or restart the server. See <a href="#configuration">Configuration</a> for the available settings.</p>
@@ -209,6 +208,7 @@ Put it into the <code>plugins</code> directory of the server.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="configuration"><a class="header" href="#configuration">Configuration</a></h1>
 <p>After the first server start, edit <code>plugins/SignColors/config.yml</code>. Apply changes with <code>/sc reload</code> (requires <code>signcolors.command.reload</code>) or restart the server. See <a href="#languages">Languages</a> for translation files.</p>
+<p>When the configuration version is outdated, SignColors backs up <code>config.yml</code> to a <code>config.yml.v&lt;version&gt;-*.bak</code> file and replaces it with the default configuration on startup. Restore custom settings from the backup as needed. Other files are not included in this backup; see <a href="#languages">Languages</a> for translation updates.</p>
 <h2 id="general-settings"><a class="header" href="#general-settings">General settings</a></h2>
 <div class="table-wrapper">
 <table>
@@ -221,6 +221,7 @@ Put it into the <code>plugins</code> directory of the server.</p>
 </tbody>
 </table>
 </div>
+<p>On color-enabled signs, escape the prefix with a backslash to display it literally: <code>\&amp;a</code> displays <code>&amp;a</code>. Use <code>\\</code> for a literal backslash. If the configured prefix is a backslash, use <code>/</code> as the escape character instead (for example, <code>/\a</code> displays <code>\a</code> and <code>//</code> displays <code>/</code>).</p>
 <h2 id="crafting"><a class="header" href="#crafting">Crafting</a></h2>
 <p><code>crafting.enabled</code> defaults to <code>true</code>. When enabled, players need a colored sign to apply codes unless they have <code>signcolors.bypass.crafting</code>. Colored signs can be crafted, bought from an <code>[SC]</code> sign, or given with <code>/sc givesign</code>. When disabled, codes can be applied to ordinary signs; color and formatting permissions still apply.</p>
 <div class="table-wrapper">
@@ -285,11 +286,11 @@ Put it into the <code>plugins</code> directory of the server.</p>
 <tr><th>Setting</th><th>Default</th><th>Description</th></tr>
 </thead>
 <tbody>
-<tr><td><code>other.editableSignColors</code></td><td><code>true</code></td><td>Show existing color and formatting codes when editing a sign. Restart after changing this setting.</td></tr>
+<tr><td><code>other.editableSignColors</code></td><td><code>true</code></td><td>Show existing color and formatting codes when editing a sign.</td></tr>
 <tr><td><code>other.updateCheck</code></td><td><code>true</code></td><td>Check for plugin updates on startup.</td></tr>
 <tr><td><code>other.errorReporting</code></td><td><code>false</code></td><td>Enable the plugin’s error-reporting path; the current implementation logs errors rather than sending them to an external service.</td></tr>
 <tr><td><code>other.debug</code></td><td><code>false</code></td><td>Enable more verbose log messages.</td></tr>
-<tr><td><code>other.configVersion</code></td><td><code>7</code></td><td>Internal configuration version; do not change it manually.</td></tr>
+<tr><td><code>other.configVersion</code></td><td><code>8</code></td><td>Internal configuration version; do not change it manually.</td></tr>
 </tbody>
 </table>
 </div>
@@ -300,6 +301,12 @@ Put it into the <code>plugins</code> directory of the server.</p>
 <p>When <code>crafting.enabled</code> is <code>true</code> (the default), use a colored sign obtained from the recipe, a buy sign, or <code>/sc givesign</code>. Players with <code>signcolors.bypass.crafting</code> can use ordinary signs. When crafting is disabled, ordinary signs work for everyone who has the relevant color or formatting permissions.</p>
 <p>When editing a sign that meets the crafting requirement, existing legacy color and formatting codes are shown using the configured prefix, including codes you cannot apply. On save, codes without permission remain visible as literal text. Codes are reconstructed from the sign’s formatting, so they may not exactly match the original input. Signs with hex colors are not converted to editable codes. Visible codes take up space, so long lines may need shortening. Disable this feature with <code>other.editableSignColors</code>.</p>
 <p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/colors_and_formats_preview.png" alt="Color and formatting preview"><span class="img-wrapper"><img src="images/colors_and_formats_preview.png" alt="Color and formatting preview"></span></label></p>
+<h2 id="crafting-a-colored-sign"><a class="header" href="#crafting-a-colored-sign">Crafting a colored sign</a></h2>
+<p>By default, craft a colored sign using one sign and one each of red, green, blue, and yellow dye. Place the sign in the center of a crafting table, with red and green dye in the top corners and blue and yellow dye in the bottom corners:</p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/sign_crafting_shaped.png" alt="Shaped colored sign recipe with a sign in the center and four dyes in the corners"><span class="img-wrapper"><img src="images/sign_crafting_shaped.png" alt="Shaped colored sign recipe with a sign in the center and four dyes in the corners"></span></label></p>
+<p>If the server is configured to use a <strong>shapeless</strong> recipe with the same ingredients, place them anywhere in the crafting grid instead:</p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/sign_crafting_shapeless.png" alt="Shapeless colored sign recipe with a sign and four dyes arranged in the crafting grid"><span class="img-wrapper"><img src="images/sign_crafting_shapeless.png" alt="Shapeless colored sign recipe with a sign and four dyes arranged in the crafting grid"></span></label></p>
+<p>The server’s configured recipe determines the ingredients, arrangement, and output amount. With the default <code>ANY_SIGN</code> ingredient, regular and hanging signs are supported and the result matches the input sign type. See <a href="#crafting">Crafting configuration</a> for details. You still need the relevant <a href="#permissions">permissions</a> to apply colors and formatting.</p>
 <h2 id="creating-a-buy-sign"><a class="header" href="#creating-a-buy-sign">Creating a buy sign</a></h2>
 <p>A player with <code>signcolors.buysign.create</code> can create a sign with these lines:</p>
 <div class="table-wrapper">
@@ -315,9 +322,16 @@ Put it into the <code>plugins</code> directory of the server.</p>
 </tbody>
 </table>
 </div>
-<p>Leave line 2 or 3 blank to use its configured default. The amount must be a positive integer, and the price must be positive and finite. For a hanging sign, append <code>_H</code> to the wood type (for example, <code>OAK_H</code> or <code>DARK_OAK_H</code>). Full material names such as <code>OAK_HANGING_SIGN</code>, or names without <code>_SIGN</code> such as <code>OAK_HANGING</code>, are also accepted if they fit. Existing buy signs with full material names continue to work. The plugin formats and waxes the completed sign.</p>
-<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/sc_sign_before.png" alt="Buy sign before creation"><span class="img-wrapper"><img src="images/sc_sign_before.png" alt="Buy sign before creation"></span></label>
-<label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/sc_sign_after.png" alt="Buy sign after creation"><span class="img-wrapper"><img src="images/sc_sign_after.png" alt="Buy sign after creation"></span></label></p>
+<p>Leave line 2 or 3 blank to use its configured default. Spaces around the colon on line 2 are optional: <code>10:100</code> and <code>10 : 100</code> are equivalent. The amount must be a positive integer, and the price must be positive and finite. For a hanging sign, append <code>_H</code> to the wood type (for example, <code>OAK_H</code> or <code>DARK_OAK_H</code>). Full material names such as <code>OAK_HANGING_SIGN</code>, or names without <code>_SIGN</code> such as <code>OAK_HANGING</code>, are also accepted if they fit. Existing buy signs with full material names continue to work. The plugin formats and waxes the completed sign.</p>
+<h3 id="standing-sign-example"><a class="header" href="#standing-sign-example">Standing sign example</a></h3>
+<p>This example sells 10 regular oak signs for 100. Enter <code>[SignColors]</code>, <code>10:100</code>, and <code>OAK</code> on the first three lines:</p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/sc_sign_before_standing.png" alt="Standing buy sign before creation, showing the sign editor"><span class="img-wrapper"><img src="images/sc_sign_before_standing.png" alt="Standing buy sign before creation, showing the sign editor"></span></label></p>
+<p>After creation, the plugin displays the sign type, amount, and price:</p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/sc_sign_after_standing.png" alt="Completed standing buy sign selling regular oak signs"><span class="img-wrapper"><img src="images/sc_sign_after_standing.png" alt="Completed standing buy sign selling regular oak signs"></span></label></p>
+<h3 id="hanging-sign-example"><a class="header" href="#hanging-sign-example">Hanging sign example</a></h3>
+<p>Use the shorter <code>[SC]</code> header on a hanging sign. This example sells 10 oak hanging signs for 100 using <code>OAK_H</code>:</p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/sc_sign_before_hanging.png" alt="Hanging buy sign before creation, showing the sign editor"><span class="img-wrapper"><img src="images/sc_sign_before_hanging.png" alt="Hanging buy sign before creation, showing the sign editor"></span></label></p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/sc_sign_after_hanging.png" alt="Completed hanging buy sign selling oak hanging signs"><span class="img-wrapper"><img src="images/sc_sign_after_hanging.png" alt="Completed hanging buy sign selling oak hanging signs"></span></label></p>
 <p>Players with <code>signcolors.buysign.use</code> can right-click it to buy colored signs. Purchases require Vault and a compatible economy provider. The configured amount, price, and material can differ from the examples above.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="commands"><a class="header" href="#commands">Commands</a></h1>
@@ -339,6 +353,33 @@ Put it into the <code>plugins</code> directory of the server.</p>
 <p>For example: <code>/sc givesign Alex 4 OAK_SIGN</code> or <code>/sc givesign Alex 4 OAK_HANGING_SIGN</code>.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="permissions"><a class="header" href="#permissions">Permissions</a></h1>
+<h2 id="example-permission-packages"><a class="header" href="#example-permission-packages">Example permission packages</a></h2>
+<p>These are suggestions, not built-in groups. Grant the nodes with your permission manager and adjust them to suit your server. The VIP package below assumes VIPs inherit the player package; otherwise, grant both lists to VIPs.</p>
+<h3 id="players"><a class="header" href="#players">Players</a></h3>
+<p>Give regular players a selection of colors, access to the code list, and the ability to buy colored signs:</p>
+<ul>
+<li><code>signcolors.command.info</code></li>
+<li><code>signcolors.command.help</code></li>
+<li><code>signcolors.command.codes</code></li>
+<li><code>signcolors.buysign.use</code></li>
+<li><code>signcolors.color.a</code> — green</li>
+<li><code>signcolors.color.b</code> — aqua</li>
+<li><code>signcolors.color.c</code> — red</li>
+<li><code>signcolors.color.e</code> — yellow</li>
+<li><code>signcolors.color.f</code> — white</li>
+<li><code>signcolors.formatting.r</code> — reset</li>
+</ul>
+<h3 id="vips"><a class="header" href="#vips">VIPs</a></h3>
+<p>In addition to the player package, give VIPs all colors and a few formatting options:</p>
+<ul>
+<li><code>signcolors.color.*</code> — all colors</li>
+<li><code>signcolors.formatting.l</code> — bold</li>
+<li><code>signcolors.formatting.n</code> — underline</li>
+<li><code>signcolors.formatting.o</code> — italic</li>
+</ul>
+<p>Optionally grant <code>signcolors.bypass.crafting</code> if VIPs should be able to color ordinary signs without obtaining colored signs. Grant <code>signcolors.formatting.*</code> instead of the individual formatting nodes if VIPs should also have magic and strikethrough.</p>
+<p>With the default <code>crafting.enabled: true</code>, players without the crafting bypass need colored signs from crafting, buy signs, or an administrator. Buy signs additionally require Vault and a compatible economy provider. See <a href="#usage">Usage</a> for details. Neither package grants buy-sign creation, administrative commands, or the blocked-line bypass; reserve those for trusted staff.</p>
+<h2 id="permission-reference"><a class="header" href="#permission-reference">Permission reference</a></h2>
 <div class="table-wrapper">
 <table>
 <thead>
@@ -360,7 +401,7 @@ Put it into the <code>plugins</code> directory of the server.</p>
 <tr><td><code>signcolors.buysign.use</code></td><td>Use <code>[SC]</code> buy signs</td></tr>
 <tr><td><code>signcolors.bypass.crafting</code></td><td>Apply codes to ordinary signs when crafting is required</td></tr>
 <tr><td><code>signcolors.bypass.blockedfirstlines</code></td><td>Bypass blocked sign lines</td></tr>
-<tr><td><code>signcolors.updatemessage</code></td><td>Get a notification when joining, as soon as an update is available</td></tr>
+<tr><td><code>signcolors.updatemessage</code></td><td>Receive a notification on joining when an update is available</td></tr>
 <tr><td><code>signcolors.color.0</code></td><td>Access to <em>BLACK</em> color: <code>&amp;0</code></td></tr>
 <tr><td><code>signcolors.color.1</code></td><td>Access to <em>DARK BLUE</em> color: <code>&amp;1</code></td></tr>
 <tr><td><code>signcolors.color.2</code></td><td>Access to <em>DARK GREEN</em> color: <code>&amp;2</code></td></tr>
@@ -389,15 +430,13 @@ Put it into the <code>plugins</code> directory of the server.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="languages"><a class="header" href="#languages">Languages</a></h1>
 <p>The plugin comes with built-in <em>English</em> and <em>German</em> translations. More can be added manually.</p>
-<p>Bundled translations have a <code>translation.version</code> key. When a newer bundled version is installed, SignColors backs up the existing file in the <code>translations</code> folder (with a <code>.bak</code> suffix) and replaces it with the new version on startup or <code>/sc reload</code>. Existing unversioned bundled files are also backed up and replaced. Copy any customizations back from the backup if needed. Custom language files are not replaced by this translation update process.</p>
+<p>Bundled translations have a <code>translation.version</code> key. When a newer bundled version is installed, SignColors backs up the existing file in the <code>translations</code> folder (with a <code>.bak</code> suffix) and replaces it with the new version on startup or <code>/sc reload</code>. Existing unversioned bundled files are also backed up and replaced. Copy any customizations back from the backup if needed. Custom language files are not replaced by this translation update process. Configuration version upgrades only back up and replace <code>config.yml</code>; see <a href="#configuration">Configuration</a>.</p>
 <h2 id="adding-a-custom-language"><a class="header" href="#adding-a-custom-language">Adding a custom language</a></h2>
 <ol>
-<li>Copy the <code>en_US.properties</code> in the <code>translations</code> folder
-and name it after your language (e.g. <code>fr.properties</code>).</li>
-<li>Adjust the translation values within the file.</li>
-<li>Set the <code>language</code> key in the <code>config.yml</code> to your language file code
-(e.g. <code>fr</code> from the example above).</li>
-<li>Reload the plugin or restart the server to make use of the new translations.</li>
+<li>Copy <code>en_US.properties</code> in the <code>translations</code> folder and name the copy after your language (for example, <code>fr.properties</code>).</li>
+<li>Adjust the translation values in the file.</li>
+<li>Set the <code>language</code> key in <code>config.yml</code> to your language file code (for example, <code>fr</code>).</li>
+<li>Reload the plugin or restart the server to use the new translations.</li>
 </ol>
 
                     </main>

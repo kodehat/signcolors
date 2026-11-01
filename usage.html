@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-07740749.js";
+            window.path_to_searchindex_js = "searchindex-673a845c.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-77ff322c.js"></script>
@@ -180,6 +180,12 @@
 <p>When <code>crafting.enabled</code> is <code>true</code> (the default), use a colored sign obtained from the recipe, a buy sign, or <code>/sc givesign</code>. Players with <code>signcolors.bypass.crafting</code> can use ordinary signs. When crafting is disabled, ordinary signs work for everyone who has the relevant color or formatting permissions.</p>
 <p>When editing a sign that meets the crafting requirement, existing legacy color and formatting codes are shown using the configured prefix, including codes you cannot apply. On save, codes without permission remain visible as literal text. Codes are reconstructed from the sign’s formatting, so they may not exactly match the original input. Signs with hex colors are not converted to editable codes. Visible codes take up space, so long lines may need shortening. Disable this feature with <code>other.editableSignColors</code>.</p>
 <p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/colors_and_formats_preview.png" alt="Color and formatting preview"><span class="img-wrapper"><img src="images/colors_and_formats_preview.png" alt="Color and formatting preview"></span></label></p>
+<h2 id="crafting-a-colored-sign"><a class="header" href="#crafting-a-colored-sign">Crafting a colored sign</a></h2>
+<p>By default, craft a colored sign using one sign and one each of red, green, blue, and yellow dye. Place the sign in the center of a crafting table, with red and green dye in the top corners and blue and yellow dye in the bottom corners:</p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/sign_crafting_shaped.png" alt="Shaped colored sign recipe with a sign in the center and four dyes in the corners"><span class="img-wrapper"><img src="images/sign_crafting_shaped.png" alt="Shaped colored sign recipe with a sign in the center and four dyes in the corners"></span></label></p>
+<p>If the server is configured to use a <strong>shapeless</strong> recipe with the same ingredients, place them anywhere in the crafting grid instead:</p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/sign_crafting_shapeless.png" alt="Shapeless colored sign recipe with a sign and four dyes arranged in the crafting grid"><span class="img-wrapper"><img src="images/sign_crafting_shapeless.png" alt="Shapeless colored sign recipe with a sign and four dyes arranged in the crafting grid"></span></label></p>
+<p>The server’s configured recipe determines the ingredients, arrangement, and output amount. With the default <code>ANY_SIGN</code> ingredient, regular and hanging signs are supported and the result matches the input sign type. See <a href="configuration.html#crafting">Crafting configuration</a> for details. You still need the relevant <a href="permissions.html">permissions</a> to apply colors and formatting.</p>
 <h2 id="creating-a-buy-sign"><a class="header" href="#creating-a-buy-sign">Creating a buy sign</a></h2>
 <p>A player with <code>signcolors.buysign.create</code> can create a sign with these lines:</p>
 <div class="table-wrapper">
@@ -195,9 +201,16 @@
 </tbody>
 </table>
 </div>
-<p>Leave line 2 or 3 blank to use its configured default. The amount must be a positive integer, and the price must be positive and finite. For a hanging sign, append <code>_H</code> to the wood type (for example, <code>OAK_H</code> or <code>DARK_OAK_H</code>). Full material names such as <code>OAK_HANGING_SIGN</code>, or names without <code>_SIGN</code> such as <code>OAK_HANGING</code>, are also accepted if they fit. Existing buy signs with full material names continue to work. The plugin formats and waxes the completed sign.</p>
-<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/sc_sign_before.png" alt="Buy sign before creation"><span class="img-wrapper"><img src="images/sc_sign_before.png" alt="Buy sign before creation"></span></label>
-<label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/sc_sign_after.png" alt="Buy sign after creation"><span class="img-wrapper"><img src="images/sc_sign_after.png" alt="Buy sign after creation"></span></label></p>
+<p>Leave line 2 or 3 blank to use its configured default. Spaces around the colon on line 2 are optional: <code>10:100</code> and <code>10 : 100</code> are equivalent. The amount must be a positive integer, and the price must be positive and finite. For a hanging sign, append <code>_H</code> to the wood type (for example, <code>OAK_H</code> or <code>DARK_OAK_H</code>). Full material names such as <code>OAK_HANGING_SIGN</code>, or names without <code>_SIGN</code> such as <code>OAK_HANGING</code>, are also accepted if they fit. Existing buy signs with full material names continue to work. The plugin formats and waxes the completed sign.</p>
+<h3 id="standing-sign-example"><a class="header" href="#standing-sign-example">Standing sign example</a></h3>
+<p>This example sells 10 regular oak signs for 100. Enter <code>[SignColors]</code>, <code>10:100</code>, and <code>OAK</code> on the first three lines:</p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/sc_sign_before_standing.png" alt="Standing buy sign before creation, showing the sign editor"><span class="img-wrapper"><img src="images/sc_sign_before_standing.png" alt="Standing buy sign before creation, showing the sign editor"></span></label></p>
+<p>After creation, the plugin displays the sign type, amount, and price:</p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/sc_sign_after_standing.png" alt="Completed standing buy sign selling regular oak signs"><span class="img-wrapper"><img src="images/sc_sign_after_standing.png" alt="Completed standing buy sign selling regular oak signs"></span></label></p>
+<h3 id="hanging-sign-example"><a class="header" href="#hanging-sign-example">Hanging sign example</a></h3>
+<p>Use the shorter <code>[SC]</code> header on a hanging sign. This example sells 10 oak hanging signs for 100 using <code>OAK_H</code>:</p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/sc_sign_before_hanging.png" alt="Hanging buy sign before creation, showing the sign editor"><span class="img-wrapper"><img src="images/sc_sign_before_hanging.png" alt="Hanging buy sign before creation, showing the sign editor"></span></label></p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/sc_sign_after_hanging.png" alt="Completed hanging buy sign selling oak hanging signs"><span class="img-wrapper"><img src="images/sc_sign_after_hanging.png" alt="Completed hanging buy sign selling oak hanging signs"></span></label></p>
 <p>Players with <code>signcolors.buysign.use</code> can right-click it to buy colored signs. Purchases require Vault and a compatible economy provider. The configured amount, price, and material can differ from the examples above.</p>
 
                     </main>

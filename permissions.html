@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-07740749.js";
+            window.path_to_searchindex_js = "searchindex-673a845c.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-77ff322c.js"></script>
@@ -175,6 +175,33 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="permissions"><a class="header" href="#permissions">Permissions</a></h1>
+<h2 id="example-permission-packages"><a class="header" href="#example-permission-packages">Example permission packages</a></h2>
+<p>These are suggestions, not built-in groups. Grant the nodes with your permission manager and adjust them to suit your server. The VIP package below assumes VIPs inherit the player package; otherwise, grant both lists to VIPs.</p>
+<h3 id="players"><a class="header" href="#players">Players</a></h3>
+<p>Give regular players a selection of colors, access to the code list, and the ability to buy colored signs:</p>
+<ul>
+<li><code>signcolors.command.info</code></li>
+<li><code>signcolors.command.help</code></li>
+<li><code>signcolors.command.codes</code></li>
+<li><code>signcolors.buysign.use</code></li>
+<li><code>signcolors.color.a</code> — green</li>
+<li><code>signcolors.color.b</code> — aqua</li>
+<li><code>signcolors.color.c</code> — red</li>
+<li><code>signcolors.color.e</code> — yellow</li>
+<li><code>signcolors.color.f</code> — white</li>
+<li><code>signcolors.formatting.r</code> — reset</li>
+</ul>
+<h3 id="vips"><a class="header" href="#vips">VIPs</a></h3>
+<p>In addition to the player package, give VIPs all colors and a few formatting options:</p>
+<ul>
+<li><code>signcolors.color.*</code> — all colors</li>
+<li><code>signcolors.formatting.l</code> — bold</li>
+<li><code>signcolors.formatting.n</code> — underline</li>
+<li><code>signcolors.formatting.o</code> — italic</li>
+</ul>
+<p>Optionally grant <code>signcolors.bypass.crafting</code> if VIPs should be able to color ordinary signs without obtaining colored signs. Grant <code>signcolors.formatting.*</code> instead of the individual formatting nodes if VIPs should also have magic and strikethrough.</p>
+<p>With the default <code>crafting.enabled: true</code>, players without the crafting bypass need colored signs from crafting, buy signs, or an administrator. Buy signs additionally require Vault and a compatible economy provider. See <a href="usage.html">Usage</a> for details. Neither package grants buy-sign creation, administrative commands, or the blocked-line bypass; reserve those for trusted staff.</p>
+<h2 id="permission-reference"><a class="header" href="#permission-reference">Permission reference</a></h2>
 <div class="table-wrapper">
 <table>
 <thead>
@@ -196,7 +223,7 @@
 <tr><td><code>signcolors.buysign.use</code></td><td>Use <code>[SC]</code> buy signs</td></tr>
 <tr><td><code>signcolors.bypass.crafting</code></td><td>Apply codes to ordinary signs when crafting is required</td></tr>
 <tr><td><code>signcolors.bypass.blockedfirstlines</code></td><td>Bypass blocked sign lines</td></tr>
-<tr><td><code>signcolors.updatemessage</code></td><td>Get a notification when joining, as soon as an update is available</td></tr>
+<tr><td><code>signcolors.updatemessage</code></td><td>Receive a notification on joining when an update is available</td></tr>
 <tr><td><code>signcolors.color.0</code></td><td>Access to <em>BLACK</em> color: <code>&amp;0</code></td></tr>
 <tr><td><code>signcolors.color.1</code></td><td>Access to <em>DARK BLUE</em> color: <code>&amp;1</code></td></tr>
 <tr><td><code>signcolors.color.2</code></td><td>Access to <em>DARK GREEN</em> color: <code>&amp;2</code></td></tr>
