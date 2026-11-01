@@ -64,13 +64,16 @@ class SignColorParsingTest {
   }
 
   @Test
-  fun editableFormattingRequiresAllPermissions() {
-    val lines = arrayOf("§aGreen", "§lBold", "plain", "")
-    assertEquals(true, SignListener.canEditFormatting(lines) { true })
-    assertEquals(false, SignListener.canEditFormatting(lines) { it != 10 })
-    assertEquals(false, SignListener.canEditFormatting(lines) { it != 17 })
-    assertEquals(true, SignListener.canEditFormatting(arrayOf("plain §z")) { false })
-    assertEquals(false, SignListener.canEditFormatting(arrayOf("§x§a§b§c§d§e§fHex")) { true })
+  fun editingPreservesUnauthorizedCodesAsLiteralText() {
+    val lines = arrayOf("§aGreen §lBold", "§cRed", "plain", "")
+    assertEquals(true, SignListener.canEditFormatting(lines))
+    val saved =
+      lines.map { line ->
+        val editable = SignListener.editableSignLine(line, "&")
+        SignListener.colorSignLine(editable, "&") { index -> index == 10 }
+      }
+    assertEquals(listOf("§aGreen &lBold", "&cRed", "plain", ""), saved)
+    assertEquals(false, SignListener.canEditFormatting(arrayOf("§x§a§b§c§d§e§fHex")))
   }
 
   @Test

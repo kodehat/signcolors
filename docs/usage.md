@@ -6,7 +6,7 @@ Write the configured prefix (default `&`) followed by a code before the text, fo
 
 When `crafting.enabled` is `true` (the default), use a colored sign obtained from the recipe, a buy sign, or `/sc givesign`. Players with `signcolors.bypass.crafting` can use ordinary signs. When crafting is disabled, ordinary signs work for everyone who has the relevant color or formatting permissions.
 
-When editing a sign, existing legacy color and formatting codes are shown using the configured prefix. Codes are reconstructed from the sign's formatting, so they may not exactly match the original input. The editor shows codes only if you can apply every existing code and the sign meets the crafting requirement. Visible codes take up space, so long lines may need shortening. Disable this feature with `other.editableSignColors`.
+When editing a sign that meets the crafting requirement, existing legacy color and formatting codes are shown using the configured prefix, including codes you cannot apply. On save, codes without permission remain visible as literal text. Codes are reconstructed from the sign's formatting, so they may not exactly match the original input. Signs with hex colors are not converted to editable codes. Visible codes take up space, so long lines may need shortening. Disable this feature with `other.editableSignColors`.
 
 ![Color and formatting preview](images/colors_and_formats_preview.png)
 

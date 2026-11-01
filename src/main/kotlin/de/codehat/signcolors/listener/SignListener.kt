@@ -92,17 +92,9 @@ class SignListener(
         prefix + match.groupValues[1]
       }
 
-    internal fun canEditFormatting(
-      lines: Array<String>,
-      hasPermission: (Int) -> Boolean,
-    ): Boolean =
-      lines.all { line ->
-        // Hex colors cannot be round-tripped by the legacy code parser.
-        !line.contains("§x", ignoreCase = true) &&
-          LEGACY_CODE.findAll(line).all { match ->
-            hasPermission(ALL_COLOR_CODES.indexOf(match.groupValues[1][0].lowercaseChar()))
-          }
-      }
+    internal fun canEditFormatting(lines: Array<String>): Boolean =
+      // Hex colors cannot be round-tripped by the legacy code parser.
+      lines.none { it.contains("§x", ignoreCase = true) }
 
     private fun checkColorPermissions(
       player: Player,
@@ -173,8 +165,7 @@ class SignListener(
 
     val side = sign.getSide(event.side)
     val lines = side.lines
-    // Do not turn existing formatting into codes the player cannot apply again.
-    if (!canEditFormatting(lines) { checkColorPermissions(player, it) }) return
+    if (!canEditFormatting(lines)) return
     val editable = lines.map { editableSignLine(it, plugin.pluginConfig.getPrefixCharacter()) }
     if (editable == lines.toList()) return
 
