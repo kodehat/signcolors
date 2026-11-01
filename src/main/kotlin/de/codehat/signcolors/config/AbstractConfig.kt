@@ -38,7 +38,7 @@ abstract class AbstractConfig<T : IFileConfiguration<V>, V, K>(
   }
 
   override fun reload() {
-    load(true)
+    cfgData = load(true)
   }
 
   override fun getFileName(): String = file.name.substring(0, file.name.lastIndexOf("."))

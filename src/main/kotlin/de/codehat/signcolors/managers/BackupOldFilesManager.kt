@@ -4,34 +4,46 @@ package de.codehat.signcolors.managers
 
 import de.codehat.signcolors.SignColors
 import de.codehat.signcolors.manager.Manager
-import java.io.BufferedInputStream
 import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.util.zip.ZipEntry
-import java.util.zip.ZipOutputStream
-import kotlin.io.path.name
+import java.io.InputStream
+import java.nio.file.AtomicMoveNotSupportedException
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 
 class BackupOldFilesManager(
   plugin: SignColors,
 ) : Manager(plugin) {
   companion object {
     const val CONFIG_VERSION = 8
-    private const val BUFFER_SIZE = 1024
 
-    private fun addToZipFile(
-      file: File,
-      zos: ZipOutputStream,
-    ) {
-      val bis = BufferedInputStream(FileInputStream(file))
-      val zipEntry = ZipEntry(file.name)
+    internal fun backupConfig(
+      dataFolder: File,
+      installedVersion: Int,
+      bundled: InputStream,
+    ): File {
+      val bundledBytes = bundled.use { it.readBytes() }
+      val directory = dataFolder.toPath()
+      val config = directory.resolve("config.yml")
+      val backup = Files.createTempFile(directory, "config.yml.v$installedVersion-", ".bak")
+      try {
+        Files.copy(config, backup, StandardCopyOption.REPLACE_EXISTING)
+      } catch (e: Exception) {
+        Files.deleteIfExists(backup)
+        throw e
+      }
 
-      zos.putNextEntry(zipEntry)
-
-      bis.copyTo(zos, BUFFER_SIZE)
-
-      zos.closeEntry()
-      bis.close()
+      val replacement = Files.createTempFile(directory, ".config-", ".tmp")
+      try {
+        Files.write(replacement, bundledBytes)
+        try {
+          Files.move(replacement, config, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING)
+        } catch (_: AtomicMoveNotSupportedException) {
+          Files.move(replacement, config, StandardCopyOption.REPLACE_EXISTING)
+        }
+      } finally {
+        Files.deleteIfExists(replacement)
+      }
+      return backup.toFile()
     }
   }
 
@@ -43,7 +55,7 @@ class BackupOldFilesManager(
     when {
       plugin.pluginConfig.getConfigVersion() == 0 -> {
         plugin.logger.info(
-          "No config version code found! Making a backup of all old files now.",
+          "No config version code found! Making a backup of the old config now.",
         )
         doBackup()
       }
@@ -62,32 +74,8 @@ class BackupOldFilesManager(
   }
 
   private fun doBackup() {
-    val dataFolder = plugin.dataFolder
-    val backupZipName = "backup-${System.currentTimeMillis()}.zip"
-    val fos = FileOutputStream(File(dataFolder, backupZipName))
-    val zos = ZipOutputStream(fos)
-
-    // Add all .yml files to the .zip file.
-    dataFolder
-      .walkTopDown()
-      .filter { file -> file.name.matches(".*\\.(ya?ml|properties)$".toRegex()) }
-      .forEach {
-        plugin.logger.info("Backing up '${it.name}'")
-        addToZipFile(it, zos)
-      }
-
-    zos.close()
-    fos.close()
-
-    // Now delete all old files.
-    dataFolder
-      .walkTopDown()
-      .filter { file -> file.name.matches(".*\\.(ya?ml|properties)$".toRegex()) }
-      .forEach {
-        plugin.logger.info("Deleting old '${it.name}'")
-        it.delete()
-      }
-
-    plugin.logger.info("Created backup file '$backupZipName' in the plugin's data folder!")
+    val bundled = requireNotNull(plugin.getResource("config.yml")) { "Missing bundled config.yml" }
+    val backup = backupConfig(plugin.dataFolder, plugin.pluginConfig.getConfigVersion() ?: 0, bundled)
+    plugin.logger.info("Created config backup '${backup.name}' in the plugin's data folder!")
   }
 }

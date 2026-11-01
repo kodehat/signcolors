@@ -2,7 +2,7 @@
 
 After the first server start, edit `plugins/SignColors/config.yml`. Apply changes with `/sc reload` (requires `signcolors.command.reload`) or restart the server. See [Languages](languages.md) for translation files.
 
-When the configuration version is outdated, SignColors backs up YAML and properties files from its data folder to a `backup-<timestamp>.zip` file and removes the originals on startup. Default files are regenerated; restore custom settings and custom language files from the backup as needed.
+When the configuration version is outdated, SignColors backs up `config.yml` to a `config.yml.v<version>-*.bak` file and replaces it with the default configuration on startup. Restore custom settings from the backup as needed. Other files are not included in this backup; see [Languages](languages.md) for translation updates.
 
 ## General settings
 
