@@ -142,7 +142,7 @@ class SignListener(
           SIGN_LINE_SECOND_INDEX,
           SignUtil.buySignMaterialName(signType),
         )
-        setLine(SIGN_LINE_THIRD_INDEX, "&8$amount : $price".color())
+        setLine(SIGN_LINE_THIRD_INDEX, "&e$amount : $price".color())
         setLine(
           SIGN_LINE_LAST_INDEX,
           plugin.getTranslation()?.t(TranslationConfigKey.BUYSIGN_LINE_FOUR),
