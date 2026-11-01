@@ -6,18 +6,24 @@ on:
       - 'config/**'
       - 'src/**'
       - 'pom.xml'
+      - '.github/workflows/maven.yml'
   pull_request:
     paths:
       - 'config/**'
       - 'src/**'
       - 'pom.xml'
+      - '.github/workflows/maven.yml'
 
 permissions:
   contents: read
+  actions: write
 
 jobs:
   build:
     runs-on: ubuntu-26.04
+    concurrency:
+      group: maven-${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -31,3 +37,35 @@ jobs:
 
       - name: Build and test
         run: mvn --batch-mode --no-transfer-progress clean verify
+
+      - name: Upload snapshot
+        id: snapshot
+        if: github.event_name == 'push' && github.ref_name == github.event.repository.default_branch
+        uses: actions/upload-artifact@v4
+        with:
+          name: signcolors-snapshot
+          path: target/signcolors-*-SNAPSHOT.jar
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Remove older snapshots
+        if: github.event_name == 'push' && github.ref_name == github.event.repository.default_branch
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const artifacts = await github.paginate(github.rest.actions.listArtifactsForRepo, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'signcolors-snapshot',
+              per_page: 100,
+            });
+            const currentId = Number('${{ steps.snapshot.outputs.artifact-id }}');
+            for (const artifact of artifacts) {
+              if (artifact.id !== currentId) {
+                await github.rest.actions.deleteArtifact({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  artifact_id: artifact.id,
+                });
+              }
+            }
