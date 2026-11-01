@@ -39,7 +39,6 @@ jobs:
         run: mvn --batch-mode --no-transfer-progress clean verify
 
       - name: Upload snapshot
-        id: snapshot
         if: github.event_name == 'push' && github.ref_name == github.event.repository.default_branch
         uses: actions/upload-artifact@v4
         with:
@@ -59,13 +58,13 @@ jobs:
               name: 'signcolors-snapshot',
               per_page: 100,
             });
-            const currentId = Number('${{ steps.snapshot.outputs.artifact-id }}');
-            for (const artifact of artifacts) {
-              if (artifact.id !== currentId) {
-                await github.rest.actions.deleteArtifact({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  artifact_id: artifact.id,
-                });
-              }
+            const snapshots = artifacts
+              .filter(artifact => !artifact.expired)
+              .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at) || b.id - a.id);
+            for (const artifact of snapshots.slice(5)) {
+              await github.rest.actions.deleteArtifact({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                artifact_id: artifact.id,
+              });
             }
