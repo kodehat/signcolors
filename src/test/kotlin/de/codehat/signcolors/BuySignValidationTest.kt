@@ -4,10 +4,20 @@ package de.codehat.signcolors
 
 import de.codehat.signcolors.listener.SignListener
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class BuySignValidationTest {
+  @Test
+  fun acceptsBothBuySignHeaders() {
+    assertTrue(SignListener.isBuySignHeader("[SignColors]"))
+    assertTrue(SignListener.isBuySignHeader("[sc]"))
+    assertFalse(SignListener.isBuySignHeader("[Buy]"))
+    assertFalse(SignListener.isBuySignHeader(null))
+  }
+
   @Test
   fun acceptsValidInputAndDefaults() {
     assertEquals(10 to 100.0, SignListener.parseBuySignAmountPrice("", 10, 100.0))

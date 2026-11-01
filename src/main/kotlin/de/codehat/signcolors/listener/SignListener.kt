@@ -5,6 +5,7 @@ package de.codehat.signcolors.listener
 import de.codehat.signcolors.SignColors
 import de.codehat.signcolors.configs.TranslationConfigKey
 import de.codehat.signcolors.permission.Permissions
+import de.codehat.signcolors.util.SignUtil
 import de.codehat.signcolors.util.SoundUtil
 import de.codehat.signcolors.util.color
 import de.codehat.signcolors.util.hasPermission
@@ -36,12 +37,14 @@ class SignListener(
   companion object {
     private const val ALL_COLOR_CODES = "0123456789abcdefklmnor"
     private val LEGACY_CODE = Regex("§([0-9a-fk-or])", RegexOption.IGNORE_CASE)
-    private const val SPECIAL_SIGN_LINE = "[SignColors]"
+    private val SPECIAL_SIGN_LINES = setOf("[SignColors]", "[SC]")
     const val SPECIAL_SIGN_INDICATOR = "&6[&3SC&6]"
     private const val SIGN_LINE_FIRST_INDEX = 0
     private const val SIGN_LINE_SECOND_INDEX = 1
     private const val SIGN_LINE_THIRD_INDEX = 2
     private const val SIGN_LINE_LAST_INDEX = 3
+
+    internal fun isBuySignHeader(line: String?): Boolean = SPECIAL_SIGN_LINES.any { it.equals(line, ignoreCase = true) }
 
     private fun applyColorsOnSign(
       colorCharacter: String,
@@ -137,7 +140,7 @@ class SignListener(
         setLine(SIGN_LINE_FIRST_INDEX, SPECIAL_SIGN_INDICATOR.color())
         setLine(
           SIGN_LINE_SECOND_INDEX,
-          signType.name,
+          SignUtil.buySignMaterialName(signType),
         )
         setLine(SIGN_LINE_THIRD_INDEX, "&8$amount : $price".color())
         setLine(
@@ -243,7 +246,7 @@ class SignListener(
   fun onSpecialSignCreate(event: SignChangeEvent) {
     val player = event.player
 
-    if (event.getLine(0).equals(SPECIAL_SIGN_LINE, true) && player.hasPermission(Permissions.BUY_SIGN_CREATE)) {
+    if (isBuySignHeader(event.getLine(0)) && player.hasPermission(Permissions.BUY_SIGN_CREATE)) {
       val amountPrice =
         parseBuySignAmountPrice(
           event.getLine(1).orEmpty(),
@@ -260,7 +263,7 @@ class SignListener(
         event.getLine(2).orEmpty().trim().ifEmpty {
           plugin.pluginConfig.getBuySignSignType().orEmpty()
         }
-      val signType = Material.getMaterial(typeName)
+      val signType = SignUtil.parseBuySignMaterial(typeName)
       if (signType == null || signType !in plugin.coloredSignManager.coloredSignStacks) {
         plugin.sendLogoMessage(player, TranslationConfigKey.ERROR_BUYSIGN_INVALID_SIGN_TYPE)
         event.isCancelled = true

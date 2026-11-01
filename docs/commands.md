@@ -10,4 +10,4 @@
 | `/sc givesign [player] [amount] [sign_material]` | `signcolors.command.give` | Give an online player 1–16 colored signs of a supported material, such as `OAK_SIGN`. Material names are case-insensitive. |
 | `/sc codes` | `signcolors.command.codes` | Display color and formatting codes. |
 
-For example: `/sc givesign Alex 4 OAK_SIGN`.
+For example: `/sc givesign Alex 4 OAK_SIGN` or `/sc givesign Alex 4 OAK_HANGING_SIGN`.

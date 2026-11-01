@@ -6,7 +6,7 @@ SignColors is a Spigot plugin that lets players with the appropriate permissions
 
 ## Features
 
-- Players can add colors/formats to signs.
+- Players can add colors/formats to regular and hanging signs.
 - Permissions per color/format.
 - Use your own color symbol instead of `&`.
 - Possibility to craft colored signs (recipe and type are configurable).

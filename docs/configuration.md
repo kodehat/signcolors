@@ -18,7 +18,7 @@ After the first server start, edit `plugins/SignColors/config.yml`. Apply change
 | `crafting.recipeType` | `shaped` | `shaped` or `shapeless`. |
 | `crafting.signType` | `ANY_SIGN` | Result sign material when the recipe uses a specific sign ingredient. |
 | `crafting.amount` | `1` | Number of colored signs produced by the recipe. |
-| `crafting.ingredients` | See example below | Maps ingredient letters to Bukkit material names. `ANY_SIGN` makes recipes for supported sign types and returns the corresponding type. |
+| `crafting.ingredients` | See example below | Maps ingredient letters to Bukkit material names. `ANY_SIGN` makes recipes for supported regular and hanging sign types and returns the corresponding type. |
 | `crafting.shape` | See example below | Up to three rows for a shaped recipe; spaces represent empty slots. Not used for shapeless recipes. |
 
 The default recipe surrounds a sign with four dyes:
@@ -53,7 +53,7 @@ Buy signs require Vault and a Vault-compatible economy provider to make purchase
 | --- | --- | --- |
 | `buySign.amount` | `10` | Default number of colored signs sold. Must be positive. |
 | `buySign.price` | `100.0` | Default price. Must be positive and finite. |
-| `buySign.signType` | `OAK_SIGN` | Default supported sign item material. |
+| `buySign.signType` | `OAK_SIGN` | Default supported sign item material, such as `OAK_SIGN` or `OAK_HANGING_SIGN`. |
 | `buySign.blockedFirstLines` | `['&6[&3SC&6]', '&1[Buy]']` | Exact first lines blocked unless the player has `signcolors.bypass.blockedfirstlines`. Entries use `&` for color codes. |
 | `buySign.creationSound.enabled` | `true` | Play a sound after creating a buy sign. |
 | `buySign.creationSound.type` | `BLOCK_ANVIL_USE` | Bukkit sound constant or namespaced sound key. |

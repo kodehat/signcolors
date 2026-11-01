@@ -5,6 +5,7 @@ package de.codehat.signcolors.listener
 import de.codehat.signcolors.SignColors
 import de.codehat.signcolors.configs.TranslationConfigKey
 import de.codehat.signcolors.permission.Permissions
+import de.codehat.signcolors.util.SignUtil
 import de.codehat.signcolors.util.SoundUtil
 import de.codehat.signcolors.util.color
 import de.codehat.signcolors.util.hasPermission
@@ -66,7 +67,7 @@ class PlayerListener(
           val amountPriceData = ChatColor.stripColor(amountPriceLine)!!.split(":")
           val signAmount = amountPriceData.getOrNull(0)?.trim()?.toIntOrNull()
           val signPrice = amountPriceData.getOrNull(1)?.trim()?.toDoubleOrNull()
-          val signMaterial = Material.getMaterial(typeLine)
+          val signMaterial = SignUtil.parseBuySignMaterial(typeLine)
           val template = plugin.coloredSignManager.coloredSignStacks[signMaterial]
           if (
             amountPriceData.size != 2 || signAmount == null || signAmount <= 0 ||

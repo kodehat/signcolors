@@ -16,12 +16,12 @@ A player with `signcolors.buysign.create` can create a sign with these lines:
 
 | Line | Content |
 | --- | --- |
-| 1 | `[SignColors]` |
+| 1 | `[SignColors]` or `[SC]` (use `[SC]` on hanging signs) |
 | 2 | Optional: `<amount>:<price>`, for example `10:100.0` |
-| 3 | Optional: supported sign material, for example `OAK_SIGN` |
+| 3 | Optional: sign type, for example `OAK` or `OAK_H` for a hanging sign |
 | 4 | Ignored; the plugin fills this line. |
 
-Leave line 2 or 3 blank to use its configured default. The amount must be a positive integer, and the price must be positive and finite. The plugin formats and waxes the completed sign.
+Leave line 2 or 3 blank to use its configured default. The amount must be a positive integer, and the price must be positive and finite. For a hanging sign, append `_H` to the wood type (for example, `OAK_H` or `DARK_OAK_H`). Full material names such as `OAK_HANGING_SIGN`, or names without `_SIGN` such as `OAK_HANGING`, are also accepted if they fit. Existing buy signs with full material names continue to work. The plugin formats and waxes the completed sign.
 
 ![Buy sign before creation](images/sc_sign_before.png)
 ![Buy sign after creation](images/sc_sign_after.png)
