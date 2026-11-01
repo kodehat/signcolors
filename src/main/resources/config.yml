@@ -4,7 +4,9 @@
 # open a pull request at the plugin's GitHub repository.
 language: 'en_US'
 
-# The character in front of the hex code (e.g. '&6' becomes 'gold').
+# The character in front of the color code (e.g. '&6' becomes 'gold').
+# On color-enabled signs, use a backslash to escape it (e.g. '\&6' displays '&6').
+# Use '\\' for a literal backslash. If the prefix is '\', use '/' to escape instead.
 prefixCharacter: '&'
 
 # Crafting settings section.

@@ -60,7 +60,7 @@ class SignColorParsingTest {
   fun reconstructsEditableLegacyCodes() {
     assertEquals("&aGreen &lBold", SignListener.editableSignLine("§aGreen §lBold", "&"))
     assertEquals("!AUpper !rReset", SignListener.editableSignLine("§AUpper §rReset", "!"))
-    assertEquals("literal §z and &a", SignListener.editableSignLine("literal §z and &a", "&"))
+    assertEquals("literal §z and \\&a", SignListener.editableSignLine("literal §z and &a", "&"))
   }
 
   @Test
@@ -74,6 +74,33 @@ class SignColorParsingTest {
       }
     assertEquals(listOf("§aGreen &lBold", "&cRed", "plain", ""), saved)
     assertEquals(false, SignListener.canEditFormatting(arrayOf("§x§a§b§c§d§e§fHex")))
+  }
+
+  @Test
+  fun escapesLiteralPrefixesAndEscapeCharacters() {
+    assertEquals("&a literal §a green", color("\\&a literal &a green"))
+    assertEquals("&a", color("\\&a", permitted = false))
+    assertEquals("\\§a", color("\\\\&a"))
+    assertEquals("\\path", color("\\path"))
+    assertEquals("!a §a", SignListener.colorSignLine("\\!a !a", "!") { true })
+    assertEquals("\\a §a", SignListener.colorSignLine("/\\a \\a", "\\") { true })
+  }
+
+  @Test
+  fun editableLinesKeepStandaloneBackslashesReadable() {
+    for (original in listOf("\\", "\\path", "text \\ end", "\\§aGreen", "\\&a", "\\\\")) {
+      val editable = SignListener.editableSignLine(original, "&")
+      assertEquals(original, color(editable), original)
+    }
+    assertEquals("\\", SignListener.editableSignLine("\\", "&"))
+    assertEquals("\\path", SignListener.editableSignLine("\\path", "&"))
+  }
+
+  @Test
+  fun editableLinesRoundTripLiteralCodesAndBackslashes() {
+    val original = "§aGreen &a literal \\&b and \\\\"
+    val editable = SignListener.editableSignLine(original, "&")
+    assertEquals(original, color(editable))
   }
 
   @Test

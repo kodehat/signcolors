@@ -9,6 +9,8 @@ After the first server start, edit `plugins/SignColors/config.yml`. Apply change
 | `language` | `en_US` | Translation file name without `.properties`; `en_US` and `de_DE` are included. |
 | `prefixCharacter` | `&` | Prefix used before a color or formatting code, for example `&a`. Use one character. |
 
+On color-enabled signs, escape the prefix with a backslash to display it literally: `\&a` displays `&a`. Use `\\` for a literal backslash. If the configured prefix is a backslash, use `/` as the escape character instead (for example, `/\a` displays `\a` and `//` displays `/`).
+
 ## Crafting
 
 `crafting.enabled` defaults to `true`. When enabled, players need a colored sign to apply codes unless they have `signcolors.bypass.crafting`. Colored signs can be crafted, bought from an `[SC]` sign, or given with `/sc givesign`. When disabled, codes can be applied to ordinary signs; color and formatting permissions still apply.

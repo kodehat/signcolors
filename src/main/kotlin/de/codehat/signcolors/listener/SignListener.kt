@@ -36,7 +36,6 @@ class SignListener(
 
   companion object {
     private const val ALL_COLOR_CODES = "0123456789abcdefklmnor"
-    private val LEGACY_CODE = Regex("§([0-9a-fk-or])", RegexOption.IGNORE_CASE)
     private val SPECIAL_SIGN_LINES = setOf("[SignColors]", "[SC]")
     const val SPECIAL_SIGN_INDICATOR = "&6[&3SC&6]"
     private const val SIGN_LINE_FIRST_INDEX = 0
@@ -52,13 +51,6 @@ class SignListener(
       player: Player,
     ) {
       for (line in SIGN_LINE_FIRST_INDEX..SIGN_LINE_LAST_INDEX) {
-        if (
-          event.getLine(line)!!.isEmpty() ||
-          !event.getLine(line)!!.contains(colorCharacter)
-        ) {
-          continue
-        }
-
         event.setLine(
           line,
           colorSignLine(event.getLine(line)!!, colorCharacter) { color ->
@@ -73,15 +65,29 @@ class SignListener(
       colorCharacter: String,
       hasPermission: (Int) -> Boolean,
     ): String {
-      val parts = line.split(colorCharacter)
-      val result = StringBuilder(parts.first())
-      for (part in parts.drop(1)) {
-        val color = part.firstOrNull()?.lowercaseChar()?.let(ALL_COLOR_CODES::indexOf) ?: -1
-        val segment = colorCharacter + part
-        if (color >= 0 && hasPermission(color)) {
-          result.append(ChatColor.translateAlternateColorCodes(colorCharacter[0], segment))
-        } else {
-          result.append(segment)
+      val prefix = colorCharacter[0]
+      val escape = if (prefix == '\\') '/' else '\\'
+      val result = StringBuilder()
+      var index = 0
+      while (index < line.length) {
+        val current = line[index]
+        val next = line.getOrNull(index + 1)
+        val color = next?.lowercaseChar()?.let(ALL_COLOR_CODES::indexOf) ?: -1
+        when {
+          current == escape && (next == prefix || next == escape) -> {
+            result.append(next)
+            index += 2
+          }
+
+          current == prefix && color >= 0 && hasPermission(color) -> {
+            result.append('§').append(next!!.lowercaseChar())
+            index += 2
+          }
+
+          else -> {
+            result.append(current)
+            index++
+          }
         }
       }
       return result.toString()
@@ -90,10 +96,31 @@ class SignListener(
     internal fun editableSignLine(
       line: String,
       prefix: String,
-    ): String =
-      LEGACY_CODE.replace(line) { match ->
-        prefix + match.groupValues[1]
+    ): String {
+      val colorPrefix = prefix[0]
+      val escape = if (colorPrefix == '\\') '/' else '\\'
+      val result = StringBuilder()
+      var index = 0
+      while (index < line.length) {
+        val current = line[index]
+        val next = line.getOrNull(index + 1)
+        if (current == '§' && next != null && next.lowercaseChar() in ALL_COLOR_CODES) {
+          result.append(colorPrefix).append(next)
+          index += 2
+        } else {
+          val nextIsColorCode =
+            next == '§' && line.getOrNull(index + 2)?.lowercaseChar()?.let { it in ALL_COLOR_CODES } == true
+          if (current == colorPrefix ||
+            (current == escape && (next == escape || next == colorPrefix || nextIsColorCode))
+          ) {
+            result.append(escape)
+          }
+          result.append(current)
+          index++
+        }
       }
+      return result.toString()
+    }
 
     internal fun canEditFormatting(lines: Array<String>): Boolean =
       // Hex colors cannot be round-tripped by the legacy code parser.
