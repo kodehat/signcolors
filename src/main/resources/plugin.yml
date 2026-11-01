@@ -1,7 +1,7 @@
 name: SignColors
 main: de.codehat.signcolors.SignColors
-author: kodehat
-website: https://signcolors.codehat.de
+author: CodeHat
+website: https://kodehat.github.io/signcolors/
 softdepend: [ Vault ]
 description: SignColors is a Spigot plugin that brings colors and formatting to signs.
 version: 2.0.0
