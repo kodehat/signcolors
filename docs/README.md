@@ -15,4 +15,4 @@ SignColors is a Spigot plugin that lets players with the appropriate permissions
 - Colored sign identity is stored in Minecraft item and block data; marked signs retain their identity when dropped through normal block drops.
 - Configurable blocked first lines can help prevent imitation of special signs.
 - Automatically checks for updates (configurable).
-- English and German translations provided and additional can be added manually.
+- English and German translations are included; additional languages can be added manually.

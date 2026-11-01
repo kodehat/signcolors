@@ -2,6 +2,8 @@
 
 After the first server start, edit `plugins/SignColors/config.yml`. Apply changes with `/sc reload` (requires `signcolors.command.reload`) or restart the server. See [Languages](languages.md) for translation files.
 
+When the configuration version is outdated, SignColors backs up YAML and properties files from its data folder to a `backup-<timestamp>.zip` file and removes the originals on startup. Default files are regenerated; restore custom settings and custom language files from the backup as needed.
+
 ## General settings
 
 | Setting | Default | Description |
@@ -70,8 +72,8 @@ Blocked lines are compared after trimming and normalizing applied color codes to
 
 | Setting | Default | Description |
 | --- | --- | --- |
-| `other.editableSignColors` | `true` | Show existing color and formatting codes when editing a sign. Restart after changing this setting. |
+| `other.editableSignColors` | `true` | Show existing color and formatting codes when editing a sign. |
 | `other.updateCheck` | `true` | Check for plugin updates on startup. |
 | `other.errorReporting` | `false` | Enable the plugin's error-reporting path; the current implementation logs errors rather than sending them to an external service. |
 | `other.debug` | `false` | Enable more verbose log messages. |
-| `other.configVersion` | `7` | Internal configuration version; do not change it manually. |
+| `other.configVersion` | `8` | Internal configuration version; do not change it manually. |

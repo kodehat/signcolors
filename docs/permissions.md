@@ -1,5 +1,39 @@
 # Permissions
 
+## Example permission packages
+
+These are suggestions, not built-in groups. Grant the nodes with your permission manager and adjust them to suit your server. The VIP package below assumes VIPs inherit the player package; otherwise, grant both lists to VIPs.
+
+### Players
+
+Give regular players a selection of colors, access to the code list, and the ability to buy colored signs:
+
+- `signcolors.command.info`
+- `signcolors.command.help`
+- `signcolors.command.codes`
+- `signcolors.buysign.use`
+- `signcolors.color.a` — green
+- `signcolors.color.b` — aqua
+- `signcolors.color.c` — red
+- `signcolors.color.e` — yellow
+- `signcolors.color.f` — white
+- `signcolors.formatting.r` — reset
+
+### VIPs
+
+In addition to the player package, give VIPs all colors and a few formatting options:
+
+- `signcolors.color.*` — all colors
+- `signcolors.formatting.l` — bold
+- `signcolors.formatting.n` — underline
+- `signcolors.formatting.o` — italic
+
+Optionally grant `signcolors.bypass.crafting` if VIPs should be able to color ordinary signs without obtaining colored signs. Grant `signcolors.formatting.*` instead of the individual formatting nodes if VIPs should also have magic and strikethrough.
+
+With the default `crafting.enabled: true`, players without the crafting bypass need colored signs from crafting, buy signs, or an administrator. Buy signs additionally require Vault and a compatible economy provider. See [Usage](usage.md) for details. Neither package grants buy-sign creation, administrative commands, or the blocked-line bypass; reserve those for trusted staff.
+
+## Permission reference
+
 | Permission | Description |
 | --- | --- |
 | `signcolors.*` | Access to all features; granted to operators by default |
@@ -17,7 +51,7 @@
 | `signcolors.buysign.use` | Use `[SC]` buy signs |
 | `signcolors.bypass.crafting` | Apply codes to ordinary signs when crafting is required |
 | `signcolors.bypass.blockedfirstlines` | Bypass blocked sign lines |
-| `signcolors.updatemessage` | Get a notification when joining, as soon as an update is available |
+| `signcolors.updatemessage` | Receive a notification on joining when an update is available |
 | `signcolors.color.0` | Access to *BLACK* color: `&0` |
 | `signcolors.color.1` | Access to *DARK BLUE* color: `&1` |
 | `signcolors.color.2` | Access to *DARK GREEN* color: `&2` |

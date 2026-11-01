@@ -1,17 +1,16 @@
 # Installation
 
-This guide covers the initial installation and setup.
+This guide covers the initial installation and setup. The current build targets Spigot 26.3 and requires Java 25.
 
 ## Download
 
 <div class="warning">
-Make sure to download the correct version of the plugin, fitting the version of the server!
+Download a plugin version compatible with your server version.
 </div>
 
-Download the plugin's JAR file [here](https://www.spigotmc.org/resources/signcolors.6135/history).
-Put it into the `plugins` directory of the server.
+Download the plugin JAR from [SpigotMC](https://www.spigotmc.org/resources/signcolors.6135/history) or [GitHub Releases](https://github.com/kodehat/signcolors/releases). Put it in the server's `plugins` directory.
 
-## Server Start
+## Start the server
 
 Start the server. Once it has finished loading, you should find a `SignColors` folder in the `plugins` directory.
 

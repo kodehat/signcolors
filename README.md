@@ -32,6 +32,7 @@
   <a href="https://github.com/kodehat/SignColors/graphs/contributors">
     contributors
   </a>
+  </sub>
 </div>
 
 ## Table of Contents
@@ -44,18 +45,16 @@
 
 ## Features
 
-- **shiny:** apply colors and formatting on signs
-- **"no" java:** completely written in Kotlin
-- **restrict features:** high diversity of permissions
-- **storage:** colored sign identity is stored in Minecraft item and block data
+- **Colors and formatting:** customize text on signs
+- **Kotlin:** written in Kotlin for the JVM
+- **Permissions:** control access to individual features
+- **Storage:** colored sign identity is stored in Minecraft item and block data
 
 ## Installation
 
-1. Download the `signcolors-x.x.x.jar` file.
-2. Put it into the server's `plugins` folder.
-3. Start the server and stop it right after finish loading.
-4. Change the settings in `plugins/SignColors/config.yml` to your likings.
-5. Start the server again and have fun!
+1. Download the plugin JAR from [SpigotMC](https://www.spigotmc.org/resources/signcolors.6135/history) or [GitHub Releases](https://github.com/kodehat/signcolors/releases).
+2. Put it in the server's `plugins` folder and start the server.
+3. Adjust `plugins/SignColors/config.yml` as needed, then run `/sc reload` or restart the server.
 
 ## Documentation
 
