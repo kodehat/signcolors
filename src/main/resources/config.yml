@@ -130,4 +130,4 @@ other:
   debug: false
 
   # Current version of the config. DON'T TOUCH IT!!!
-  configVersion: 7
+  configVersion: 8

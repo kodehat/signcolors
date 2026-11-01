@@ -16,7 +16,7 @@ class BackupOldFilesManager(
   plugin: SignColors,
 ) : Manager(plugin) {
   companion object {
-    const val CONFIG_VERSION = 7
+    const val CONFIG_VERSION = 8
     private const val BUFFER_SIZE = 1024
 
     private fun addToZipFile(
