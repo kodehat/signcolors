@@ -5,7 +5,7 @@ website: https://kodehat.github.io/signcolors/
 softdepend: [ Vault ]
 description: SignColors is a Spigot plugin that brings colors and formatting to signs.
 version: '${project.version}'
-api-version: 1.20
+api-version: 26.3
 
 commands:
   sc:
