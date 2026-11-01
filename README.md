@@ -12,7 +12,7 @@
 
 <div align="center">
   <h3>
-    <a href="https://signcolors.codehat.de">
+    <a href="https://kodehat.github.io/signcolors/">
       Website
     </a>
     <span> | </span>
@@ -22,10 +22,6 @@
     <span> | </span>
     <a href="https://kodehat.github.io/signcolors/">
       Documentation
-    </a>
-    <span> | </span>
-    <a href="https://github.com/kodehat/SignColors/blob/master/.github/CONTRIBUTING.md">
-      Contributing
     </a>
   </h3>
 </div>
