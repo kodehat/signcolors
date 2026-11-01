@@ -207,12 +207,7 @@ class ColoredSignManager(
     val signStackLore =
       arrayListOf((plugin.getTranslation()?.t(TranslationConfigKey.BUYSIGN_LORE))?.color())
 
-    with(signStackMeta) {
-      this?.setDisplayName(
-        (plugin.getTranslation()?.t(TranslationConfigKey.BUYSIGN_NAME))?.color(),
-      )
-      this?.lore = signStackLore
-    }
+    signStackMeta?.lore = signStackLore
     signStack.itemMeta = signStackMeta
     plugin.coloredSignMarker.mark(signStack)
 

@@ -21,7 +21,6 @@ enum class TranslationConfigKey(
   INFO_VERSION("info.version"),
   COMMAND_HELP("command.help"),
   COMMAND_HELP_PAGE("command.help.page"),
-  BUYSIGN_NAME("buysign.name"),
   BUYSIGN_LORE("buysign.lore"),
   CONFIG_RELOAD("config.reload"),
   ERROR_BUYSIGN_FORMAT_INCORRECT("error.buysign.format-incorrect"),
