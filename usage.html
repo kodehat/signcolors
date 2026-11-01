@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-83dc4c44.js";
+            window.path_to_searchindex_js = "searchindex-07740749.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-77ff322c.js"></script>
@@ -178,6 +178,7 @@
 <h2 id="adding-colors-and-formatting"><a class="header" href="#adding-colors-and-formatting">Adding colors and formatting</a></h2>
 <p>Write the configured prefix (default <code>&amp;</code>) followed by a code before the text, for example <code>&amp;aHello &amp;lworld</code>. You can use multiple codes per line. See <a href="permissions.html">Permissions</a> for the available codes and their permission nodes, or use <code>/sc codes</code> to display them in game.</p>
 <p>When <code>crafting.enabled</code> is <code>true</code> (the default), use a colored sign obtained from the recipe, a buy sign, or <code>/sc givesign</code>. Players with <code>signcolors.bypass.crafting</code> can use ordinary signs. When crafting is disabled, ordinary signs work for everyone who has the relevant color or formatting permissions.</p>
+<p>When editing a sign that meets the crafting requirement, existing legacy color and formatting codes are shown using the configured prefix, including codes you cannot apply. On save, codes without permission remain visible as literal text. Codes are reconstructed from the sign’s formatting, so they may not exactly match the original input. Signs with hex colors are not converted to editable codes. Visible codes take up space, so long lines may need shortening. Disable this feature with <code>other.editableSignColors</code>.</p>
 <p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/colors_and_formats_preview.png" alt="Color and formatting preview"><span class="img-wrapper"><img src="images/colors_and_formats_preview.png" alt="Color and formatting preview"></span></label></p>
 <h2 id="creating-a-buy-sign"><a class="header" href="#creating-a-buy-sign">Creating a buy sign</a></h2>
 <p>A player with <code>signcolors.buysign.create</code> can create a sign with these lines:</p>
@@ -187,14 +188,14 @@
 <tr><th>Line</th><th>Content</th></tr>
 </thead>
 <tbody>
-<tr><td>1</td><td><code>[SignColors]</code></td></tr>
+<tr><td>1</td><td><code>[SignColors]</code> or <code>[SC]</code> (use <code>[SC]</code> on hanging signs)</td></tr>
 <tr><td>2</td><td>Optional: <code>&lt;amount&gt;:&lt;price&gt;</code>, for example <code>10:100.0</code></td></tr>
-<tr><td>3</td><td>Optional: supported sign material, for example <code>OAK_SIGN</code></td></tr>
+<tr><td>3</td><td>Optional: sign type, for example <code>OAK</code> or <code>OAK_H</code> for a hanging sign</td></tr>
 <tr><td>4</td><td>Ignored; the plugin fills this line.</td></tr>
 </tbody>
 </table>
 </div>
-<p>Leave line 2 or 3 blank to use its configured default. The amount must be a positive integer, and the price must be positive and finite. The plugin formats and waxes the completed sign.</p>
+<p>Leave line 2 or 3 blank to use its configured default. The amount must be a positive integer, and the price must be positive and finite. For a hanging sign, append <code>_H</code> to the wood type (for example, <code>OAK_H</code> or <code>DARK_OAK_H</code>). Full material names such as <code>OAK_HANGING_SIGN</code>, or names without <code>_SIGN</code> such as <code>OAK_HANGING</code>, are also accepted if they fit. Existing buy signs with full material names continue to work. The plugin formats and waxes the completed sign.</p>
 <p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/sc_sign_before.png" alt="Buy sign before creation"><span class="img-wrapper"><img src="images/sc_sign_before.png" alt="Buy sign before creation"></span></label>
 <label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/sc_sign_after.png" alt="Buy sign after creation"><span class="img-wrapper"><img src="images/sc_sign_after.png" alt="Buy sign after creation"></span></label></p>
 <p>Players with <code>signcolors.buysign.use</code> can right-click it to buy colored signs. Purchases require Vault and a compatible economy provider. The configured amount, price, and material can differ from the examples above.</p>

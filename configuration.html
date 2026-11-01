@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-83dc4c44.js";
+            window.path_to_searchindex_js = "searchindex-07740749.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-77ff322c.js"></script>
@@ -199,7 +199,7 @@
 <tr><td><code>crafting.recipeType</code></td><td><code>shaped</code></td><td><code>shaped</code> or <code>shapeless</code>.</td></tr>
 <tr><td><code>crafting.signType</code></td><td><code>ANY_SIGN</code></td><td>Result sign material when the recipe uses a specific sign ingredient.</td></tr>
 <tr><td><code>crafting.amount</code></td><td><code>1</code></td><td>Number of colored signs produced by the recipe.</td></tr>
-<tr><td><code>crafting.ingredients</code></td><td>See example below</td><td>Maps ingredient letters to Bukkit material names. <code>ANY_SIGN</code> makes recipes for supported sign types and returns the corresponding type.</td></tr>
+<tr><td><code>crafting.ingredients</code></td><td>See example below</td><td>Maps ingredient letters to Bukkit material names. <code>ANY_SIGN</code> makes recipes for supported regular and hanging sign types and returns the corresponding type.</td></tr>
 <tr><td><code>crafting.shape</code></td><td>See example below</td><td>Up to three rows for a shaped recipe; spaces represent empty slots. Not used for shapeless recipes.</td></tr>
 </tbody>
 </table>
@@ -233,7 +233,7 @@
 <tbody>
 <tr><td><code>buySign.amount</code></td><td><code>10</code></td><td>Default number of colored signs sold. Must be positive.</td></tr>
 <tr><td><code>buySign.price</code></td><td><code>100.0</code></td><td>Default price. Must be positive and finite.</td></tr>
-<tr><td><code>buySign.signType</code></td><td><code>OAK_SIGN</code></td><td>Default supported sign item material.</td></tr>
+<tr><td><code>buySign.signType</code></td><td><code>OAK_SIGN</code></td><td>Default supported sign item material, such as <code>OAK_SIGN</code> or <code>OAK_HANGING_SIGN</code>.</td></tr>
 <tr><td><code>buySign.blockedFirstLines</code></td><td><code>['&amp;6[&amp;3SC&amp;6]', '&amp;1[Buy]']</code></td><td>Exact first lines blocked unless the player has <code>signcolors.bypass.blockedfirstlines</code>. Entries use <code>&amp;</code> for color codes.</td></tr>
 <tr><td><code>buySign.creationSound.enabled</code></td><td><code>true</code></td><td>Play a sound after creating a buy sign.</td></tr>
 <tr><td><code>buySign.creationSound.type</code></td><td><code>BLOCK_ANVIL_USE</code></td><td>Bukkit sound constant or namespaced sound key.</td></tr>
@@ -252,6 +252,7 @@
 <tr><th>Setting</th><th>Default</th><th>Description</th></tr>
 </thead>
 <tbody>
+<tr><td><code>other.editableSignColors</code></td><td><code>true</code></td><td>Show existing color and formatting codes when editing a sign. Restart after changing this setting.</td></tr>
 <tr><td><code>other.updateCheck</code></td><td><code>true</code></td><td>Check for plugin updates on startup.</td></tr>
 <tr><td><code>other.errorReporting</code></td><td><code>false</code></td><td>Enable the plugin’s error-reporting path; the current implementation logs errors rather than sending them to an external service.</td></tr>
 <tr><td><code>other.debug</code></td><td><code>false</code></td><td>Enable more verbose log messages.</td></tr>
