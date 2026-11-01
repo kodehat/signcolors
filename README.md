@@ -7,7 +7,7 @@
   <strong>Repository of the SignColors plugin</strong>
 </div>
 <div align="center">
-  A Spigot plugin to let your players use colors on signs
+  A Spigot plugin that allows players adding colored and formatted text to signs.
 </div>
 
 <div align="center">
