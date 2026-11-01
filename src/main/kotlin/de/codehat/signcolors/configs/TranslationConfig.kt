@@ -17,8 +17,15 @@ class TranslationConfig(
     "translations" + File.separator + "$language.properties",
     PropertiesFileConfiguration(),
   ) {
+  companion object {
+    internal fun translation(
+      properties: Properties,
+      key: TranslationConfigKey,
+    ): String? = properties.getProperty(key.toString()) ?: key.fallbackKey?.let(properties::getProperty)
+  }
+
   fun t(
     key: TranslationConfigKey,
     vararg params: Any,
-  ): String = cfgData?.getProperty(key.toString())!!.format(*params).color()
+  ): String = translation(cfgData!!, key)!!.format(*params).color()
 }

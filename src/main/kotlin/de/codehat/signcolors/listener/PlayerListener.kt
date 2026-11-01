@@ -113,7 +113,10 @@ class PlayerListener(
             plugin
               .getTranslation()
               ?.t(
-                TranslationConfigKey.BUYSIGN_SIGN_AMOUNT_RECEIVED,
+                TranslationConfigKey.BUYSIGN_SIGN_AMOUNT_RECEIVED.forAmount(
+                  signAmount,
+                  TranslationConfigKey.BUYSIGN_SIGN_AMOUNT_RECEIVED_SINGLE,
+                ),
                 signPrice,
                 signAmount,
               )

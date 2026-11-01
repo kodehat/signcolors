@@ -9,6 +9,7 @@ import de.codehat.signcolors.commands.GiveSignCommand
 import de.codehat.signcolors.commands.HelpCommand
 import de.codehat.signcolors.commands.InfoCommand
 import de.codehat.signcolors.commands.ReloadCommand
+import de.codehat.signcolors.config.TranslationFileUpdater
 import de.codehat.signcolors.configs.PluginConfig
 import de.codehat.signcolors.configs.TranslationConfig
 import de.codehat.signcolors.configs.TranslationConfigKey
@@ -77,13 +78,20 @@ class SignColors : JavaPlugin() {
   }
 
   internal fun loadTranslations() {
-    PROVIDED_LANGUAGES.forEach(this::loadTranslation)
-    Files
-      .list(dataFolder.toPath().resolve("translations"))
-      .filter { it.fileName.toString().endsWith(".properties") }
-      .map { it.fileName.toString().replace(".properties", "") }
-      .filter { !PROVIDED_LANGUAGES.contains(it) }
-      .forEach(this::loadTranslation)
+    PROVIDED_LANGUAGES.forEach { language ->
+      val resource = "translations/$language.properties"
+      val bundled = requireNotNull(getResource(resource)) { "Missing bundled translation: $resource" }
+      val backup = TranslationFileUpdater.update(dataFolder.toPath().resolve(resource), bundled)
+      if (backup != null) logger.info("Updated '$resource'; previous version backed up to '$backup'.")
+      loadTranslation(language)
+    }
+    Files.list(dataFolder.toPath().resolve("translations")).use { files ->
+      files
+        .filter { it.fileName.toString().endsWith(".properties") }
+        .map { it.fileName.toString().removeSuffix(".properties") }
+        .filter { !PROVIDED_LANGUAGES.contains(it) }
+        .forEach(this::loadTranslation)
+    }
   }
 
   private fun loadTranslation(language: String) {

@@ -84,14 +84,14 @@ class GiveSignCommand(
 
     plugin.sendLogoMessage(
       sender,
-      TranslationConfigKey.GIVE_DONOR_SUCCESS,
+      TranslationConfigKey.GIVE_DONOR_SUCCESS.forAmount(signAmount, TranslationConfigKey.GIVE_DONOR_SUCCESS_SINGLE),
       signAmount,
       player.name,
     )
 
     plugin.sendLogoMessage(
       player,
-      TranslationConfigKey.GIVE_TARGET_SUCCESS,
+      TranslationConfigKey.GIVE_TARGET_SUCCESS.forAmount(signAmount, TranslationConfigKey.GIVE_TARGET_SUCCESS_SINGLE),
       signAmount,
       sender.name,
     )

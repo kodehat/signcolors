@@ -4,6 +4,7 @@ package de.codehat.signcolors.configs
 
 enum class TranslationConfigKey(
   private val key: String,
+  internal val fallbackKey: String? = null,
 ) {
   TAG("tag"),
   ERROR_PERMISSION_MISSING("error.permission.missing"),
@@ -28,6 +29,7 @@ enum class TranslationConfigKey(
   ERROR_BUYSIGN_INVALID_SIGN_TYPE("error.buysign.invalid-sign-type"),
   BUYSIGN_LINE_FOUR("buysign.line.four"),
   BUYSIGN_SIGN_AMOUNT_RECEIVED("buysign.sign-amount-received"),
+  BUYSIGN_SIGN_AMOUNT_RECEIVED_SINGLE("buysign.sign-amount-received.single", "buysign.sign-amount-received"),
   ERROR_BUYSIGN_FIRST_LINE_BLOCKED("error.buysign.first-line-blocked"),
   ERROR_NOT_ENOUGH_MONEY("error.not-enough-money"),
   ERROR_NOT_ENOUGH_SPACE("error.not-enough-space"),
@@ -36,9 +38,16 @@ enum class TranslationConfigKey(
   ERROR_GIVE_AMOUNT_INVALID("error.give.amount-invalid"),
   ERROR_SIGN_MATERIAL_INVALID("error.give.sign-material-invalid"),
   GIVE_DONOR_SUCCESS("give.donor.success"),
+  GIVE_DONOR_SUCCESS_SINGLE("give.donor.success.single", "give.donor.success"),
   GIVE_TARGET_SUCCESS("give.target.success"),
+  GIVE_TARGET_SUCCESS_SINGLE("give.target.success.single", "give.target.success"),
   VERSION_NEW_AVAILABLE("version.new-available"),
   ;
+
+  fun forAmount(
+    amount: Int,
+    singular: TranslationConfigKey,
+  ): TranslationConfigKey = if (amount == 1) singular else this
 
   override fun toString(): String = key
 }
